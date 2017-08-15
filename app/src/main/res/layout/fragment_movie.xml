@@ -1,0 +1,35 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.moovies.ui.home_movie.HomeHomeMovieFragment"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:text="Movies"/>
+
+        <include
+            android:id="@+id/horizontal_now_playing"
+            layout="@layout/horizontal_list"/>
+        <include
+            android:id="@+id/horizontal_upcoming"
+            layout="@layout/horizontal_list"/>
+        <include
+            android:id="@+id/horizontal_popular"
+            layout="@layout/horizontal_list"/>
+        <include
+            android:id="@+id/horizontal_top_rated"
+            layout="@layout/horizontal_list"/>
+
+    </LinearLayout>
+
+</ScrollView>
