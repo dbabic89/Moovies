@@ -12,18 +12,20 @@ import java.util.List;
 
 public class CustomViewPager {
 
-    List<Fragment> mFragmentList;
-    List<String> mStringList;
-    FragmentManager mFragmentManager;
-    ViewPager mViewPager;
-    TabLayout mTabLayout;
+    private List<Fragment> mFragmentList;
+    private List<String> mStringList;
+    private FragmentManager mFragmentManager;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private int currentTab = -1;
 
-    public CustomViewPager(List<Fragment> mFragmentList, List<String> mStringList, FragmentManager mFragmentManager, ViewPager mViewPager, TabLayout mTabLayout) {
+    public CustomViewPager(List<Fragment> mFragmentList, List<String> mStringList, FragmentManager mFragmentManager, ViewPager mViewPager, TabLayout mTabLayout, int currentTab) {
         this.mFragmentList = mFragmentList;
         this.mStringList = mStringList;
         this.mFragmentManager = mFragmentManager;
         this.mViewPager = mViewPager;
         this.mTabLayout = mTabLayout;
+        this.currentTab = currentTab;
 
         setupTabLayout();
         setupViewPager(mViewPager);
@@ -36,6 +38,7 @@ public class CustomViewPager {
             adapter.addFrag(mFragmentList.get(i), mStringList.get(i));
         }
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(currentTab);
     }
 
     private void setupTabLayout() {

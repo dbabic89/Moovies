@@ -21,7 +21,7 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
     private TmdbInterface mTmdbInterface;
     private Observable<MovieListResponse> mObservable;
     private List<MovieListResult> mMovieListResultList;
-    private int x = 0;
+    private int x = -1;
 
     MovieListPresenter(int x) {
 
@@ -43,16 +43,16 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
     List<MovieListResult> getMovies(){
 
         switch (x) {
-            case 1:
+            case 0:
                 mObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
                 break;
-            case 2:
+            case 1:
                 mObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
                 break;
-            case 3:
+            case 2:
                 mObservable = mTmdbInterface.getPopularMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
                 break;
-            case 4:
+            case 3:
                 mObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
                 break;
         }

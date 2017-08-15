@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.moovies.ui.home_movie.HomeHomeMovieFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.android.moovies.ui.home_movie.HomeMovieFragment"
     android:paddingBottom="8dp">
 
     <LinearLayout
@@ -11,24 +12,29 @@
         android:orientation="vertical"
         android:layout_margin="8dp">
 
-        <Button
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/now_playing"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:text="Movies"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <include
-            android:id="@+id/horizontal_now_playing"
-            layout="@layout/horizontal_list"/>
-        <include
-            android:id="@+id/horizontal_upcoming"
-            layout="@layout/horizontal_list"/>
-        <include
-            android:id="@+id/horizontal_popular"
-            layout="@layout/horizontal_list"/>
-        <include
-            android:id="@+id/horizontal_top_rated"
-            layout="@layout/horizontal_list"/>
+        <FrameLayout
+            android:id="@+id/upcoming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <FrameLayout
+            android:id="@+id/popular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <FrameLayout
+            android:id="@+id/top_rated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </LinearLayout>
 

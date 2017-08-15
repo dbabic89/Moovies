@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.ui.celebrities.CelebritiesFragment;
-import com.example.android.moovies.ui.home_movie.HomeHomeMovieFragment;
+import com.example.android.moovies.ui.home_movie.HomeMovieFragment;
 import com.example.android.moovies.ui.progress.ProgressFragment;
 import com.example.android.moovies.ui.tv.TvFragment;
 import com.example.android.moovies.ui.common.view_pager.CustomViewPager;
@@ -36,12 +36,12 @@ public class HomeFragment extends Fragment {
 
         ButterKnife.bind(this, mView);
 
-        List<Fragment> fragmentList = Arrays.asList(new HomeHomeMovieFragment(), new TvFragment(), new CelebritiesFragment(),
+        List<Fragment> fragmentList = Arrays.asList(new HomeMovieFragment(), new TvFragment(), new CelebritiesFragment(),
                 new ProgressFragment());
 
         List<String> stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
 
-        new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout);
+        new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout, 0);
 
         return mView;
     }

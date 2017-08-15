@@ -57,9 +57,12 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication{
     }
 
     @Override
-    public void startMovieTabs() {
+    public void startMovieTabs(int tab) {
 
         Fragment movieViewPagerFragment = new MovieViewPagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("curretTab", tab);
+        movieViewPagerFragment.setArguments(bundle);
         fragmentManager.beginTransaction().add(R.id.content_main, movieViewPagerFragment).addToBackStack("tag").commit();
     }
 

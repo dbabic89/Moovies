@@ -26,6 +26,8 @@ public class MovieViewPagerFragment extends Fragment{
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
+    int x = -1;
+
     View mView;
 
     @Override
@@ -35,24 +37,26 @@ public class MovieViewPagerFragment extends Fragment{
 
         ButterKnife.bind(this, mView);
 
+        x = getArguments().getInt("curretTab");
+
         Fragment nowPlayingMovieListFragment = new MovieListFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putInt("tab", 1);
+        bundle1.putInt("tab", 0);
         nowPlayingMovieListFragment.setArguments(bundle1);
 
         Fragment soonPlayingMovieListFragment = new MovieListFragment();
         Bundle bundle2 = new Bundle();
-        bundle2.putInt("tab", 2);
+        bundle2.putInt("tab", 1);
         soonPlayingMovieListFragment.setArguments(bundle2);
 
         Fragment popularMovieListFragment = new MovieListFragment();
         Bundle bundle3 = new Bundle();
-        bundle3.putInt("tab", 3);
+        bundle3.putInt("tab", 2);
         popularMovieListFragment.setArguments(bundle3);
 
         Fragment topRatedMovieListFragment = new MovieListFragment();
         Bundle bundle4 = new Bundle();
-        bundle4.putInt("tab", 4);
+        bundle4.putInt("tab", 3);
         topRatedMovieListFragment.setArguments(bundle4);
 
         List<Fragment> fragmentList = Arrays.asList(nowPlayingMovieListFragment, soonPlayingMovieListFragment, popularMovieListFragment,
@@ -60,7 +64,7 @@ public class MovieViewPagerFragment extends Fragment{
 
         List<String> stringList = Arrays.asList("Now", "Upcoming", "Popular", "Top 200");
 
-        new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout);
+        new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout, x);
 
         return mView;
     }
