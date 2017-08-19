@@ -14,7 +14,7 @@ public class BasePresenter<T extends BaseMvpView> implements Presenter<T> {
         mMvpView = null;
     }
 
-    public boolean isViewAttached() {
+    private boolean isViewAttached() {
         return mMvpView != null;
     }
 
@@ -26,10 +26,9 @@ public class BasePresenter<T extends BaseMvpView> implements Presenter<T> {
         if (!isViewAttached()) throw new MvpViewNotAttachedException();
     }
 
-    public static class MvpViewNotAttachedException extends RuntimeException {
-        public MvpViewNotAttachedException() {
-            super("Please call Presenter.attachView(BaseMvpView) before" +
-                    " requesting data to the Presenter");
+    private static class MvpViewNotAttachedException extends RuntimeException {
+        MvpViewNotAttachedException() {
+            super("Please call Presenter.attachView(BaseMvpView) before requesting data to the Presenter");
         }
     }
 }

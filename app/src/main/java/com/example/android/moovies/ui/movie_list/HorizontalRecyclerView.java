@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,13 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
         ButterKnife.bind(this, mView);
 
         currentRv = getArguments().getInt("tab");
+        Log.i("TAG", "horizontal primio: " + getArguments().getInt("tab"));
+
+        if (mPresenter == null) {
+            mPresenter = new MovieListPresenter(currentRv);
+        }
+        mPresenter.attachView(this);
+        mPresenter.getMovies(1);
 
         fragmentCommunication = (FragmentCommunication) getActivity();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -55,17 +63,13 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
 
         buttonSeeMore.setOnClickListener(this);
 
-        mPresenter = new MovieListPresenter(currentRv);
-        mPresenter.attachView(this);
-        mPresenter.getMovies();
-
         return mView;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView();
+//        mPresenter.detachView();
     }
 
     @Override
@@ -92,7 +96,6 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
 
     @Override
     public void openMovieDetails(int id) {
-
     }
 
     @Override

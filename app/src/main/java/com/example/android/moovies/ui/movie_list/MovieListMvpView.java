@@ -5,7 +5,7 @@ import com.example.android.moovies.ui.base.BaseMvpView;
 
 import java.util.List;
 
-public interface MovieListMvpView extends BaseMvpView {
+interface MovieListMvpView extends BaseMvpView {
 
         void showMovies(List<MovieListResult> movies);
 
@@ -16,4 +16,5 @@ public interface MovieListMvpView extends BaseMvpView {
         void showError();
 
         void openMovieDetails(int id);
+
 }

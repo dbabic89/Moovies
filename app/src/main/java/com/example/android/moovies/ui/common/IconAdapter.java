@@ -15,7 +15,7 @@ import java.util.List;
 
 public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolder> {
 
-    private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w342";
+    private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w185";
     private int rowLayout;
     private Context context;
     private List<MovieListResult> movies;
@@ -44,10 +44,6 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolde
         MovieListResult movie = movies.get(position);
 
         Picasso.with(context).load(BASE_URL_IMG + movie.getPosterPath()).into(holder.imageView);
-
-        if (holder.imageView.getDrawable() == null) {
-
-        }
 
     }
 

@@ -1,4 +1,4 @@
-package com.example.android.moovies.ui.home_movie;
+package com.example.android.moovies.ui.home;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

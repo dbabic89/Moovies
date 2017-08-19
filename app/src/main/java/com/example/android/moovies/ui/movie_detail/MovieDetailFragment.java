@@ -1,4 +1,4 @@
-package com.example.android.moovies.ui.home;
+package com.example.android.moovies.ui.movie_detail;
 
 
 import android.os.Bundle;
@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.ui.celebrities.CelebritiesFragment;
-import com.example.android.moovies.ui.home_movie.HomeMovieFragment;
+import com.example.android.moovies.ui.common.view_pager.CustomViewPager;
 import com.example.android.moovies.ui.progress.ProgressFragment;
 import com.example.android.moovies.ui.tv.TvFragment;
-import com.example.android.moovies.ui.common.view_pager.CustomViewPager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +21,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeFragment extends Fragment {
+public class MovieDetailFragment extends Fragment {
+
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
     @BindView(R.id.view_pager)
@@ -32,18 +32,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_home, container, false);
+        mView = inflater.inflate(R.layout.fragment_view_pager, container, false);
 
         ButterKnife.bind(this, mView);
 
-        List<Fragment> fragmentList = Arrays.asList(new HomeMovieFragment(), new TvFragment(), new CelebritiesFragment(),
+        List<Fragment> fragmentList = Arrays.asList(new TvFragment(), new TvFragment(), new CelebritiesFragment(),
                 new ProgressFragment());
 
-        List<String> stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
+        List<String> stringList = Arrays.asList("Info", "Cast", "Celebs", "Progress");
 
         new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout, 0);
 
-        return mView;
-    }
+        return mView;}
 
 }

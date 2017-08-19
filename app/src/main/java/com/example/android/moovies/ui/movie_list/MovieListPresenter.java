@@ -1,5 +1,7 @@
 package com.example.android.moovies.ui.movie_list;
 
+import android.util.Log;
+
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
 import com.example.android.moovies.data.models.movie.MovieListResult;
@@ -40,20 +42,21 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
         super.detachView();
     }
 
-    List<MovieListResult> getMovies(){
+    void getMovies(int page){
+        Log.i("TAG", "MovieListPresenter primio: " + x);
 
         switch (x) {
             case 0:
-                mObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
+                mObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
                 break;
             case 1:
-                mObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
+                mObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
                 break;
             case 2:
-                mObservable = mTmdbInterface.getPopularMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
+                mObservable = mTmdbInterface.getPopularMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
                 break;
             case 3:
-                mObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", 1);
+                mObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
                 break;
         }
 
@@ -83,7 +86,5 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
 
                     }
                 });
-
-        return mMovieListResultList;
     }
 }

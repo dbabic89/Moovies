@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.ui.base.BaseActivity;
-import com.example.android.moovies.ui.movie_view_pager.MovieViewPagerFragment;
+import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.utils.FragmentCommunication;
 
@@ -24,10 +24,13 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication{
         setContentView(R.layout.activity_home);
         getSupportActionBar().setElevation(0);
 
-        Fragment homeFragment = new HomeFragment();
+        Fragment viewPager = new ViewPagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("vpf", "homeFragment");
+        viewPager.setArguments(bundle);
 
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_main, homeFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_main, viewPager).commit();
     }
 
     @Override
@@ -59,11 +62,14 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication{
     @Override
     public void startMovieTabs(int tab) {
 
-        Fragment movieViewPagerFragment = new MovieViewPagerFragment();
+        Fragment fragment = new ViewPagerFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("curretTab", tab);
-        movieViewPagerFragment.setArguments(bundle);
-        fragmentManager.beginTransaction().add(R.id.content_main, movieViewPagerFragment).addToBackStack("tag").commit();
+        bundle.putString("vpf", "movieFragment");
+        bundle.putInt("currentTab", tab);
+        Log.i("TAG", "startMovieTabs primio: " + tab);
+        fragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, fragment).addToBackStack("tag").commit();
     }
 
 }
