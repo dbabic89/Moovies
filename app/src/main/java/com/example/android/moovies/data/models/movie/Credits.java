@@ -10,24 +10,24 @@ public class Credits {
 
     @SerializedName("cast")
     @Expose
-    private List<Object> cast = null;
+    private List<Cast> cast = null;
     @SerializedName("crew")
     @Expose
-    private List<Object> crew = null;
+    private List<Crew> crew = null;
 
-    public List<Object> getCast() {
+    public List<Cast> getCast() {
         return cast;
     }
 
-    public void setCast(List<Object> cast) {
+    public void setCast(List<Cast> cast) {
         this.cast = cast;
     }
 
-    public List<Object> getCrew() {
+    public List<Crew> getCrew() {
         return crew;
     }
 
-    public void setCrew(List<Object> crew) {
+    public void setCrew(List<Crew> crew) {
         this.crew = crew;
     }
 

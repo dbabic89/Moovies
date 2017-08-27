@@ -3,8 +3,6 @@ package com.example.android.moovies;
 import android.app.Application;
 
 import com.example.android.moovies.di.component.ApplicationComponent;
-import com.example.android.moovies.di.component.DaggerApplicationComponent;
-import com.example.android.moovies.di.module.ContextModule;
 
 public class Moovies extends Application {
 
@@ -13,10 +11,10 @@ public class Moovies extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        mApplicationComponent = DaggerApplicationComponent.builder()
-                .contextModule(new ContextModule(this))
-                .build();
+//
+//        mApplicationComponent = DaggerApplicationComponent.builder()
+//                .contextModule(new ContextModule(this))
+//                .build();
 
     }
 }

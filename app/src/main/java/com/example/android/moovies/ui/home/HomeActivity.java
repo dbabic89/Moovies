@@ -8,12 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.moovies.R;
+import com.example.android.moovies.data.models.movie.Review;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
+import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
+import com.example.android.moovies.ui.review_list.ReviewListFragment;
 import com.example.android.moovies.utils.FragmentCommunication;
 
-public class HomeActivity extends BaseActivity implements FragmentCommunication{
+import java.util.ArrayList;
+
+public class HomeActivity extends BaseActivity implements FragmentCommunication {
 
     Fragment fragment;
     FragmentManager fragmentManager;
@@ -66,10 +71,32 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication{
         Bundle bundle = new Bundle();
         bundle.putString("vpf", "movieFragment");
         bundle.putInt("currentTab", tab);
-        Log.i("TAG", "startMovieTabs primio: " + tab);
         fragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, fragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startMovieDetail(int id) {
+
+        Fragment movieDetailFragment = new MovieDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("vpf", "movieDetailFragment");
+        bundle.putInt("movie_id", id);
+        movieDetailFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, movieDetailFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startReviewList(ArrayList<Review> reviewArrayList) {
+
+        Fragment reviewListFragment = new ReviewListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("reviews", reviewArrayList);
+        reviewListFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, reviewListFragment).addToBackStack("tag").commit();
     }
 
 }

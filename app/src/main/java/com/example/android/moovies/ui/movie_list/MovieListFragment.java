@@ -1,12 +1,10 @@
 package com.example.android.moovies.ui.movie_list;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.models.movie.MovieListResult;
-import com.example.android.moovies.ui.movie_detail.MovieDetailActivity;
+import com.example.android.moovies.utils.FragmentCommunication;
 
 import java.util.List;
 
@@ -24,6 +22,7 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     RecyclerView mRecyclerView;
     MovieListPresenter mPresenter;
     MovieListAdapter mMovieListAdapter;
+    FragmentCommunication fragmentCommunication;
     View mView;
     List<MovieListResult> movies;
 
@@ -38,27 +37,27 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
 
         mView = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        fragmentCommunication = (FragmentCommunication) getActivity();
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mMovieListAdapter = new MovieListAdapter(getActivity());
+
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recycler_view);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mMovieListAdapter);
 
         mMovieListAdapter.setRecyclerViewInterface(new MovieListAdapter.RecyclerViewInterface() {
             @Override
             public void onCardClick(int position) {
                 MovieListResult movieListResult = mMovieListAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra("movie_id", movieListResult.getId());
-                startActivity(intent);
+                openMovieDetails(movieListResult.getId());
+
             }
         });
 
         mPresenter = new MovieListPresenter(getArguments().getInt("tab"));
-        Log.i("TAG", "MovieListFragment primio: " + getArguments().getInt("tab"));
         mPresenter.attachView(this);
-        mPresenter.getMovies(1);
+        mPresenter.getMovies(1, 0);
 
 //        mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
 //
@@ -98,7 +97,6 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     public void showMovies(List<MovieListResult> movies) {
         mMovieListAdapter.addAll(movies);
         for (MovieListResult mo :movies) {
-//            Log.i("TAG", currentPage + "movie " + mo.getTitle());
             
         }
     }
@@ -122,6 +120,6 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
 
     @Override
     public void openMovieDetails(int id) {
-
+        fragmentCommunication.startMovieDetail(id);
     }
 }

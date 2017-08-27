@@ -6,4 +6,14 @@
     <string name="see_more">See more</string>
     <string name="action_profile">Profile</string>
     <string name="action_logout">Logout</string>
+    <string name="label_release_date">Release date:</string>
+    <string name="label_directed_by">Directed by:</string>
+    <string name="label_duration">Duration:</string>
+    <string name="add_to_watchlist">Add to watchlist</string>
+    <string name="on_watchlist">On watchlist</string>
+    <string name="on_list">On list</string>
+    <string name="add_to_list">Add to list</string>
+    <string name="check_collection">Check collection</string>
+    <string name="this_movie_belongs_to">This movie belongs to: </string>
+    <string name="keywords_label">Keywords:</string>
 </resources>

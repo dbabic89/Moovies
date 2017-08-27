@@ -1,13 +1,9 @@
-package com.example.android.moovies.data.models;
+package com.example.android.moovies.data.models.movie;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Laptop on 03.08.2017..
- */
-
-public class Genre {
+public class Keyword {
 
     @SerializedName("id")
     @Expose
@@ -31,4 +27,5 @@ public class Genre {
     public void setName(String name) {
         this.name = name;
     }
+
 }

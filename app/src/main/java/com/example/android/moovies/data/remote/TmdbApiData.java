@@ -54,7 +54,7 @@ public class TmdbApiData {
             @Override
             public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
                 if (response.code() == 200){
-                    mIconAdapter = new IconAdapter(response.body().getResults(), R.layout.icon_movie, context);
+                    mIconAdapter = new IconAdapter(context);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     recyclerView.setAdapter(mIconAdapter);
                 }

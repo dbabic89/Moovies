@@ -1,6 +1,5 @@
 package com.example.android.moovies.data.models.movie;
 
-import com.example.android.moovies.data.models.Genre;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

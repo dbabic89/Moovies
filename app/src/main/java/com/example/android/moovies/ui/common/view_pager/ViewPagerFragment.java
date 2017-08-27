@@ -28,10 +28,13 @@ public class ViewPagerFragment extends Fragment {
     TabLayout mTabLayout;
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
+
     View mView;
     List<Fragment> fragmentList;
     List<String> stringList;
-    int x, currentTab = -1;
+
+    String vpf;
+    int x, currentTab, movieId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,17 +44,15 @@ public class ViewPagerFragment extends Fragment {
         ButterKnife.bind(this, mView);
 
         currentTab = getArguments().getInt("currentTab");
-        String vpf = getArguments().getString("vpf");
+        movieId = getArguments().getInt("movie_id");
+        vpf = getArguments().getString("vpf");
 
         switch (vpf) {
 
             case "homeFragment":
                 fragmentList = Arrays.asList(new HomeMovieFragment(), new TvFragment(), new CelebritiesFragment(),
                         new ProgressFragment());
-
                 stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
-
-                currentTab = 0;
 
                 break;
 
@@ -80,18 +81,9 @@ public class ViewPagerFragment extends Fragment {
 
                 fragmentList = Arrays.asList(nowPlayingMovieListFragment, soonPlayingMovieListFragment, popularMovieListFragment,
                         topRatedMovieListFragment);
-
                 stringList = Arrays.asList("Now", "Upcoming", "Popular", "Top 200");
                 break;
 
-            case "movieDetailFragment":
-
-                fragmentList = Arrays.asList(new TvFragment(), new TvFragment(), new CelebritiesFragment());
-
-                stringList = Arrays.asList("Info", "Cast", "Reviews");
-
-                currentTab = 0;
-                break;
         }
 
         new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout, currentTab);

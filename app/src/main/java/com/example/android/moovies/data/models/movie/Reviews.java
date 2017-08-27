@@ -12,7 +12,7 @@ public class Reviews {
     private int page;
     @SerializedName("results")
     @Expose
-    private List<Object> results = null;
+    private List<Review> results = null;
     @SerializedName("total_pages")
     @Expose
     private int totalPages;
@@ -28,11 +28,11 @@ public class Reviews {
         this.page = page;
     }
 
-    public List<Object> getResults() {
+    public List<Review> getResults() {
         return results;
     }
 
-    public void setResults(List<Object> results) {
+    public void setResults(List<Review> results) {
         this.results = results;
     }
 

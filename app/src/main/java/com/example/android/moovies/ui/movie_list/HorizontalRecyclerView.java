@@ -34,10 +34,11 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
     @BindView(R.id.button_see_more)
     Button buttonSeeMore;
 
-    int currentRv;
+    int currentRv, movieId = 0;
 
-    FragmentCommunication fragmentCommunication;
-    MovieListPresenter mPresenter;
+    private IconAdapter mIconAdapter;
+    private FragmentCommunication mFragmentCommunication;
+    private MovieListPresenter mPresenter;
     View mView;
 
     @Override
@@ -47,21 +48,37 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
         ButterKnife.bind(this, mView);
 
         currentRv = getArguments().getInt("tab");
-        Log.i("TAG", "horizontal primio: " + getArguments().getInt("tab"));
+        movieId = getArguments().getInt("movie_id");
 
         if (mPresenter == null) {
             mPresenter = new MovieListPresenter(currentRv);
         }
+        mPresenter.getMovies(1, movieId);
+        Log.i("TAG", "HorizontalRecyclerView onCreateView " + movieId);
         mPresenter.attachView(this);
-        mPresenter.getMovies(1);
 
-        fragmentCommunication = (FragmentCommunication) getActivity();
+        mFragmentCommunication = (FragmentCommunication) getActivity();
+
+        mIconAdapter = new IconAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerView.setAdapter(mIconAdapter);
+        mIconAdapter.setRecyclerViewInterface(new IconAdapter.RecyclerViewInterface() {
+            @Override
+            public void onCardClick(int position) {
+                MovieListResult movieListResult = mIconAdapter.getItem(position);
+                openMovieDetails(movieListResult.getId());
+            }
+        });
 
-        List<String> movieListNames = Arrays.asList("Now", "Upcoming", "Popular", "Top rated");
+        List<String> movieListNames = Arrays.asList("Now", "Upcoming", "Popular", "Top rated", "Similar");
         mTextMovieList.setText(movieListNames.get(currentRv));
 
-        buttonSeeMore.setOnClickListener(this);
+        if (currentRv == 4) {
+            buttonSeeMore.setVisibility(View.INVISIBLE);
+        } else {
+            buttonSeeMore.setOnClickListener(this);
+        }
+
 
         return mView;
     }
@@ -74,7 +91,7 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
 
     @Override
     public void showMovies(List<MovieListResult> movies) {
-        mRecyclerView.setAdapter(new IconAdapter(movies, R.layout.icon_movie, getActivity()));
+        mIconAdapter.addAll(movies);
     }
 
     @Override
@@ -84,7 +101,6 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
 
     @Override
     public void showMoviesEmpty() {
-
         Toast.makeText(getActivity(), "Nema filmova", Toast.LENGTH_SHORT).show();
     }
 
@@ -96,11 +112,11 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
 
     @Override
     public void openMovieDetails(int id) {
+        mFragmentCommunication.startMovieDetail(id);
     }
 
     @Override
     public void onClick(View view) {
-
-        fragmentCommunication.startMovieTabs(currentRv);
+        mFragmentCommunication.startMovieTabs(currentRv);
     }
 }

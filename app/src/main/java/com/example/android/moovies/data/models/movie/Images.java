@@ -9,24 +9,24 @@ public class Images {
 
     @SerializedName("backdrops")
     @Expose
-    private List<Object> backdrops = null;
+    private List<Backdrop> backdrops = null;
     @SerializedName("posters")
     @Expose
-    private List<Object> posters = null;
+    private List<Poster> posters = null;
 
-    public List<Object> getBackdrops() {
+    public List<Backdrop> getBackdrops() {
         return backdrops;
     }
 
-    public void setBackdrops(List<Object> backdrops) {
+    public void setBackdrops(List<Backdrop> backdrops) {
         this.backdrops = backdrops;
     }
 
-    public List<Object> getPosters() {
+    public List<Poster> getPosters() {
         return posters;
     }
 
-    public void setPosters(List<Object> posters) {
+    public void setPosters(List<Poster> posters) {
         this.posters = posters;
     }
 

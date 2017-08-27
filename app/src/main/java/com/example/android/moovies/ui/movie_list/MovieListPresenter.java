@@ -42,8 +42,8 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
         super.detachView();
     }
 
-    void getMovies(int page){
-        Log.i("TAG", "MovieListPresenter primio: " + x);
+    void getMovies(int page, int movieId){
+        Log.i("TAG", "MovieListPresenter getMovies " + movieId);
 
         switch (x) {
             case 0:
@@ -57,6 +57,9 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
                 break;
             case 3:
                 mObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                break;
+            case 4:
+                mObservable = mTmdbInterface.getSimilar(movieId, BuildConfig.TMDB_APIKEY);
                 break;
         }
 

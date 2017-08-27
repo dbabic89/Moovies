@@ -25,6 +25,7 @@
                 android:id="@+id/image_movie_poster"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:transitionName="moviePoster"
                 android:scaleType="centerCrop"/>
 
             <TextView

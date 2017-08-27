@@ -11,20 +11,19 @@ import com.example.android.moovies.R;
 import com.example.android.moovies.data.models.movie.MovieListResult;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolder> {
 
     private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w185";
-    private int rowLayout;
     private Context context;
     private List<MovieListResult> movies;
     private IconAdapter.RecyclerViewInterface recyclerViewInterface;
 
-    public IconAdapter(List<MovieListResult> movies, int rowLayout, Context context) {
-        this.movies = movies;
-        this.rowLayout = rowLayout;
+    public IconAdapter(Context context) {
         this.context = context;
+        movies = new ArrayList<>();
     }
 
     public void setRecyclerViewInterface(IconAdapter.RecyclerViewInterface recyclerViewInterface) {
@@ -34,7 +33,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolde
     @Override
     public IconAdapter.MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.icon_movie, parent, false);
         return new IconAdapter.MovieViewHolder(view);
     }
 
@@ -52,25 +51,39 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolde
         return movies.size();
     }
 
+    public MovieListResult getItem(int position) {
+        return movies.get(position);
+    }
+
     public interface RecyclerViewInterface {
 
         void onCardClick(int position);
 
     }
+    public void add(MovieListResult movie) {
+        movies.add(movie);
+        notifyItemInserted(movies.size() - 1);
+    }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder{
+    public void addAll(List<MovieListResult> movies) {
+        for (MovieListResult movie : movies) {
+            add(movie);
+        }
+    }
+
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView imageView;
 
         public MovieViewHolder(View v) {
             super(v);
-//            v.setOnClickListener(this);
+            v.setOnClickListener(this);
             imageView = (ImageView) v.findViewById(R.id.image_movie_poster);
         }
-//
-//        @Override
-//        public void onClick(View view) {
-//            recyclerViewInterface.onCardClick(getAdapterPosition());
+
+        @Override
+        public void onClick(View view) {
+            recyclerViewInterface.onCardClick(getAdapterPosition());
         }
-//    }
+    }
 }

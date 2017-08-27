@@ -2,8 +2,8 @@ package com.example.android.moovies.data.remote;
 
 import android.accounts.Account;
 
-import com.example.android.moovies.data.models.MovieGenreResponse;
 import com.example.android.moovies.data.models.authentication.RequestTokenResponse;
+import com.example.android.moovies.data.models.movie.MovieDetail;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
 
 import io.reactivex.Observable;
@@ -16,6 +16,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface TmdbInterface {
+
+    //Movie lists
 
     @GET("movie/now_playing")
     Call<MovieListResponse> getNowPlayingMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
@@ -33,9 +35,6 @@ public interface TmdbInterface {
     public Observable<MovieListResponse> getMoviesByGenre(@Path("genre_id") int genre_id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
 
 
-    @GET("genre/movie/list")
-    public Observable<MovieGenreResponse> getMovieGenresList(@Query("api_key") String apiKey);
-
     @GET("movie/now_playing")
     Observable<MovieListResponse> getNowPlayingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
 
@@ -47,6 +46,14 @@ public interface TmdbInterface {
 
     @GET("movie/top_rated")
     Observable<MovieListResponse> getTopRatedMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+
+    @GET("movie/{movie_id}/similar")
+    Observable<MovieListResponse> getSimilar(@Path("movie_id") int id, @Query("api_key") String apiKey);
+
+    //Movie details
+
+    @GET("movie/{id}")
+    Observable<MovieDetail> getMovieImages(@Path("id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
 
 
     //User authentication
@@ -63,5 +70,8 @@ public interface TmdbInterface {
 
     @GET("account")
     Observable<Account> getAccountDetail(@Query("api_key") String apiKey, @Query("session_id") String session_id);
+
+    @GET("/movie/{movie_id}/account_states")
+    Observable<Account> getAccountStates(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
 }

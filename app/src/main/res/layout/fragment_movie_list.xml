@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.moovies.ui.movie_list.MovieListFragment"
-    android:background="@android:color/white">
+    android:background="@color/lightGrey">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/movies_recycler_view"

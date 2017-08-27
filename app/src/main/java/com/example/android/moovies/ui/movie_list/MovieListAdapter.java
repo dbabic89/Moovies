@@ -62,7 +62,7 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
     }
 
 
-    public MovieListResult getItem(int position) {
+    MovieListResult getItem(int position) {
         return movies.get(position);
     }
 

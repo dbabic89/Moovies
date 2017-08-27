@@ -7,15 +7,26 @@ import java.util.List;
 
 public class Keywords {
 
+    @SerializedName("id")
+    @Expose
+    private int id;
     @SerializedName("keywords")
     @Expose
-    private List<Object> keywords = null;
+    private List<Keyword> keywords = null;
 
-    public List<Object> getKeywords() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Keyword> getKeywordsList() {
         return keywords;
     }
 
-    public void setKeywords(List<Object> keywords) {
+    public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
     }
 
