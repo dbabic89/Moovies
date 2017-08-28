@@ -3,9 +3,10 @@ package com.example.android.moovies.data.models.movie;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Videos {
+public class Videos implements Serializable{
 
     @SerializedName("results")
     @Expose

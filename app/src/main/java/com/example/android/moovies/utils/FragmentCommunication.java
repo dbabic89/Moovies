@@ -1,8 +1,6 @@
 package com.example.android.moovies.utils;
 
-import com.example.android.moovies.data.models.movie.Review;
-
-import java.util.ArrayList;
+import com.example.android.moovies.data.models.movie.Reviews;
 
 public interface FragmentCommunication {
 
@@ -10,5 +8,7 @@ public interface FragmentCommunication {
 
     void startMovieDetail(int id);
 
-    void startReviewList(ArrayList<Review> reviewArrayList);
+    void startReviewList(Reviews reviews);
+
+    void startCollectionList(int id);
 }

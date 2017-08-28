@@ -1,14 +1,14 @@
 package com.example.android.moovies.ui.movie_detail;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,15 +20,16 @@ import com.example.android.moovies.data.models.movie.Backdrop;
 import com.example.android.moovies.data.models.movie.Genre;
 import com.example.android.moovies.data.models.movie.Keyword;
 import com.example.android.moovies.data.models.movie.MovieDetail;
-import com.example.android.moovies.data.models.movie.Review;
+import com.example.android.moovies.data.models.movie.Reviews;
 import com.example.android.moovies.data.models.movie.Video;
+import com.example.android.moovies.data.models.movie.Videos;
+import com.example.android.moovies.ui.gallery_videos.GalleryVideosActivity;
 import com.example.android.moovies.ui.movie_list.HorizontalRecyclerView;
 import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
 import com.example.android.moovies.utils.StringFormating;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -88,6 +89,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     @BindView(R.id.recycler_view_keywords)
     RecyclerView recyclerViewKeywords;
 
+    @BindView(R.id.button_check_collection)
+    Button buttonCheckCollectioN;
+
     MovieDetailPresenter mPresenter;
     LayoutInflater layoutInflater;
     LinearLayout.LayoutParams layoutParams;
@@ -96,7 +100,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     View mView;
 
     int movieId;
-    private int numberOfBackdrops;
     private FragmentCommunication fragmentCommunication;
 
     @Override
@@ -120,6 +123,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         mPresenter = new MovieDetailPresenter();
         mPresenter.attachView(this);
         mPresenter.getMovieDetails(movieId);
+
 
         return mView;
     }
@@ -163,6 +167,17 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
             textCollectionName.setText(movieDetail.getBelongsToCollection().getName());
             relativeLayoutCollection.setVisibility(View.VISIBLE);
             textBelognsToCollection.setVisibility(View.VISIBLE);
+
+
+            final int id = movieDetail.getBelongsToCollection().getId();
+
+            buttonCheckCollectioN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    fragmentCommunication.startCollectionList(id);
+                }
+            });
         }
 
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -174,17 +189,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         similar.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.similar, similar).commit();
 
-        List<Backdrop> backdropList = movieDetail.getImages().getBackdrops();
 
-        List<Video> videoList = movieDetail.getVideos().getResults();
-        getVideosForSlider(videoList);
-
-        getImagesForSlider(backdropList);
-
-
-        List<Review> reviewList = movieDetail.getReviews().getResults();
-
-        getReviews(reviewList);
+        getVideosForSlider(movieDetail.getVideos(), movieDetail.getTitle(), movieDetail.getOverview());
+        getImagesForSlider(movieDetail.getImages().getBackdrops());
+        getReviews(movieDetail.getReviews());
     }
 
     @Override
@@ -244,67 +252,64 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
 
     private void getImagesForSlider(List<Backdrop> backdropList) {
 
-        numberOfBackdrops = backdropList.size();
-
-        for (int i = 0; i < numberOfBackdrops; i++) {
-            Backdrop backdrop = backdropList.get(i);
-            Log.i("TAG", i + " getImagesForSlider " + backdrop.getFilePath());
-        }
-
         LinearLayout imageButtonLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_images);
         ImageView imageButton = (ImageView) imageButtonLayout.findViewById(R.id.image_button);
         TextView textButton = (TextView) imageButtonLayout.findViewById(R.id.text_button);
 
-        Random random = new Random();
-        int randomPicture = random.nextInt(numberOfBackdrops);
+        if (!backdropList.isEmpty()) {
 
-        textButton.setText("Images (" + numberOfBackdrops + ")");
-        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + backdropList.get(randomPicture).getFilePath()).into(imageButton);
+            textButton.setText("Images (" + backdropList.size() + ")");
+
+            Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButton);
+        } else {
+            textButton.setText("No images");
+        }
 
     }
 
-    private void getVideosForSlider(List<Video> videoList) {
-
-        for (int i = 0; i < videoList.size(); i++){
-            Video video = videoList.get(i);
-            Log.i("TAG", i + " getVideosForSlider " + video.getName());
-        }
+    private void getVideosForSlider(final Videos videos, final String title, final String overview) {
 
         LinearLayout imageButtonLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_videos);
         ImageView imageButton = (ImageView) imageButtonLayout.findViewById(R.id.image_button);
         ImageView playButton = (ImageView) imageButtonLayout.findViewById(R.id.play_button);
         TextView textButton = (TextView) imageButtonLayout.findViewById(R.id.text_button);
 
-        if (!videoList.isEmpty()){
+        if (!videos.getResults().isEmpty()){
             playButton.setVisibility(View.VISIBLE);
-            Random random = new Random();
-            int randomPicture = random.nextInt(videoList.size());
 
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(getActivity(), GalleryVideosActivity.class)
+                            .putExtra("videos", videos)
+                            .putExtra("title", title)
+                            .putExtra("overview", overview);
+                    startActivity(intent);
+
+                }
+            });
+
+            List<Video> videoList = videos.getResults();
             textButton.setText("Videos (" + videoList.size() + ")");
-            Picasso.with(getActivity()).load("http://img.youtube.com/vi/" +  videoList.get(randomPicture).getKey() + "/0.jpg").into(imageButton);
+            Picasso.with(getActivity()).load("http://img.youtube.com/vi/" +  videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButton);
         } else {
             textButton.setText("No videos");
         }
 
     }
 
-    private void getReviews(final List<Review> reviewList){
+    private void getReviews(final Reviews reviews){
 
-        for (int i = 0; i < reviewList.size(); i++){
-            Review video = reviewList.get(i);
-            Log.i("TAG", i + " getReview " + video.getAuthor());
-        }
-
-        if (!reviewList.isEmpty()){
+        if (!reviews.getResults().isEmpty()){
             LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_reviews);
             linearLayout.setVisibility(View.VISIBLE);
             TextView te = (TextView) linearLayout.findViewById(R.id.text_reviews);
-            te.setText("Reviews (" + reviewList.size() + ")");
+            te.setText("Reviews (" + reviews.getResults().size() + ")");
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    ArrayList<Review> reviews = (ArrayList<Review>) reviewList;
                     fragmentCommunication.startReviewList(reviews);
                 }
             });

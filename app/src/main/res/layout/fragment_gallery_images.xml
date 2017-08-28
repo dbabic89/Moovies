@@ -2,13 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.moovies.ui.review_list.ReviewListFragment"
-    android:background="@android:color/white">
+    tools:context="com.example.android.moovies.ui.gallery_images.GalleryImagesFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="8dp"
-        android:id="@+id/reviews_recycler_view"
+        android:id="@+id/recycler_view_images"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

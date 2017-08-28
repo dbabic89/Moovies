@@ -1,12 +1,11 @@
 package com.example.android.moovies.data.models.movie;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Review implements Parcelable {
+import java.io.Serializable;
+
+public class Review implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -53,15 +52,4 @@ public class Review implements Parcelable {
         this.url = url;
     }
 
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-    }
 }

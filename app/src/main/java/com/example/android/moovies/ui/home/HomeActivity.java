@@ -8,15 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.Review;
+import com.example.android.moovies.data.models.movie.Reviews;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
+import com.example.android.moovies.ui.movie_list.MovieListFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.review_list.ReviewListFragment;
 import com.example.android.moovies.utils.FragmentCommunication;
-
-import java.util.ArrayList;
 
 public class HomeActivity extends BaseActivity implements FragmentCommunication {
 
@@ -89,14 +88,26 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     }
 
     @Override
-    public void startReviewList(ArrayList<Review> reviewArrayList) {
+    public void startReviewList(Reviews reviews) {
 
         Fragment reviewListFragment = new ReviewListFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("reviews", reviewArrayList);
+        bundle.putSerializable("reviews", reviews);
         reviewListFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, reviewListFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startCollectionList(int id) {
+
+        Fragment movieListFragment = new MovieListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("collection_id", id);
+        bundle.putInt("tab", 5);
+        movieListFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, movieListFragment).addToBackStack("tag").commit();
     }
 
 }

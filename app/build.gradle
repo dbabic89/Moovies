@@ -19,6 +19,7 @@ android {
     }
     buildTypes.each {
         it.buildConfigField 'String', 'TMDB_APIKEY', TmdbApiKey
+        it.buildConfigField 'String', 'YOUTUBE_APIKEY', YoutubeApiKey
     }
 }
 
@@ -27,6 +28,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
@@ -50,6 +52,7 @@ dependencies {
     compile 'com.ms-square:expandableTextView:0.1.4'
     compile 'com.hedgehog.ratingbar:app:1.1.2'
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'org.parceler:parceler:1.1.9'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     provided 'javax.annotation:jsr250-api:1.0'

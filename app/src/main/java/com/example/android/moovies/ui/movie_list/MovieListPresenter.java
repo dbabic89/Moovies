@@ -3,6 +3,7 @@ package com.example.android.moovies.ui.movie_list;
 import android.util.Log;
 
 import com.example.android.moovies.BuildConfig;
+import com.example.android.moovies.data.models.movie.CollectionDetail;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
 import com.example.android.moovies.data.models.movie.MovieListResult;
 import com.example.android.moovies.data.remote.TmdbClient;
@@ -18,10 +19,11 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
-class MovieListPresenter extends BasePresenter<MovieListMvpView>{
+class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
     private TmdbInterface mTmdbInterface;
-    private Observable<MovieListResponse> mObservable;
+    private Observable<MovieListResponse> movieListObservable;
+    private Observable<CollectionDetail> collectionListObservable;
     private List<MovieListResult> mMovieListResultList;
     private int x = -1;
 
@@ -42,35 +44,68 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
         super.detachView();
     }
 
-    void getMovies(int page, int movieId){
+    void getMovies(int page, int movieId, int collection_id) {
         Log.i("TAG", "MovieListPresenter getMovies " + movieId);
 
         switch (x) {
             case 0:
-                mObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                movieListObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                startMovieListObservable();
                 break;
             case 1:
-                mObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                movieListObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                startMovieListObservable();
                 break;
             case 2:
-                mObservable = mTmdbInterface.getPopularMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                movieListObservable = mTmdbInterface.getPopularMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                startMovieListObservable();
                 break;
             case 3:
-                mObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                movieListObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                startMovieListObservable();
                 break;
             case 4:
-                mObservable = mTmdbInterface.getSimilar(movieId, BuildConfig.TMDB_APIKEY);
+                movieListObservable = mTmdbInterface.getSimilar(movieId, BuildConfig.TMDB_APIKEY);
+                startMovieListObservable();
+                break;
+            case 5:
+                collectionListObservable = mTmdbInterface.getCollection(collection_id, BuildConfig.TMDB_APIKEY);
+
+                collectionListObservable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableObserver<CollectionDetail>() {
+                            @Override
+                            public void onNext(CollectionDetail value) {
+                                if (value != null) {
+                                    mMovieListResultList.addAll(value.getParts());
+                                    getMvpView().showMovies(mMovieListResultList);
+                                } else {
+                                    getMvpView().showMoviesEmpty();
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                getMvpView().showError();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
                 break;
         }
+    }
 
-        mObservable
+    private void startMovieListObservable() {
+        movieListObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<MovieListResponse>() {
                     @Override
                     public void onNext(MovieListResponse value) {
-
-                        if (value != null){
+                        if (value != null) {
                             mMovieListResultList.addAll(value.getResults());
                             getMvpView().showMovies(mMovieListResultList);
                         } else {
@@ -80,7 +115,6 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView>{
 
                     @Override
                     public void onError(Throwable e) {
-
                         getMvpView().showError();
                     }
 

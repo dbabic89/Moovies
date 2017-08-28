@@ -3,22 +3,27 @@ package com.example.android.moovies.data.models.movie;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Reviews {
+public class Reviews implements Serializable{
 
     @SerializedName("page")
     @Expose
-    private int page;
+    public int page;
     @SerializedName("results")
     @Expose
-    private List<Review> results = null;
+    public List<Review> results = null;
     @SerializedName("total_pages")
     @Expose
-    private int totalPages;
+    public int totalPages;
     @SerializedName("total_results")
     @Expose
-    private int totalResults;
+    public int totalResults;
+
+    public Reviews(List<Review> results) {
+        this.results = results;
+    }
 
     public int getPage() {
         return page;

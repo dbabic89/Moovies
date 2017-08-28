@@ -55,9 +55,11 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
             }
         });
 
+        int collectionId = getArguments().getInt("collection_id");
+
         mPresenter = new MovieListPresenter(getArguments().getInt("tab"));
         mPresenter.attachView(this);
-        mPresenter.getMovies(1, 0);
+        mPresenter.getMovies(1, 0, collectionId);
 
 //        mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
 //
@@ -96,9 +98,6 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     @Override
     public void showMovies(List<MovieListResult> movies) {
         mMovieListAdapter.addAll(movies);
-        for (MovieListResult mo :movies) {
-            
-        }
     }
 
     @Override
@@ -108,7 +107,6 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
 
     @Override
     public void showMoviesEmpty() {
-
         Toast.makeText(getActivity(), "Nema filmova", Toast.LENGTH_SHORT).show();
     }
 

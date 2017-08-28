@@ -3,6 +3,7 @@ package com.example.android.moovies.data.remote;
 import android.accounts.Account;
 
 import com.example.android.moovies.data.models.authentication.RequestTokenResponse;
+import com.example.android.moovies.data.models.movie.CollectionDetail;
 import com.example.android.moovies.data.models.movie.MovieDetail;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
 
@@ -49,6 +50,10 @@ public interface TmdbInterface {
 
     @GET("movie/{movie_id}/similar")
     Observable<MovieListResponse> getSimilar(@Path("movie_id") int id, @Query("api_key") String apiKey);
+
+    @GET("collection/{collection_id}")
+    Observable<CollectionDetail> getCollection(@Path("collection_id") int id, @Query("api_key") String apiKey);
+
 
     //Movie details
 
