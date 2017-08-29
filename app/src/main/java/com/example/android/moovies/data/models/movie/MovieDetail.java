@@ -15,7 +15,7 @@ public class MovieDetail {
     private String backdropPath;
     @SerializedName("belongs_to_collection")
     @Expose
-    private BelongsToCollection belongsToCollection;
+    private CollectionDetail belongsToCollection;
     @SerializedName("budget")
     @Expose
     private int budget;
@@ -82,30 +82,27 @@ public class MovieDetail {
     @SerializedName("vote_count")
     @Expose
     private int voteCount;
-    @SerializedName("changes")
-    @Expose
-    private Changes changes;
-    @SerializedName("credits")
-    @Expose
-    private Credits credits;
     @SerializedName("images")
     @Expose
     private Images images;
+    @SerializedName("videos")
+    @Expose
+    private Videos videos;
+    @SerializedName("credits")
+    @Expose
+    private Credits credits;
+    @SerializedName("similar")
+    @Expose
+    private Similar similar;
+    @SerializedName("reviews")
+    @Expose
+    private Reviews reviews;
     @SerializedName("keywords")
     @Expose
     private Keywords keywords;
     @SerializedName("releases")
     @Expose
     private Releases releases;
-    @SerializedName("reviews")
-    @Expose
-    private Reviews reviews;
-    @SerializedName("similar")
-    @Expose
-    private Similar similar;
-    @SerializedName("videos")
-    @Expose
-    private Videos videos;
 
     public boolean isAdult() {
         return adult;
@@ -123,11 +120,11 @@ public class MovieDetail {
         this.backdropPath = backdropPath;
     }
 
-    public BelongsToCollection getBelongsToCollection() {
+    public CollectionDetail getBelongsToCollection() {
         return belongsToCollection;
     }
 
-    public void setBelongsToCollection(BelongsToCollection belongsToCollection) {
+    public void setBelongsToCollection(CollectionDetail belongsToCollection) {
         this.belongsToCollection = belongsToCollection;
     }
 
@@ -307,12 +304,20 @@ public class MovieDetail {
         this.voteCount = voteCount;
     }
 
-    public Changes getChanges() {
-        return changes;
+    public Images getImages() {
+        return images;
     }
 
-    public void setChanges(Changes changes) {
-        this.changes = changes;
+    public void setImages(Images images) {
+        this.images = images;
+    }
+
+    public Videos getVideos() {
+        return videos;
+    }
+
+    public void setVideos(Videos videos) {
+        this.videos = videos;
     }
 
     public Credits getCredits() {
@@ -323,12 +328,20 @@ public class MovieDetail {
         this.credits = credits;
     }
 
-    public Images getImages() {
-        return images;
+    public Similar getSimilar() {
+        return similar;
     }
 
-    public void setImages(Images images) {
-        this.images = images;
+    public void setSimilar(Similar similar) {
+        this.similar = similar;
+    }
+
+    public Reviews getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Reviews reviews) {
+        this.reviews = reviews;
     }
 
     public Keywords getKeywords() {
@@ -345,30 +358,6 @@ public class MovieDetail {
 
     public void setReleases(Releases releases) {
         this.releases = releases;
-    }
-
-    public Reviews getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Reviews reviews) {
-        this.reviews = reviews;
-    }
-
-    public Similar getSimilar() {
-        return similar;
-    }
-
-    public void setSimilar(Similar similar) {
-        this.similar = similar;
-    }
-
-    public Videos getVideos() {
-        return videos;
-    }
-
-    public void setVideos(Videos videos) {
-        this.videos = videos;
     }
 
 }

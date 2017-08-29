@@ -3,7 +3,7 @@
     android:id="@+id/recommended"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="195dp"
+    android:minHeight="205dp"
     android:layout_marginBottom="8dp">
 
     <LinearLayout
@@ -21,8 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"/>
 
             <Button
                 android:id="@+id/button_see_more"

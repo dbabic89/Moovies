@@ -33,7 +33,7 @@ public interface TmdbInterface {
     Call<MovieListResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
 
     @GET("genre/{genre_id}/movies")
-    public Observable<MovieListResponse> getMoviesByGenre(@Path("genre_id") int genre_id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getMoviesByGenre(@Path("genre_id") int genre_id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
 
 
     @GET("movie/now_playing")
@@ -58,8 +58,18 @@ public interface TmdbInterface {
     //Movie details
 
     @GET("movie/{id}")
-    Observable<MovieDetail> getMovieImages(@Path("id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
+    Observable<MovieDetail> getMovieDetails(@Path("id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
 
+    @GET("movie/{movie_id}/release_dates")
+    Observable<MovieDetail> getMovieReleaseDateAndCertification(@Path("movie_id") int id, @Query("api_key") String apiKey);
+
+    //Certification
+
+    @GET("certification/movie/list")
+    Observable<MovieDetail> getMovieCertification(@Query("api_key") String apiKey);
+
+    @GET("certification/tv/list")
+    Observable<MovieDetail> getTvCertification(@Query("api_key") String apiKey);
 
     //User authentication
 

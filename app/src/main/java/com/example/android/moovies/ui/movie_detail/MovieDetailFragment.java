@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.models.movie.Backdrop;
+import com.example.android.moovies.data.models.movie.Cast;
+import com.example.android.moovies.data.models.movie.Country;
 import com.example.android.moovies.data.models.movie.Genre;
 import com.example.android.moovies.data.models.movie.Keyword;
 import com.example.android.moovies.data.models.movie.MovieDetail;
@@ -92,6 +94,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     @BindView(R.id.button_check_collection)
     Button buttonCheckCollectioN;
 
+    @BindView(R.id.text_certification)
+    TextView textCertification;
+
     MovieDetailPresenter mPresenter;
     LayoutInflater layoutInflater;
     LinearLayout.LayoutParams layoutParams;
@@ -157,7 +162,19 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         textMovieReleaseDate.setText(StringFormating.dateFormating(movieDetail.getReleaseDate()));
         textMovieDirectedBy.setText(StringFormating.getDirectors(movieDetail.getCredits().getCrew()));
         textMovieDuration.setText(StringFormating.timeFormating(movieDetail.getRuntime()));
-        showKeywords(movieDetail.getKeywords().getKeywordsList());
+
+        List<Country> countries = movieDetail.getReleases().getCountries();
+
+        for (Country country: countries) {
+            if (country.getIso31661().equals("US")){
+                String certification = country.getCertification();
+                if (certification.isEmpty()){
+                    textCertification.setText("N/A");
+                } else {
+                    textCertification.setText(certification);
+                }
+            }
+        }
 
         Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + movieDetail.getBackdropPath()).into(imageMovieBackdrop);
         Picasso.with(getActivity()).load(Constants.URL_IMG_MOVIE_POSTER + movieDetail.getPosterPath()).into(imageMoviePoster);
@@ -190,9 +207,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         fragmentManager.beginTransaction().replace(R.id.similar, similar).commit();
 
 
-        getVideosForSlider(movieDetail.getVideos(), movieDetail.getTitle(), movieDetail.getOverview());
         getImagesForSlider(movieDetail.getImages().getBackdrops());
+        getVideosForSlider(movieDetail.getVideos(), movieDetail.getTitle(), movieDetail.getOverview());
+        getCast(movieDetail.getCredits().getCast());
         getReviews(movieDetail.getReviews());
+        showKeywords(movieDetail.getKeywords().getKeywordsList());
     }
 
     @Override
@@ -314,5 +333,24 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
                 }
             });
         }
+    }
+
+    private void getCast(List<Cast> castList) {
+
+        LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_cast);
+
+        for (int i = 0; i < 3; i++) {
+
+            RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(R.layout.icon_person, null);
+            TextView textView = (TextView) relativeLayout.findViewById(R.id.text_person);
+            ImageView imageView = (ImageView) relativeLayout.findViewById(R.id.image_person);
+            textView.setText(castList.get(i).getName());
+            Picasso.with(getActivity()).load(Constants.URL_IMG_MOVIE_POSTER + castList.get(i).getProfilePath()).resize(400, 200).into(imageView);
+            linearLayout.addView(relativeLayout);
+
+        }
+
+
+
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:paddingEnd="8dp">
+
+    <ImageView
+        android:id="@+id/image_person"
+        android:layout_width="100dp"
+        android:layout_height="140dp"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/text_person"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_alignBottom="@id/image_person"
+        android:padding="6dp" />
+
+</RelativeLayout>

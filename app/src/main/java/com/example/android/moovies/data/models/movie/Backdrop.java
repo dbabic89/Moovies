@@ -7,7 +7,7 @@ public class Backdrop  {
 
     @SerializedName("aspect_ratio")
     @Expose
-    private double aspectRatio;
+    private float aspectRatio;
     @SerializedName("file_path")
     @Expose
     private String filePath;
@@ -19,7 +19,7 @@ public class Backdrop  {
     private String iso6391;
     @SerializedName("vote_average")
     @Expose
-    private double voteAverage;
+    private float voteAverage;
     @SerializedName("vote_count")
     @Expose
     private int voteCount;
@@ -27,11 +27,11 @@ public class Backdrop  {
     @Expose
     private int width;
 
-    public double getAspectRatio() {
+    public float getAspectRatio() {
         return aspectRatio;
     }
 
-    public void setAspectRatio(double aspectRatio) {
+    public void setAspectRatio(float aspectRatio) {
         this.aspectRatio = aspectRatio;
     }
 
@@ -59,11 +59,11 @@ public class Backdrop  {
         this.iso6391 = iso6391;
     }
 
-    public double getVoteAverage() {
+    public float getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(double voteAverage) {
+    public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
     }
 

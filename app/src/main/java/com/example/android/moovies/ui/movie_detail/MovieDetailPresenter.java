@@ -32,7 +32,7 @@ public class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
     void getMovieDetails(int movieId) {
 
-        Observable<MovieDetail> observable = mTmdbInterface.getMovieImages(movieId, BuildConfig.TMDB_APIKEY, "images,videos,credits,similar,reviews,keywords");
+        Observable<MovieDetail> observable = mTmdbInterface.getMovieDetails(movieId, BuildConfig.TMDB_APIKEY, "images,videos,credits,similar,reviews,keywords,releases");
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

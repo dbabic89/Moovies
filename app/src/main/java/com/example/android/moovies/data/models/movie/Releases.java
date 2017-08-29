@@ -9,13 +9,13 @@ public class Releases {
 
     @SerializedName("countries")
     @Expose
-    private List<Object> countries = null;
+    private List<Country> countries = null;
 
-    public List<Object> getCountries() {
+    public List<Country> getCountries() {
         return countries;
     }
 
-    public void setCountries(List<Object> countries) {
+    public void setCountries(List<Country> countries) {
         this.countries = countries;
     }
 
