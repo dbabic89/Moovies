@@ -54,7 +54,6 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
             mPresenter = new MovieListPresenter(currentRv);
         }
         mPresenter.getMovies(1, movieId, 0);
-        Log.i("TAG", "HorizontalRecyclerView onCreateView " + movieId);
         mPresenter.attachView(this);
 
         mFragmentCommunication = (FragmentCommunication) getActivity();

@@ -1,23 +1,29 @@
 package com.example.android.moovies.ui.movie_detail;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.example.android.moovies.R;
+import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.data.models.movie.Backdrop;
 import com.example.android.moovies.data.models.movie.Cast;
+import com.example.android.moovies.data.models.movie.CollectionDetail;
 import com.example.android.moovies.data.models.movie.Country;
 import com.example.android.moovies.data.models.movie.Genre;
 import com.example.android.moovies.data.models.movie.Keyword;
@@ -35,115 +41,75 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Random;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MovieDetailFragment extends Fragment implements MovieDetailMvpView {
 
-    @BindView(R.id.text_movie_title)
-    TextView textMovieTitle;
-
-    @BindView(R.id.text_movie_rating)
-    TextView textMovieRating;
-
-    @BindView(R.id.image_movie_backdrop)
-    ImageView imageMovieBackdrop;
-
-    @BindView(R.id.image_movie_poster)
-    ImageView imageMoviePoster;
-
-    @BindView(R.id.text_movie_tagline)
-    TextView textMovieTagline;
-
-    @BindView(R.id.text_movie_overview)
-    TextView textMovieOverview;
-
-    @BindView(R.id.text_release_date)
-    TextView textMovieReleaseDate;
-
-    @BindView(R.id.text_directed_by_date)
-    TextView textMovieDirectedBy;
-
-    @BindView(R.id.text_duration)
-    TextView textMovieDuration;
-
-    @BindView(R.id.text_watchlist)
-    TextView textWatchlist;
-
-    @BindView(R.id.text_rating)
-    TextView textRating;
-
-    @BindView(R.id.text_list)
-    TextView textList;
-
-    @BindView(R.id.image_collection_backdrop)
-    ImageView imageMovieCollection;
-
-    @BindView(R.id.text_collection_name)
-    TextView textCollectionName;
-
-    @BindView(R.id.relative_layout_collection)
-    RelativeLayout relativeLayoutCollection;
-
-    @BindView(R.id.text_belongs_to_collection)
-    TextView textBelognsToCollection;
-
-    @BindView(R.id.recycler_view_keywords)
-    RecyclerView recyclerViewKeywords;
-
-    @BindView(R.id.button_check_collection)
+    View mView;
+    TextView textMovieTitle, textMovieRating, textMovieTagline, textMovieOverview, textMovieReleaseDate, textMovieDirectedBy,
+            textMovieDuration, textWatchlist, textRating, textList, textCollectionName, textBelognsToCollection, textCertification;
+    ImageView imageMovieBackdrop, imageMoviePoster, imageMovieCollection;
+    ImageButton imageButtonWatchlist, imageButtonRating;
     Button buttonCheckCollectioN;
 
-    @BindView(R.id.text_certification)
-    TextView textCertification;
+    RecyclerView recyclerViewKeywords;
+    RelativeLayout relativeLayoutCollection;
 
-    MovieDetailPresenter mPresenter;
     LayoutInflater layoutInflater;
     LinearLayout.LayoutParams layoutParams;
+
+    MovieDetailPresenter mPresenter;
     KeywordsAdapter keywordsAdapter;
+    SharedPreferencesManager sharedPreferencesManager;
+    FragmentCommunication fragmentCommunication;
 
-    View mView;
-
-    int movieId;
-    private FragmentCommunication fragmentCommunication;
+    int currentRating, movieId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        movieId = getArguments().getInt("movie_id");
 
-        layoutInflater = getActivity().getLayoutInflater();
-
+        sharedPreferencesManager = new SharedPreferencesManager(getActivity());
         fragmentCommunication = (FragmentCommunication) getActivity();
+        layoutInflater = getActivity().getLayoutInflater();
 
         layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
         mView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        ButterKnife.bind(this, mView);
+        initializeViews(mView);
 
-        movieId = getArguments().getInt("movie_id");
-
-        mPresenter = new MovieDetailPresenter();
+        mPresenter = new MovieDetailPresenter(this, sharedPreferencesManager);
         mPresenter.attachView(this);
         mPresenter.getMovieDetails(movieId);
+        mPresenter.getAccountStatesRated(movieId);
 
+        imageButtonWatchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (textWatchlist.getText().equals("Add to watchlist")) {
+                    textWatchlist.setText("On watchlist");
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
+                    mPresenter.addMovieToWatchlist(movieId, true);
+                } else {
+                    textWatchlist.setText("Add to watchlist");
+                    mPresenter.addMovieToWatchlist(movieId, false);
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+                }
+            }
+        });
+
+        imageButtonRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createDialog(movieId);
+            }
+        });
 
         return mView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-    }
 
     @Override
     public void onDestroy() {
@@ -152,97 +118,23 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     }
 
     @Override
-    public void showMovieDetail(MovieDetail movieDetail) {
+    public void showMovieDetail(final MovieDetail movieDetail) {
 
         textMovieRating.setText(String.valueOf(movieDetail.getVoteAverage()));
         textMovieTitle.setText(movieDetail.getTitle());
-        showGenres(movieDetail.getGenres());
         textMovieTagline.setText(movieDetail.getTagline());
         textMovieOverview.setText(movieDetail.getOverview());
         textMovieReleaseDate.setText(StringFormating.dateFormating(movieDetail.getReleaseDate()));
         textMovieDirectedBy.setText(StringFormating.getDirectors(movieDetail.getCredits().getCrew()));
         textMovieDuration.setText(StringFormating.timeFormating(movieDetail.getRuntime()));
 
-        List<Country> countries = movieDetail.getReleases().getCountries();
-
-        for (Country country: countries) {
-            if (country.getIso31661().equals("US")){
-                String certification = country.getCertification();
-                if (certification.isEmpty()){
-                    textCertification.setText("N/A");
-                } else {
-                    textCertification.setText(certification);
-                }
-            }
-        }
-
         Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + movieDetail.getBackdropPath()).into(imageMovieBackdrop);
         Picasso.with(getActivity()).load(Constants.URL_IMG_MOVIE_POSTER + movieDetail.getPosterPath()).into(imageMoviePoster);
 
-        if (movieDetail.getBelongsToCollection() != null) {
-            Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + movieDetail.getBelongsToCollection().getBackdropPath()).into(imageMovieCollection);
-            textCollectionName.setText(movieDetail.getBelongsToCollection().getName());
-            relativeLayoutCollection.setVisibility(View.VISIBLE);
-            textBelognsToCollection.setVisibility(View.VISIBLE);
-
-
-            final int id = movieDetail.getBelongsToCollection().getId();
-
-            buttonCheckCollectioN.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    fragmentCommunication.startCollectionList(id);
-                }
-            });
-        }
-
-        FragmentManager fragmentManager = getChildFragmentManager();
-
-        Fragment similar = new HorizontalRecyclerView();
-        Bundle bundle = new Bundle();
-        bundle.putInt("tab", 4);
-        bundle.putInt("movie_id", movieId);
-        similar.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.similar, similar).commit();
-
-
-        getImagesForSlider(movieDetail.getImages().getBackdrops());
-        getVideosForSlider(movieDetail.getVideos(), movieDetail.getTitle(), movieDetail.getOverview());
-        getCast(movieDetail.getCredits().getCast());
-        getReviews(movieDetail.getReviews());
-        showKeywords(movieDetail.getKeywords().getKeywordsList());
     }
 
     @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void showWatchlist(boolean watchlist) {
-        if (watchlist) {
-            textWatchlist.setText(R.string.on_watchlist);
-        } else {
-            textWatchlist.setText(R.string.add_to_watchlist);
-        }
-    }
-
-    @Override
-    public void showRating(int rating) {
-        textRating.setText(String.valueOf(rating));
-    }
-
-    @Override
-    public void showList(boolean list) {
-        if (list) {
-            textList.setText(R.string.on_list);
-        } else {
-            textList.setText(R.string.add_to_list);
-        }
-    }
-
-    private void showGenres(List<Genre> genreList) {
+    public void showGenres(List<Genre> genreList) {
 
         LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_genres);
 
@@ -257,19 +149,65 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
 
     }
 
-    private void showKeywords(List<Keyword> keywordsList) {
+    @Override
+    public void showCollection(CollectionDetail collectionDetail) {
+        if (collectionDetail != null) {
+            final int id = collectionDetail.getId();
 
-        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
-                .setScrollingEnabled(false)
-                .build();
+            Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + collectionDetail.getBackdropPath()).into(imageMovieCollection);
+            textCollectionName.setText(collectionDetail.getName());
+            relativeLayoutCollection.setVisibility(View.VISIBLE);
+            textBelognsToCollection.setVisibility(View.VISIBLE);
 
-        keywordsAdapter = new KeywordsAdapter(StringFormating.getKeywords(keywordsList));
-        recyclerViewKeywords.setLayoutManager(chipsLayoutManager);
-        recyclerViewKeywords.setAdapter(keywordsAdapter);
-
+            buttonCheckCollectioN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fragmentCommunication.startCollectionList(id);
+                }
+            });
+        }
     }
 
-    private void getImagesForSlider(List<Backdrop> backdropList) {
+    @Override
+    public void showCertification(List<Country> countries) {
+
+        for (Country country : countries)
+            if (country.getIso31661().equals("US")) {
+                String certification = country.getCertification();
+                if (certification.isEmpty()) textCertification.setText("N/A");
+                else textCertification.setText(certification);
+            }
+    }
+
+    @Override
+    public void showWatchlist(boolean watchlist) {
+        Log.i("TAG", "showWatchlist");
+        if (watchlist) {
+            textWatchlist.setText(R.string.on_watchlist);
+            imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
+        } else textWatchlist.setText(R.string.add_to_watchlist);
+    }
+
+    @Override
+    public void showRating(int rating) {
+        Log.i("TAG", "showRating");
+        if (rating == 0) {
+            textRating.setText("Rate this movie");
+            imageButtonRating.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+        } else {
+            textRating.setText(String.valueOf(rating));
+            imageButtonRating.setBackground(getResources().getDrawable(R.drawable.green_circle));
+        }
+    }
+
+    @Override
+    public void showList(boolean list) {
+        if (list) textList.setText(R.string.on_list);
+        else textList.setText(R.string.add_to_list);
+    }
+
+    @Override
+    public void showImagesForSlider(List<Backdrop> backdropList) {
 
         LinearLayout imageButtonLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_images);
         ImageView imageButton = (ImageView) imageButtonLayout.findViewById(R.id.image_button);
@@ -280,20 +218,19 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
             textButton.setText("Images (" + backdropList.size() + ")");
 
             Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButton);
-        } else {
-            textButton.setText("No images");
-        }
+        } else textButton.setText("No images");
 
     }
 
-    private void getVideosForSlider(final Videos videos, final String title, final String overview) {
+    @Override
+    public void showVideosForSlider(final Videos videos, final String title, final String overview) {
 
         LinearLayout imageButtonLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_videos);
         ImageView imageButton = (ImageView) imageButtonLayout.findViewById(R.id.image_button);
         ImageView playButton = (ImageView) imageButtonLayout.findViewById(R.id.play_button);
         TextView textButton = (TextView) imageButtonLayout.findViewById(R.id.text_button);
 
-        if (!videos.getResults().isEmpty()){
+        if (!videos.getResults().isEmpty()) {
             playButton.setVisibility(View.VISIBLE);
 
             imageButton.setOnClickListener(new View.OnClickListener() {
@@ -311,16 +248,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
 
             List<Video> videoList = videos.getResults();
             textButton.setText("Videos (" + videoList.size() + ")");
-            Picasso.with(getActivity()).load("http://img.youtube.com/vi/" +  videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButton);
-        } else {
-            textButton.setText("No videos");
-        }
+            Picasso.with(getActivity()).load("http://img.youtube.com/vi/" + videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButton);
+        } else textButton.setText("No videos");
 
     }
 
-    private void getReviews(final Reviews reviews){
+    @Override
+    public void showReviews(final Reviews reviews) {
 
-        if (!reviews.getResults().isEmpty()){
+        if (!reviews.getResults().isEmpty()) {
             LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_reviews);
             linearLayout.setVisibility(View.VISIBLE);
             TextView te = (TextView) linearLayout.findViewById(R.id.text_reviews);
@@ -335,7 +271,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         }
     }
 
-    private void getCast(List<Cast> castList) {
+    @Override
+    public void showCast(List<Cast> castList) {
 
         LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_cast);
 
@@ -349,8 +286,112 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
             linearLayout.addView(relativeLayout);
 
         }
+    }
 
+    @Override
+    public void showSimilarMovies(int movieId) {
 
+        FragmentManager fragmentManager = getChildFragmentManager();
+
+        Fragment similar = new HorizontalRecyclerView();
+        Bundle bundle = new Bundle();
+        bundle.putInt("tab", 4);
+        bundle.putInt("movie_id", movieId);
+        similar.setArguments(bundle);
+        fragmentManager.beginTransaction().replace(R.id.similar, similar).commit();
+
+    }
+
+    @Override
+    public void showKeywords(List<Keyword> keywordsList) {
+
+        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
+                .setScrollingEnabled(false)
+                .build();
+
+        keywordsAdapter = new KeywordsAdapter(StringFormating.getKeywords(keywordsList));
+        recyclerViewKeywords.setLayoutManager(chipsLayoutManager);
+        recyclerViewKeywords.setAdapter(keywordsAdapter);
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    private void createDialog(final int movieId) {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog__rating);
+        dialog.setTitle("Rate this movie");
+        com.hedgehog.ratingbar.RatingBar ratingBar = (com.hedgehog.ratingbar.RatingBar) dialog.findViewById(R.id.rating_bar);
+        ratingBar.setOnRatingChangeListener(new com.hedgehog.ratingbar.RatingBar.OnRatingChangeListener() {
+            @Override
+            public void onRatingChange(final float RatingCount) {
+
+                currentRating = (int) RatingCount;
+
+            }
+        });
+
+        Button b1 = (Button) dialog.findViewById(R.id.button3);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (currentRating < 1) {
+                    Toast.makeText(getActivity(), "Rate movie please", Toast.LENGTH_SHORT).show();
+                } else {
+                    mPresenter.addMovieRating(movieId, currentRating);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        Button b2 = (Button) dialog.findViewById(R.id.button4);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mPresenter.deleteMovieRating(movieId, 0);
+                dialog.dismiss();
+            }
+        });
+
+        if (textRating.getText().toString().equals("Rate this movie")) ratingBar.setStar(0);
+        else ratingBar.setStar(Integer.parseInt(textRating.getText().toString()));
+
+        dialog.show();
+    }
+
+    private void initializeViews(View view) {
+
+        textMovieTitle = (TextView) view.findViewById(R.id.text_movie_title);
+        textMovieRating = (TextView) view.findViewById(R.id.text_movie_rating);
+        textMovieTagline = (TextView) view.findViewById(R.id.text_movie_tagline);
+        textMovieOverview = (TextView) view.findViewById(R.id.text_movie_overview);
+        textMovieReleaseDate = (TextView) view.findViewById(R.id.text_release_date);
+        textMovieDirectedBy = (TextView) view.findViewById(R.id.text_directed_by);
+        textMovieDuration = (TextView) view.findViewById(R.id.text_duration);
+        textWatchlist = (TextView) view.findViewById(R.id.text_watchlist);
+        textRating = (TextView) view.findViewById(R.id.text_rating);
+        textList = (TextView) view.findViewById(R.id.text_list);
+        textCollectionName = (TextView) view.findViewById(R.id.text_collection_name);
+        textBelognsToCollection = (TextView) view.findViewById(R.id.text_belongs_to_collection);
+        textCertification = (TextView) view.findViewById(R.id.text_certification);
+
+        imageMovieBackdrop = (ImageView) view.findViewById(R.id.image_movie_backdrop);
+        imageMoviePoster = (ImageView) view.findViewById(R.id.image_movie_poster);
+        imageMovieCollection = (ImageView) view.findViewById(R.id.image_collection_backdrop);
+
+        imageButtonWatchlist = (ImageButton) view.findViewById(R.id.image_button_watchlist);
+        imageButtonRating = (ImageButton) view.findViewById(R.id.image_button_rating);
+
+        buttonCheckCollectioN = (Button) view.findViewById(R.id.button_check_collection);
+
+        recyclerViewKeywords =(RecyclerView) view.findViewById(R.id.recycler_view_keywords);
+
+        relativeLayoutCollection = (RelativeLayout) view.findViewById(R.id.relative_layout_collection);
 
     }
 }

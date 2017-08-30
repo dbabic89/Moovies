@@ -136,7 +136,7 @@
                     android:text="@string/label_directed_by" />
 
                 <TextView
-                    android:id="@+id/text_directed_by_date"
+                    android:id="@+id/text_directed_by"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/text_directed_by_label"
@@ -196,6 +196,7 @@
                     android:orientation="vertical">
 
                     <ImageButton
+                        android:id="@+id/image_button_watchlist"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/blue_circle" />
@@ -203,8 +204,7 @@
                     <TextView
                         android:id="@+id/text_watchlist"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Watchlist" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -215,6 +215,7 @@
                     android:orientation="vertical">
 
                     <ImageButton
+                        android:id="@+id/image_button_rating"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/blue_circle" />
@@ -222,8 +223,7 @@
                     <TextView
                         android:id="@+id/text_rating"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rating" />
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -234,6 +234,7 @@
                     android:orientation="vertical">
 
                     <ImageButton
+                        android:id="@+id/image_button_list"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/blue_circle" />

@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.android.moovies.BuildConfig;
-import com.example.android.moovies.R;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
 import com.example.android.moovies.ui.common.IconAdapter;
 
@@ -21,7 +20,7 @@ public class TmdbApiData {
 
     public TmdbApiData(Context context) {
         this.context = context;
-        tmdbInterface = TmdbClient.getTmdbV3Client().create(TmdbInterface.class);
+        tmdbInterface = TmdbClient.getTmdbClient().create(TmdbInterface.class);
     }
 
     public void getNowPlayingMovies(RecyclerView recyclerView){

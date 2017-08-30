@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <com.hedgehog.ratingbar.RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        hedgehog:clickable="true"
+        hedgehog:starCount="10"
+        hedgehog:starEmpty="@mipmap/star_empty"
+        hedgehog:starFill="@mipmap/star_full"
+        hedgehog:starImageHeight="32dp"
+        hedgehog:starImageWidth="32dp"
+        hedgehog:starImagePadding="4dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:text="Save"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:id="@+id/button3"/>
+
+        <Button
+            android:text="Remove"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/button4"/>
+    </LinearLayout>
+
+</LinearLayout>

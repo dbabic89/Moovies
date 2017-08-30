@@ -1,17 +1,22 @@
 package com.example.android.moovies.data.remote;
 
-import android.accounts.Account;
-
-import com.example.android.moovies.data.models.authentication.RequestTokenResponse;
+import com.example.android.moovies.data.models.account.Account;
+import com.example.android.moovies.data.models.account.AccountStatesRated;
+import com.example.android.moovies.data.models.account.AccountStatesRating;
+import com.example.android.moovies.data.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.data.models.account.PostResponse;
+import com.example.android.moovies.data.models.account.Rated;
+import com.example.android.moovies.data.models.authentication.Session;
+import com.example.android.moovies.data.models.authentication.Token;
 import com.example.android.moovies.data.models.movie.CollectionDetail;
 import com.example.android.moovies.data.models.movie.MovieDetail;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -73,20 +78,30 @@ public interface TmdbInterface {
 
     //User authentication
 
-    @POST("auth/request_token")
-    Call<RequestTokenResponse> requestToken(@Header("Authorization:") String authorization, @Header("Content-Type:") String contentType);
+    @GET("authentication/token/new")
+    Call<Token> getToken(@Query("api_key") String apiKey);
 
-    @Headers({"Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyM2ZiZmIzM2JjZGIzYjE4ZjJkYzY4YTM0MzgyNGEyMiIsInN1YiI6IjU4Zjg4YTUwYzNhMzY4NzVmMDAwNjc3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gAGNBXdD0Xf53WusYqEU4ioLAp0vCWmdUhyCjr8qqHo",
-    "Content-Type:application/json;charset=utf-8"})
-    @POST("auth/request_token")
-    Call<RequestTokenResponse> requestToken2();
+    @GET("authentication/session/new")
+    Call<Session> getSessionId(@Query("api_key") String apiKey, @Query("request_token") String token);
 
     //User account
 
     @GET("account")
     Observable<Account> getAccountDetail(@Query("api_key") String apiKey, @Query("session_id") String session_id);
 
-    @GET("/movie/{movie_id}/account_states")
-    Observable<Account> getAccountStates(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
+    @GET("movie/{movie_id}/account_states")
+    Observable<AccountStatesRated> getAccountStatesRated(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
+
+    @GET("movie/{movie_id}/account_states")
+    Observable<AccountStatesRating> getAccountStatesRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
+
+    @POST("account/{account_id}/watchlist")
+    Call<PostResponse> addMovieToWatchlist (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostMovieToWatchlist movieToWatchlist);
+
+    @POST("movie/{movie_id}/rating")
+    Call<PostResponse> addMovieRating (@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
+
+    @DELETE("movie/{movie_id}/rating")
+    Call<PostResponse> deleteMovieRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
 }

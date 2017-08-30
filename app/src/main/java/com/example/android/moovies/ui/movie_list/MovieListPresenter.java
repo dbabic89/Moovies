@@ -29,7 +29,7 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
     MovieListPresenter(int x) {
 
-        mTmdbInterface = TmdbClient.getTmdbV3Client().create(TmdbInterface.class);
+        mTmdbInterface = TmdbClient.getTmdbClient().create(TmdbInterface.class);
         mMovieListResultList = new ArrayList<>();
         this.x = x;
     }
@@ -45,7 +45,6 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
     }
 
     void getMovies(int page, int movieId, int collection_id) {
-        Log.i("TAG", "MovieListPresenter getMovies " + movieId);
 
         switch (x) {
             case 0:
