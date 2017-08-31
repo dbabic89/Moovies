@@ -10,22 +10,22 @@ import com.example.android.moovies.R;
 
 import java.util.List;
 
-class KeywordsAdapter extends RecyclerView.Adapter<KeywordsAdapter.MovieViewHolder> {
+class ChipsAdapter extends RecyclerView.Adapter<ChipsAdapter.MovieViewHolder> {
 
     private List<String> keywords;
 
-    KeywordsAdapter(List<String> keywords) {
+    ChipsAdapter(List<String> keywords) {
         this.keywords = keywords;
     }
 
     @Override
-    public KeywordsAdapter.MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChipsAdapter.MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chip_keyword, parent, false);
-        return new KeywordsAdapter.MovieViewHolder(view);
+        return new ChipsAdapter.MovieViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(KeywordsAdapter.MovieViewHolder holder, final int position) {
+    public void onBindViewHolder(ChipsAdapter.MovieViewHolder holder, final int position) {
 
         holder.textKeyword.setText(keywords.get(position));
     }

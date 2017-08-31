@@ -40,11 +40,6 @@ class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>
         return reviews.size();
     }
 
-
-    Review getItem(int position) {
-        return reviews.get(position);
-    }
-
     public void add(Review movie) {
         reviews.add(movie);
         notifyItemInserted(reviews.size() - 1);

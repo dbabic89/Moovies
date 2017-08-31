@@ -16,4 +16,10 @@
     <string name="check_collection">Check collection</string>
     <string name="this_movie_belongs_to">This movie belongs to: </string>
     <string name="keywords_label">Keywords:</string>
+    <string name="no_videos">No videos</string>
+    <string name="no_overview">No overview</string>
+    <string name="no_images">No images</string>
+    <string name="no_tagline">No tagline</string>
+    <string name="not_available">N/A</string>
+    <string name="info_label">Info</string>
 </resources>

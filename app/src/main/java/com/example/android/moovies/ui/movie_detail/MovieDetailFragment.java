@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,10 +25,9 @@ import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.data.models.movie.Backdrop;
 import com.example.android.moovies.data.models.movie.Cast;
 import com.example.android.moovies.data.models.movie.CollectionDetail;
-import com.example.android.moovies.data.models.movie.Country;
+import com.example.android.moovies.data.models.movie.Crew;
 import com.example.android.moovies.data.models.movie.Genre;
 import com.example.android.moovies.data.models.movie.Keyword;
-import com.example.android.moovies.data.models.movie.MovieDetail;
 import com.example.android.moovies.data.models.movie.Reviews;
 import com.example.android.moovies.data.models.movie.Video;
 import com.example.android.moovies.data.models.movie.Videos;
@@ -41,23 +41,25 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Random;
 
-public class MovieDetailFragment extends Fragment implements MovieDetailMvpView {
+public class MovieDetailFragment extends Fragment implements MovieDetailMvpView, View.OnClickListener {
 
     View mView;
-    TextView textMovieTitle, textMovieRating, textMovieTagline, textMovieOverview, textMovieReleaseDate, textMovieDirectedBy,
-            textMovieDuration, textWatchlist, textRating, textList, textCollectionName, textBelognsToCollection, textCertification;
-    ImageView imageMovieBackdrop, imageMoviePoster, imageMovieCollection;
+    TextView textTitle, textMovieFullTitle, textMovieRating, textMovieTagline, textMovieOverview, textMovieReleaseDate, textMovieDirectedBy,
+            textMovieDuration, textWatchlist, textRating, textList, textCollectionName, textBelognsToCollection, textCredits, textCertification,
+            textReviewLabel, textInfoLabel, textProductionCompanies, textProductionCountries, textSpokenLanguage, textBudget, textRevenue, textKeywordsLabel, textButtonImages, textButtonVideos;
+    ImageView imageMovieBackdrop, imageMoviePoster, imageMovieCollection, imageButtonImages, imageButtonVideos, imagePlayButtonVideos;
     ImageButton imageButtonWatchlist, imageButtonRating;
-    Button buttonCheckCollectioN;
+    Button buttonCheckCollection;
 
-    RecyclerView recyclerViewKeywords;
+    RecyclerView recyclerViewGenres, recyclerViewKeywords;
+    LinearLayout linearLayoutReviews, linearLayoutVideos, linearLayoutImages;
     RelativeLayout relativeLayoutCollection;
+    FrameLayout frameLayoutSimilar;
 
     LayoutInflater layoutInflater;
-    LinearLayout.LayoutParams layoutParams;
 
     MovieDetailPresenter mPresenter;
-    KeywordsAdapter keywordsAdapter;
+    ChipsAdapter chipsAdapter;
     SharedPreferencesManager sharedPreferencesManager;
     FragmentCommunication fragmentCommunication;
 
@@ -72,44 +74,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         fragmentCommunication = (FragmentCommunication) getActivity();
         layoutInflater = getActivity().getLayoutInflater();
 
-        layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-
         mView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         initializeViews(mView);
+        setPresenter();
 
-        mPresenter = new MovieDetailPresenter(this, sharedPreferencesManager);
-        mPresenter.attachView(this);
-        mPresenter.getMovieDetails(movieId);
-        mPresenter.getAccountStatesRated(movieId);
-
-        imageButtonWatchlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (textWatchlist.getText().equals("Add to watchlist")) {
-                    textWatchlist.setText("On watchlist");
-                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
-                    mPresenter.addMovieToWatchlist(movieId, true);
-                } else {
-                    textWatchlist.setText("Add to watchlist");
-                    mPresenter.addMovieToWatchlist(movieId, false);
-                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.blue_circle));
-                }
-            }
-        });
-
-        imageButtonRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createDialog(movieId);
-            }
-        });
+        imageButtonWatchlist.setOnClickListener(this);
+        imageButtonRating.setOnClickListener(this);
 
         return mView;
     }
-
 
     @Override
     public void onDestroy() {
@@ -118,65 +91,123 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     }
 
     @Override
-    public void showMovieDetail(final MovieDetail movieDetail) {
+    public void showMovieDetail(String movieTitle, float movieRating) {
 
-        textMovieRating.setText(String.valueOf(movieDetail.getVoteAverage()));
-        textMovieTitle.setText(movieDetail.getTitle());
-        textMovieTagline.setText(movieDetail.getTagline());
-        textMovieOverview.setText(movieDetail.getOverview());
-        textMovieReleaseDate.setText(StringFormating.dateFormating(movieDetail.getReleaseDate()));
-        textMovieDirectedBy.setText(StringFormating.getDirectors(movieDetail.getCredits().getCrew()));
-        textMovieDuration.setText(StringFormating.timeFormating(movieDetail.getRuntime()));
+        textMovieRating.setText(String.valueOf(movieRating));
+        textTitle.setText(movieTitle);
+        textInfoLabel.setVisibility(View.VISIBLE);
+        textMovieFullTitle.setText(movieTitle);
 
-        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + movieDetail.getBackdropPath()).into(imageMovieBackdrop);
-        Picasso.with(getActivity()).load(Constants.URL_IMG_MOVIE_POSTER + movieDetail.getPosterPath()).into(imageMoviePoster);
+    }
 
+    @Override
+    public void showBackdrop(String imageUrl) {
+        Picasso.with(getActivity()).load(imageUrl).into(imageMovieBackdrop);
+    }
+
+    @Override
+    public void showNoBackdrop() {
+        imageMoviePoster.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageMovieBackdrop);
+    }
+
+    @Override
+    public void showTagline(String tagline) {
+        textMovieTagline.setText(tagline);
+    }
+
+    @Override
+    public void showPoster(String imageUrl) {
+        Picasso.with(getActivity()).load(imageUrl).into(imageMoviePoster);
+    }
+
+    @Override
+    public void showNoPoster() {
+        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageMoviePoster);
+    }
+
+    @Override
+    public void showOverview(String overview) {
+        textMovieOverview.setText(overview);
+    }
+
+    @Override
+    public void showNoOverview() {
+        textMovieOverview.setText(R.string.no_overview);
     }
 
     @Override
     public void showGenres(List<Genre> genreList) {
 
-        LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_genres);
 
-        for (String string : StringFormating.getGenres(genreList)) {
+        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
+                .setScrollingEnabled(false)
+                .build();
 
-            TextView textView = (TextView) layoutInflater.inflate(R.layout.genre_text, null);
-            textView.setText(string);
-            layoutParams.setMargins(0, 0, 8, 8);
-            textView.setLayoutParams(layoutParams);
-            linearLayout.addView(textView);
-        }
+        chipsAdapter = new ChipsAdapter(StringFormating.getGenres(genreList));
+        textKeywordsLabel.setVisibility(View.VISIBLE);
+        recyclerViewGenres.setVisibility(View.VISIBLE);
+        recyclerViewGenres.setLayoutManager(chipsLayoutManager);
+        recyclerViewGenres.setAdapter(chipsAdapter);
 
     }
 
     @Override
     public void showCollection(CollectionDetail collectionDetail) {
-        if (collectionDetail != null) {
-            final int id = collectionDetail.getId();
 
-            Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + collectionDetail.getBackdropPath()).into(imageMovieCollection);
-            textCollectionName.setText(collectionDetail.getName());
-            relativeLayoutCollection.setVisibility(View.VISIBLE);
-            textBelognsToCollection.setVisibility(View.VISIBLE);
+        final int id = collectionDetail.getId();
 
-            buttonCheckCollectioN.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    fragmentCommunication.startCollectionList(id);
-                }
-            });
-        }
+        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + collectionDetail.getBackdropPath()).into(imageMovieCollection);
+        textCollectionName.setText(collectionDetail.getName());
+        relativeLayoutCollection.setVisibility(View.VISIBLE);
+        textBelognsToCollection.setVisibility(View.VISIBLE);
+
+        buttonCheckCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentCommunication.startCollectionList(id);
+            }
+        });
     }
 
     @Override
-    public void showCertification(List<Country> countries) {
+    public void showCertification(String certification) {
+        textCertification.setText(certification);
+    }
 
-        for (Country country : countries)
-            if (country.getIso31661().equals("US")) {
-                String certification = country.getCertification();
-                if (certification.isEmpty()) textCertification.setText("N/A");
-                else textCertification.setText(certification);
-            }
+    @Override
+    public void showNoCertification() {
+        textCertification.setText(R.string.not_available);
+    }
+
+    @Override
+    public void showReleaseDate(String releaseDate) {
+        textMovieReleaseDate.setText(StringFormating.dateFormating(releaseDate));
+    }
+
+    @Override
+    public void showNoReleaseDate() {
+        textMovieReleaseDate.setText(R.string.not_available);
+    }
+
+    @Override
+    public void showDuration(int duration) {
+        textMovieDuration.setText(StringFormating.timeFormating(duration));
+    }
+
+    @Override
+    public void showNoDuration() {
+        textMovieDuration.setText(R.string.not_available);
+    }
+
+    @Override
+    public void showDirectedBy(List<Crew> crewList) {
+        textMovieDirectedBy.setText(StringFormating.getDirectors(crewList));
+    }
+
+    @Override
+    public void showNoDirectedBy() {
+        textMovieDirectedBy.setText(R.string.not_available);
     }
 
     @Override
@@ -207,73 +238,68 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     }
 
     @Override
-    public void showImagesForSlider(List<Backdrop> backdropList) {
+    public void showImages(List<Backdrop> backdropList) {
+        textButtonImages.setText("Images (" + backdropList.size() + ")");
+        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButtonImages);
+    }
 
-        LinearLayout imageButtonLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_images);
-        ImageView imageButton = (ImageView) imageButtonLayout.findViewById(R.id.image_button);
-        TextView textButton = (TextView) imageButtonLayout.findViewById(R.id.text_button);
+    @Override
+    public void showNoImages() {
+        textButtonImages.setText(R.string.no_images);
+        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageButtonImages);
+    }
 
-        if (!backdropList.isEmpty()) {
+    @Override
+    public void showVideos(final Videos videos, final String title, final String overview) {
 
-            textButton.setText("Images (" + backdropList.size() + ")");
+        imagePlayButtonVideos.setVisibility(View.VISIBLE);
 
-            Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButton);
-        } else textButton.setText("No images");
+        imageButtonVideos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), GalleryVideosActivity.class)
+                        .putExtra("videos", videos)
+                        .putExtra("title", title)
+                        .putExtra("overview", overview);
+                startActivity(intent);
+
+            }
+        });
+
+        List<Video> videoList = videos.getResults();
+        textButtonVideos.setText("Videos (" + videoList.size() + ")");
+        Picasso.with(getActivity()).load("http://img.youtube.com/vi/" + videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButtonVideos);
 
     }
 
     @Override
-    public void showVideosForSlider(final Videos videos, final String title, final String overview) {
-
-        LinearLayout imageButtonLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_videos);
-        ImageView imageButton = (ImageView) imageButtonLayout.findViewById(R.id.image_button);
-        ImageView playButton = (ImageView) imageButtonLayout.findViewById(R.id.play_button);
-        TextView textButton = (TextView) imageButtonLayout.findViewById(R.id.text_button);
-
-        if (!videos.getResults().isEmpty()) {
-            playButton.setVisibility(View.VISIBLE);
-
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent intent = new Intent(getActivity(), GalleryVideosActivity.class)
-                            .putExtra("videos", videos)
-                            .putExtra("title", title)
-                            .putExtra("overview", overview);
-                    startActivity(intent);
-
-                }
-            });
-
-            List<Video> videoList = videos.getResults();
-            textButton.setText("Videos (" + videoList.size() + ")");
-            Picasso.with(getActivity()).load("http://img.youtube.com/vi/" + videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButton);
-        } else textButton.setText("No videos");
+    public void showNoVideos() {
+        textButtonVideos.setText(R.string.no_videos);
+        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageButtonVideos);
 
     }
 
     @Override
     public void showReviews(final Reviews reviews) {
 
-        if (!reviews.getResults().isEmpty()) {
-            LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_reviews);
-            linearLayout.setVisibility(View.VISIBLE);
-            TextView te = (TextView) linearLayout.findViewById(R.id.text_reviews);
-            te.setText("Reviews (" + reviews.getResults().size() + ")");
-            linearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        textReviewLabel.setVisibility(View.VISIBLE);
+        linearLayoutReviews.setVisibility(View.VISIBLE);
+        TextView te = (TextView) linearLayoutReviews.findViewById(R.id.text_reviews);
+        te.setText("Reviews (" + reviews.getResults().size() + ")");
+        linearLayoutReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    fragmentCommunication.startReviewList(reviews);
-                }
-            });
-        }
+                fragmentCommunication.startReviewList(reviews);
+            }
+        });
     }
 
     @Override
     public void showCast(List<Cast> castList) {
 
+        textCredits.setVisibility(View.VISIBLE);
         LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_cast);
 
         for (int i = 0; i < 3; i++) {
@@ -289,6 +315,31 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
     }
 
     @Override
+    public void showProductionCompanies(String productionCompanies) {
+        textProductionCompanies.setText(productionCompanies);
+    }
+
+    @Override
+    public void showProductionCountries(String productionCountries) {
+        textProductionCountries.setText(productionCountries);
+    }
+
+    @Override
+    public void showSpokenLanguage(String spokenLanguages) {
+        textSpokenLanguage.setText(spokenLanguages);
+    }
+
+    @Override
+    public void showBudget(String budget) {
+        textBudget.setText(budget + " $");
+    }
+
+    @Override
+    public void showRevenue(String revenue) {
+        textRevenue.setText(revenue + " $");
+    }
+
+    @Override
     public void showSimilarMovies(int movieId) {
 
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -298,6 +349,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         bundle.putInt("tab", 4);
         bundle.putInt("movie_id", movieId);
         similar.setArguments(bundle);
+        frameLayoutSimilar.setVisibility(View.VISIBLE);
         fragmentManager.beginTransaction().replace(R.id.similar, similar).commit();
 
     }
@@ -309,14 +361,96 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
                 .setScrollingEnabled(false)
                 .build();
 
-        keywordsAdapter = new KeywordsAdapter(StringFormating.getKeywords(keywordsList));
+        chipsAdapter = new ChipsAdapter(StringFormating.getKeywords(keywordsList));
+        textKeywordsLabel.setVisibility(View.VISIBLE);
+        recyclerViewKeywords.setVisibility(View.VISIBLE);
         recyclerViewKeywords.setLayoutManager(chipsLayoutManager);
-        recyclerViewKeywords.setAdapter(keywordsAdapter);
+        recyclerViewKeywords.setAdapter(chipsAdapter);
 
     }
 
     @Override
     public void showError() {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        int id = view.getId();
+
+        if (id == R.id.image_button_watchlist) {
+
+            if (textWatchlist.getText().equals("Add to watchlist")) {
+                textWatchlist.setText("On watchlist");
+                imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
+                mPresenter.addMovieToWatchlist(movieId, true);
+            } else {
+                textWatchlist.setText("Add to watchlist");
+                mPresenter.addMovieToWatchlist(movieId, false);
+                imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+            }
+
+        } else if (id == R.id.image_button_rating) {
+            createDialog(movieId);
+        }
+    }
+
+    private void setPresenter() {
+        mPresenter = new MovieDetailPresenter(this, sharedPreferencesManager);
+        mPresenter.attachView(this);
+        mPresenter.getMovieDetails(movieId);
+        mPresenter.getAccountStatesRated(movieId);
+    }
+
+    private void initializeViews(View view) {
+
+        linearLayoutReviews = (LinearLayout) mView.findViewById(R.id.linear_layout_reviews);
+        linearLayoutImages = (LinearLayout) mView.findViewById(R.id.linear_layout_images);
+        linearLayoutVideos = (LinearLayout) mView.findViewById(R.id.linear_layout_videos);
+        relativeLayoutCollection = (RelativeLayout) view.findViewById(R.id.relative_layout_collection);
+        frameLayoutSimilar = (FrameLayout) view.findViewById(R.id.similar);
+
+        textTitle = (TextView) view.findViewById(R.id.text_movie_title);
+        textMovieFullTitle = (TextView) view.findViewById(R.id.text_movie_full_title);
+        textMovieRating = (TextView) view.findViewById(R.id.text_movie_rating);
+        textMovieTagline = (TextView) view.findViewById(R.id.text_movie_tagline);
+        textMovieOverview = (TextView) view.findViewById(R.id.text_movie_overview);
+        textMovieReleaseDate = (TextView) view.findViewById(R.id.text_release_date);
+        textMovieDirectedBy = (TextView) view.findViewById(R.id.text_directed_by);
+        textMovieDuration = (TextView) view.findViewById(R.id.text_duration);
+        textWatchlist = (TextView) view.findViewById(R.id.text_watchlist);
+        textRating = (TextView) view.findViewById(R.id.text_rating);
+        textList = (TextView) view.findViewById(R.id.text_list);
+        textCollectionName = (TextView) view.findViewById(R.id.text_collection_name);
+        textBelognsToCollection = (TextView) view.findViewById(R.id.text_belongs_to_collection_label);
+        textCredits = (TextView) view.findViewById(R.id.text_credits_label);
+        textCertification = (TextView) view.findViewById(R.id.text_certification);
+        textReviewLabel = (TextView) view.findViewById(R.id.text_reviews_label);
+        textInfoLabel = (TextView) view.findViewById(R.id.text_info_label);
+        textProductionCompanies = (TextView) view.findViewById(R.id.text_movie_production_companies);
+        textProductionCountries = (TextView) view.findViewById(R.id.text_movie_production_countries);
+        textSpokenLanguage = (TextView) view.findViewById(R.id.text_movie_spoken_language);
+        textBudget = (TextView) view.findViewById(R.id.text_movie_budget);
+        textRevenue = (TextView) view.findViewById(R.id.text_movie_revenue);
+        textKeywordsLabel = (TextView) view.findViewById(R.id.text_keywords_label);
+        textButtonImages = (TextView) linearLayoutImages.findViewById(R.id.text_button);
+        textButtonVideos = (TextView) linearLayoutVideos.findViewById(R.id.text_button);
+
+        imageMovieBackdrop = (ImageView) view.findViewById(R.id.image_movie_backdrop);
+        imageMoviePoster = (ImageView) view.findViewById(R.id.image_movie_poster);
+        imageMovieCollection = (ImageView) view.findViewById(R.id.image_collection_backdrop);
+        imageButtonImages = (ImageView) linearLayoutImages.findViewById(R.id.image_button);
+        imageButtonVideos = (ImageView) linearLayoutVideos.findViewById(R.id.image_button);
+        imagePlayButtonVideos = (ImageView) linearLayoutVideos.findViewById(R.id.play_button);
+
+        imageButtonWatchlist = (ImageButton) view.findViewById(R.id.image_button_watchlist);
+        imageButtonRating = (ImageButton) view.findViewById(R.id.image_button_rating);
+
+        buttonCheckCollection = (Button) view.findViewById(R.id.button_check_collection);
+
+        recyclerViewGenres = (RecyclerView) view.findViewById(R.id.recycler_view_genres);
+        recyclerViewKeywords = (RecyclerView) view.findViewById(R.id.recycler_view_keywords);
 
     }
 
@@ -364,34 +498,4 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView 
         dialog.show();
     }
 
-    private void initializeViews(View view) {
-
-        textMovieTitle = (TextView) view.findViewById(R.id.text_movie_title);
-        textMovieRating = (TextView) view.findViewById(R.id.text_movie_rating);
-        textMovieTagline = (TextView) view.findViewById(R.id.text_movie_tagline);
-        textMovieOverview = (TextView) view.findViewById(R.id.text_movie_overview);
-        textMovieReleaseDate = (TextView) view.findViewById(R.id.text_release_date);
-        textMovieDirectedBy = (TextView) view.findViewById(R.id.text_directed_by);
-        textMovieDuration = (TextView) view.findViewById(R.id.text_duration);
-        textWatchlist = (TextView) view.findViewById(R.id.text_watchlist);
-        textRating = (TextView) view.findViewById(R.id.text_rating);
-        textList = (TextView) view.findViewById(R.id.text_list);
-        textCollectionName = (TextView) view.findViewById(R.id.text_collection_name);
-        textBelognsToCollection = (TextView) view.findViewById(R.id.text_belongs_to_collection);
-        textCertification = (TextView) view.findViewById(R.id.text_certification);
-
-        imageMovieBackdrop = (ImageView) view.findViewById(R.id.image_movie_backdrop);
-        imageMoviePoster = (ImageView) view.findViewById(R.id.image_movie_poster);
-        imageMovieCollection = (ImageView) view.findViewById(R.id.image_collection_backdrop);
-
-        imageButtonWatchlist = (ImageButton) view.findViewById(R.id.image_button_watchlist);
-        imageButtonRating = (ImageButton) view.findViewById(R.id.image_button_rating);
-
-        buttonCheckCollectioN = (Button) view.findViewById(R.id.button_check_collection);
-
-        recyclerViewKeywords =(RecyclerView) view.findViewById(R.id.recycler_view_keywords);
-
-        relativeLayoutCollection = (RelativeLayout) view.findViewById(R.id.relative_layout_collection);
-
-    }
 }

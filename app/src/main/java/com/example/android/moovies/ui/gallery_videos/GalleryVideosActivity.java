@@ -84,9 +84,7 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
                     youTubePlayer2.loadVideo(videos.getResults().get(position).getKey());
                 }
             });
-        } else {
-            recyclerViewVideos.setVisibility(View.GONE);
-        }
+        } else recyclerViewVideos.setVisibility(View.GONE);
 
     }
 

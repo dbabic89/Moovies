@@ -11,7 +11,6 @@ import com.example.android.moovies.R;
 
 public class FindFragment extends Fragment {
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

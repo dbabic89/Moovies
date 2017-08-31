@@ -3,6 +3,9 @@ package com.example.android.moovies.utils;
 import com.example.android.moovies.data.models.movie.Crew;
 import com.example.android.moovies.data.models.movie.Genre;
 import com.example.android.moovies.data.models.movie.Keyword;
+import com.example.android.moovies.data.models.movie.ProductionCompany;
+import com.example.android.moovies.data.models.movie.ProductionCountry;
+import com.example.android.moovies.data.models.movie.SpokenLanguage;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -115,4 +118,56 @@ public class StringFormating {
         return " " + outputFormat.format(currentDate);
     }
 
+    public static String countriesFormating(List<ProductionCountry> countryList){
+
+        String countries = "";
+
+        for (int i = 0; i < countryList.size(); i++) {
+
+            String country = countryList.get(i).getName();
+
+            if (i == 0) {
+                countries = countries + country;
+            } else{
+                countries = countries + ", " + country;
+            }
+        }
+
+        return countries;
+    }
+
+    public static String companyFormating(List<ProductionCompany> companyList){
+
+        String companies = "";
+
+        for (int i = 0; i < companyList.size(); i++) {
+
+            String company = companyList.get(i).getName();
+
+            if (i == 0) {
+                companies = companies + company;
+            } else{
+                companies = companies + ", " + company;
+            }
+        }
+
+        return companies;
+    }
+
+    public static String getSpokenLanguage(List<SpokenLanguage> spokenLanguages) {
+
+        String languages = "";
+
+        for (int i = 0; i < spokenLanguages.size(); i++){
+
+            String language = spokenLanguages.get(i).getName();
+
+            if (i == 0) {
+                languages = languages + language;
+            } else{
+                languages = languages + ", " + language;
+            }
+        }
+        return languages;
+    }
 }

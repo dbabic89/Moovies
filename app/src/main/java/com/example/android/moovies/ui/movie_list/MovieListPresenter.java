@@ -1,7 +1,5 @@
 package com.example.android.moovies.ui.movie_list;
 
-import android.util.Log;
-
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.models.movie.CollectionDetail;
 import com.example.android.moovies.data.models.movie.MovieListResponse;
@@ -48,11 +46,11 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
         switch (x) {
             case 0:
-                movieListObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                movieListObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "DE");
                 startMovieListObservable();
                 break;
             case 1:
-                movieListObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
+                movieListObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "DE");
                 startMovieListObservable();
                 break;
             case 2:

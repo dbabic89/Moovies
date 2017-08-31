@@ -42,10 +42,10 @@ public interface TmdbInterface {
 
 
     @GET("movie/now_playing")
-    Observable<MovieListResponse> getNowPlayingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getNowPlayingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex, @Query("region") String region);
 
     @GET("movie/upcoming")
-    Observable<MovieListResponse> getUpcomingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getUpcomingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex, @Query("region") String region);
 
     @GET("movie/popular")
     Observable<MovieListResponse> getPopularMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);

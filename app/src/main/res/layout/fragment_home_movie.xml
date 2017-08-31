@@ -17,24 +17,28 @@
             android:id="@+id/now_playing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <FrameLayout
             android:id="@+id/upcoming"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <FrameLayout
             android:id="@+id/popular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <FrameLayout
             android:id="@+id/top_rated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </LinearLayout>

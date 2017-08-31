@@ -10,16 +10,17 @@ import android.widget.LinearLayout;
 
 import java.util.List;
 
-public class CustomViewPager {
+class CustomViewPager {
+
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private FragmentManager mFragmentManager;
 
     private List<Fragment> mFragmentList;
     private List<String> mStringList;
-    private FragmentManager mFragmentManager;
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
     private int currentTab = -1;
 
-    public CustomViewPager(List<Fragment> mFragmentList, List<String> mStringList, FragmentManager mFragmentManager, ViewPager mViewPager, TabLayout mTabLayout, int currentTab) {
+    CustomViewPager(List<Fragment> mFragmentList, List<String> mStringList, FragmentManager mFragmentManager, ViewPager mViewPager, TabLayout mTabLayout, int currentTab) {
         this.mFragmentList = mFragmentList;
         this.mStringList = mStringList;
         this.mFragmentManager = mFragmentManager;
@@ -44,13 +45,16 @@ public class CustomViewPager {
     private void setupTabLayout() {
 
         mTabLayout.setupWithViewPager(mViewPager);
-        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
-        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(Color.YELLOW);
         drawable.setSize(2, 2);
+
+        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         linearLayout.setDividerPadding(30);
         linearLayout.setDividerDrawable(drawable);
+
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

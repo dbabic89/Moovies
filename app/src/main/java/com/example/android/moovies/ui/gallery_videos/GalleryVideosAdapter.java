@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdapter.MovieViewHolder> {
+class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdapter.MovieViewHolder> {
 
     private List<Video> videos;
     private Context context;
@@ -53,12 +53,6 @@ public class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdap
     public int getItemCount() {
         return videos.size();
     }
-
-
-    Video getItem(int position) {
-        return videos.get(position);
-    }
-
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

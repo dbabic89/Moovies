@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +49,7 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
         currentRv = getArguments().getInt("tab");
         movieId = getArguments().getInt("movie_id");
 
-        if (mPresenter == null) {
-            mPresenter = new MovieListPresenter(currentRv);
-        }
+        if (mPresenter == null) mPresenter = new MovieListPresenter(currentRv);
         mPresenter.getMovies(1, movieId, 0);
         mPresenter.attachView(this);
 
@@ -72,11 +69,8 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
         List<String> movieListNames = Arrays.asList("Now", "Upcoming", "Popular", "Top rated", "Similar");
         mTextMovieList.setText(movieListNames.get(currentRv));
 
-        if (currentRv == 4) {
-            buttonSeeMore.setVisibility(View.INVISIBLE);
-        } else {
-            buttonSeeMore.setOnClickListener(this);
-        }
+        if (currentRv == 4) buttonSeeMore.setVisibility(View.INVISIBLE);
+        else buttonSeeMore.setOnClickListener(this);
 
 
         return mView;

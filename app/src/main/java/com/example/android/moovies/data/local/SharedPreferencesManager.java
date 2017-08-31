@@ -5,9 +5,8 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesManager {
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    Context context;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     private static final String PREF_NAME = "MooviesPref";
     private static final String KEY_LOGIN = "isLoggedIn";
@@ -16,7 +15,6 @@ public class SharedPreferencesManager {
 
     public SharedPreferencesManager(Context context) {
 
-        this.context = context;
         sharedPreferences = context.getSharedPreferences(PREF_NAME, 0);
         editor = sharedPreferences.edit();
     }
@@ -38,8 +36,7 @@ public class SharedPreferencesManager {
     }
 
     public void setAccountId(int accountId){
-        editor.putInt(KEY_ACCOUNT_ID, accountId);
-        editor.commit();
+        editor.putInt(KEY_ACCOUNT_ID, accountId).commit();
     }
 
     public int getAccountId(){

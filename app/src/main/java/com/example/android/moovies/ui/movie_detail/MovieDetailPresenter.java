@@ -7,10 +7,13 @@ import com.example.android.moovies.data.models.account.AccountStatesRating;
 import com.example.android.moovies.data.models.account.PostMovieToWatchlist;
 import com.example.android.moovies.data.models.account.PostResponse;
 import com.example.android.moovies.data.models.account.Rated;
+import com.example.android.moovies.data.models.movie.Country;
 import com.example.android.moovies.data.models.movie.MovieDetail;
 import com.example.android.moovies.data.remote.TmdbClient;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.ui.base.BasePresenter;
+import com.example.android.moovies.utils.Constants;
+import com.example.android.moovies.utils.StringFormating;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,16 +57,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
                     public void onNext(MovieDetail value) {
 
                         if (value != null) {
-                            movieDetailFragment.showMovieDetail(value);
-                            movieDetailFragment.showCertification(value.getReleases().getCountries());
-                            movieDetailFragment.showGenres(value.getGenres());
-                            movieDetailFragment.showImagesForSlider(value.getImages().getBackdrops());
-                            movieDetailFragment.showVideosForSlider(value.getVideos(), value.getTitle(), value.getOverview());
-                            movieDetailFragment.showCollection(value.getBelongsToCollection());
-                            movieDetailFragment.showReviews(value.getReviews());
-                            movieDetailFragment.showCast(value.getCredits().getCast());
-                            movieDetailFragment.showSimilarMovies(value.getId());
-                            movieDetailFragment.showKeywords(value.getKeywords().getKeywordsList());
+                            setDetailsToView(value);
                         }
                     }
 
@@ -79,6 +73,73 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
                     }
                 });
 
+    }
+
+    private void setDetailsToView(MovieDetail movie) {
+
+        movieDetailFragment.showMovieDetail(movie.getTitle(), movie.getVoteAverage());
+
+        if (movie.getBackdropPath() != null) movieDetailFragment.showBackdrop(Constants.URL_IMG_BACKDROP + movie.getBackdropPath());
+        else movieDetailFragment.showNoBackdrop();
+
+        if (movie.getTagline() != null) movieDetailFragment.showTagline(movie.getTagline());
+        else  movieDetailFragment.showTagline(" N/A");
+
+        if (!movie.getCredits().getCrew().isEmpty()) movieDetailFragment.showDirectedBy(movie.getCredits().getCrew());
+        else movieDetailFragment.showNoDirectedBy();
+
+        if (movie.getPosterPath() != null) movieDetailFragment.showPoster(Constants.URL_IMG_MOVIE_POSTER + movie.getPosterPath());
+        else movieDetailFragment.showNoPoster();
+
+        if (movie.getOverview() != null) movieDetailFragment.showOverview(movie.getOverview());
+        else movieDetailFragment.showNoOverview();
+
+        for (Country country : movie.getReleases().getCountries()){
+            if (country.getIso31661().equals("US")) {
+
+                if (!country.getCertification().isEmpty()) movieDetailFragment.showCertification(country.getCertification());
+                else movieDetailFragment.showNoCertification();
+
+                if (!country.getReleaseDate().isEmpty()) movieDetailFragment.showReleaseDate(country.getReleaseDate());
+                else movieDetailFragment.showNoReleaseDate();
+            }
+        }
+
+        if (movie.getRuntime() != 0) movieDetailFragment.showDuration(movie.getRuntime());
+        else movieDetailFragment.showNoDuration();
+
+        movieDetailFragment.showGenres(movie.getGenres());
+
+        if (!movie.getImages().getBackdrops().isEmpty()) movieDetailFragment.showImages(movie.getImages().getBackdrops());
+        else movieDetailFragment.showNoImages();
+
+        if (!movie.getVideos().getResults().isEmpty()) movieDetailFragment.showVideos(movie.getVideos(), movie.getTitle(), movie.getOverview());
+        else movieDetailFragment.showNoVideos();
+
+        if (movie.getBelongsToCollection() != null) movieDetailFragment.showCollection(movie.getBelongsToCollection());
+        if (!movie.getReviews().getResults().isEmpty()) movieDetailFragment.showReviews(movie.getReviews());
+
+        movieDetailFragment.showCast(movie.getCredits().getCast());
+
+//        if (!movie.getHomepage().isEmpty())
+
+        if (!movie.getProductionCompanies().isEmpty()) movieDetailFragment.showProductionCompanies(StringFormating.companyFormating(movie.getProductionCompanies()));
+        else movieDetailFragment.showProductionCompanies("N/A");
+
+        if (!movie.getProductionCountries().isEmpty()) movieDetailFragment.showProductionCountries(StringFormating.countriesFormating(movie.getProductionCountries()));
+        else movieDetailFragment.showProductionCountries("N/A");
+
+        if (!movie.getSpokenLanguages().isEmpty()) movieDetailFragment.showSpokenLanguage(StringFormating.getSpokenLanguage(movie.getSpokenLanguages()));
+        else movieDetailFragment.showSpokenLanguage("N/A");
+
+        if (movie.getBudget() != 0) movieDetailFragment.showBudget(StringFormating.currencyFormating(movie.getBudget()));
+        else movieDetailFragment.showBudget("N/A");
+
+        if (movie.getRevenue() != 0) movieDetailFragment.showRevenue(StringFormating.currencyFormating(movie.getRevenue()));
+        else movieDetailFragment.showRevenue("N/A");
+
+        if (!movie.getSimilar().getResults().isEmpty()) movieDetailFragment.showSimilarMovies(movie.getId());
+        if (!movie.getKeywords().getKeywordsList().isEmpty()) movieDetailFragment.showKeywords(movie.getKeywords().getKeywordsList());
     }
 
     void getAccountStatesRated(final int movieId) {

@@ -75,7 +75,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolde
 
         ImageView imageView;
 
-        public MovieViewHolder(View v) {
+        MovieViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
             imageView = (ImageView) v.findViewById(R.id.image_movie_poster);

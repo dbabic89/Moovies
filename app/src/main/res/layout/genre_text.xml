@@ -3,7 +3,7 @@
     android:id="@+id/text"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/genre_square"
+    android:background="@drawable/chip_square"
     android:padding="4dp"
     android:shadowColor="@android:color/black"
     android:shadowDx="1"

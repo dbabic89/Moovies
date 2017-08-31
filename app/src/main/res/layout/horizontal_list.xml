@@ -3,8 +3,7 @@
     android:id="@+id/recommended"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="205dp"
-    android:layout_marginBottom="8dp">
+    android:minHeight="205dp">
 
     <LinearLayout
         android:layout_width="match_parent"

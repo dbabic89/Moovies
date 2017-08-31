@@ -48,11 +48,11 @@
 
             <TextView
                 android:id="@+id/text_movie_title"
-                style="@style/TextTitle"/>
+                style="@style/MovieListTitle"/>
 
             <TextView
                 android:id="@+id/text_movie_description"
-                style="@style/TextDescription"/>
+                style="@style/MovieListDescription"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
