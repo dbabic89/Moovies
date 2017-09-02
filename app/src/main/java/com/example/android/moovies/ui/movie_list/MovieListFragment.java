@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.models.movie.MovieListResult;
 import com.example.android.moovies.utils.FragmentCommunication;
+import com.example.android.moovies.utils.PaginationScrollListener;
 
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     MovieListAdapter mMovieListAdapter;
     FragmentCommunication fragmentCommunication;
     View mView;
-    List<MovieListResult> movies;
 
     private int currentPage = 1;
 
@@ -55,36 +55,38 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
             }
         });
 
-        int collectionId = getArguments().getInt("collection_id");
+        final int collectionId = getArguments().getInt("collection_id");
 
         mPresenter = new MovieListPresenter(getArguments().getInt("tab"));
         mPresenter.attachView(this);
         mPresenter.getMovies(1, 0, collectionId);
 
-//        mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-//
-//            @Override
-//            protected void loadMoreItems() {
-//                currentPage += 1;
-//                Log.i("TAG", "currentPage" + currentPage);
-//                mPresenter.getMovies(2);
-//            }
-//
-//            @Override
-//            public int getTotalPageCount() {
-//                return TOTAL_PAGES;
-//            }
-//
-//            @Override
-//            public boolean isLastPage() {
-//                return isLastPage;
-//            }
-//
-//            @Override
-//            public boolean isLoading() {
-//                return isLoading;
-//            }
-//        });
+        mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+
+            @Override
+            protected void loadMoreItems() {
+                currentPage += 1;
+
+                if (currentPage <= TOTAL_PAGES) {
+                    mPresenter.getMovies(currentPage, 0, collectionId);
+                }
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
 
         return mView;
     }
@@ -98,11 +100,17 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     @Override
     public void showMovies(List<MovieListResult> movies) {
         mMovieListAdapter.addAll(movies);
+
     }
 
     @Override
-    public void showMovieProgress(boolean show) {
+    public void showProgress() {
+        mMovieListAdapter.addLoadingFooter();
+    }
 
+    @Override
+    public void removeProgress() {
+        mMovieListAdapter.removeLoadingFooter();
     }
 
     @Override

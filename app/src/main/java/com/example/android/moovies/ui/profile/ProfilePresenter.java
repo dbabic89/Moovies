@@ -17,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfilePresenter extends BasePresenter<ProfileMvpView> {
+class ProfilePresenter extends BasePresenter<ProfileMvpView> {
 
     private TmdbInterface mTmdbInterface;
     private SharedPreferencesManager sharedPreferencesManager;

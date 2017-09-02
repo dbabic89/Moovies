@@ -73,6 +73,9 @@ public class ProfileFragment extends Fragment implements ProfileMvpView{
     @Override
     public void displayProfile(String sessionId) {
 
+        mPresenter.getAccountId();
+
+        buttonLogin.setVisibility(View.GONE);
         buttonLogout.setVisibility(View.VISIBLE);
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +83,6 @@ public class ProfileFragment extends Fragment implements ProfileMvpView{
                 mPresenter.userLogout();
             }
         });
-        buttonLogin.setVisibility(View.GONE);
     }
 
     @Override

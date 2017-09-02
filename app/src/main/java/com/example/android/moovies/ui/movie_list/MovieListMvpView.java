@@ -7,14 +7,16 @@ import java.util.List;
 
 interface MovieListMvpView extends BaseMvpView {
 
-        void showMovies(List<MovieListResult> movies);
+    void showMovies(List<MovieListResult> movies);
 
-        void showMovieProgress(boolean show);
+    void showProgress();
 
-        void showMoviesEmpty();
+    void removeProgress();
 
-        void showError();
+    void showMoviesEmpty();
 
-        void openMovieDetails(int id);
+    void showError();
+
+    void openMovieDetails(int id);
 
 }

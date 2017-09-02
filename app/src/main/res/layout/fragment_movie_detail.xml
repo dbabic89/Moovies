@@ -79,9 +79,17 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/text_status"
+                    style="@style/ChipText"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
                     android:id="@+id/text_certification"
                     style="@style/ChipText"
                     android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@id/text_status"
                     android:layout_marginBottom="50dp"
                     android:layout_marginStart="8dp" />
 
@@ -340,7 +348,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Movie title: " />
+                    android:text="Title: " />
 
                 <TextView
                     android:id="@+id/text_movie_full_title"
@@ -350,12 +358,44 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/text_movie_full_title_label" />
 
+                <LinearLayout
+                    android:id="@+id/linear_layout_votes"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:layout_below="@id/text_movie_full_title"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/text_movie_vote_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rating: " />
+
+                    <TextView
+                        android:id="@+id/text_movie_vote_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"/>
+
+                    <TextView
+                        android:id="@+id/text_movie_vote_count_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vote count: " />
+
+                    <TextView
+                        android:id="@+id/text_movie_vote_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/text_movie_production_companies_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/text_movie_full_title"
-                    android:layout_marginTop="8dp"
+                    android:layout_below="@id/linear_layout_votes"
                     android:text="Production companies: " />
 
                 <TextView
@@ -363,8 +403,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/text_movie_production_companies_label"
-                    android:layout_below="@id/text_movie_full_title"
-                    android:layout_marginTop="8dp"
+                    android:layout_below="@id/linear_layout_votes"
                     android:layout_toEndOf="@id/text_movie_production_companies_label" />
 
                 <TextView
@@ -444,7 +483,6 @@
             <TextView
                 android:id="@+id/text_keywords_label"
                 style="@style/MovieTextLabel"
-                android:visibility="gone"
                 android:text="@string/keywords_label" />
 
             <android.support.v7.widget.RecyclerView

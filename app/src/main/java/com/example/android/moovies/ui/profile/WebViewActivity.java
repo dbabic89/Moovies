@@ -48,7 +48,6 @@ public class WebViewActivity extends Activity {
                         }
                     }, 1000);
 
-
                 }
             }
         });

@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.ui.celebrities.CelebritiesFragment;
+import com.example.android.moovies.ui.home.HomeCelebsFragment;
 import com.example.android.moovies.ui.home.HomeMovieFragment;
 import com.example.android.moovies.ui.movie_list.MovieListFragment;
 import com.example.android.moovies.ui.progress.ProgressFragment;
@@ -50,7 +50,7 @@ public class ViewPagerFragment extends Fragment {
         switch (vpf) {
 
             case "homeFragment":
-                fragmentList = Arrays.asList(new HomeMovieFragment(), new TvFragment(), new CelebritiesFragment(),
+                fragmentList = Arrays.asList(new HomeMovieFragment(), new TvFragment(), new HomeCelebsFragment(),
                         new ProgressFragment());
                 stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
 

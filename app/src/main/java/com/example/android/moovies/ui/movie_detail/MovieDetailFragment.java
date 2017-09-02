@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,10 +43,11 @@ import java.util.Random;
 public class MovieDetailFragment extends Fragment implements MovieDetailMvpView, View.OnClickListener {
 
     View mView;
-    TextView textTitle, textMovieFullTitle, textMovieRating, textMovieTagline, textMovieOverview, textMovieReleaseDate, textMovieDirectedBy,
-            textMovieDuration, textWatchlist, textRating, textList, textCollectionName, textBelognsToCollection, textCredits, textCertification,
-            textReviewLabel, textInfoLabel, textProductionCompanies, textProductionCountries, textSpokenLanguage, textBudget, textRevenue, textKeywordsLabel, textButtonImages, textButtonVideos;
-    ImageView imageMovieBackdrop, imageMoviePoster, imageMovieCollection, imageButtonImages, imageButtonVideos, imagePlayButtonVideos;
+    TextView textTitle, textRating, textTagline, textOverview, textStatus, textReleaseDate, textDirectedBy, textDuration, textWatchlist,
+            textUserRating, textList, textCollectionName, textBelongsToCollection, textCredits, textCertification, textReviewLabel,
+            textInfoLabel, textMovieFullTitle, textVoteRating, textVoteCount, textProductionCompanies, textProductionCountries,
+            textSpokenLanguage, textBudget, textRevenue, textKeywordsLabel, textButtonImages, textButtonVideos;
+    ImageView imageBackdrop, imagePoster, imageCollection, imageButtonImages, imageButtonVideos, imagePlayButtonVideos;
     ImageButton imageButtonWatchlist, imageButtonRating;
     Button buttonCheckCollection;
 
@@ -91,49 +91,47 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     }
 
     @Override
-    public void showMovieDetail(String movieTitle, float movieRating) {
+    public void showMovieDetail(String title, String voteRating, String voteCount, String status) {
 
-        textMovieRating.setText(String.valueOf(movieRating));
-        textTitle.setText(movieTitle);
+        textRating.setText(voteRating);
+        textVoteRating.setText(voteRating);
+        textVoteCount.setText(voteCount);
+        textTitle.setText(title);
         textInfoLabel.setVisibility(View.VISIBLE);
-        textMovieFullTitle.setText(movieTitle);
+        textMovieFullTitle.setText(title);
+        textStatus.setText(status);
 
     }
 
     @Override
     public void showBackdrop(String imageUrl) {
-        Picasso.with(getActivity()).load(imageUrl).into(imageMovieBackdrop);
+        Picasso.with(getActivity()).load(imageUrl).into(imageBackdrop);
     }
 
     @Override
     public void showNoBackdrop() {
-        imageMoviePoster.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageMovieBackdrop);
+        imagePoster.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageBackdrop);
     }
 
     @Override
     public void showTagline(String tagline) {
-        textMovieTagline.setText(tagline);
+        textTagline.setText(tagline);
     }
 
     @Override
     public void showPoster(String imageUrl) {
-        Picasso.with(getActivity()).load(imageUrl).into(imageMoviePoster);
+        Picasso.with(getActivity()).load(imageUrl).into(imagePoster);
     }
 
     @Override
     public void showNoPoster() {
-        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageMoviePoster);
+        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imagePoster);
     }
 
     @Override
     public void showOverview(String overview) {
-        textMovieOverview.setText(overview);
-    }
-
-    @Override
-    public void showNoOverview() {
-        textMovieOverview.setText(R.string.no_overview);
+        textOverview.setText(overview);
     }
 
     @Override
@@ -145,7 +143,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
                 .build();
 
         chipsAdapter = new ChipsAdapter(StringFormating.getGenres(genreList));
-        textKeywordsLabel.setVisibility(View.VISIBLE);
         recyclerViewGenres.setVisibility(View.VISIBLE);
         recyclerViewGenres.setLayoutManager(chipsLayoutManager);
         recyclerViewGenres.setAdapter(chipsAdapter);
@@ -157,10 +154,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         final int id = collectionDetail.getId();
 
-        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + collectionDetail.getBackdropPath()).into(imageMovieCollection);
+        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + collectionDetail.getBackdropPath()).into(imageCollection);
         textCollectionName.setText(collectionDetail.getName());
         relativeLayoutCollection.setVisibility(View.VISIBLE);
-        textBelognsToCollection.setVisibility(View.VISIBLE);
+        textBelongsToCollection.setVisibility(View.VISIBLE);
 
         buttonCheckCollection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,37 +179,36 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showReleaseDate(String releaseDate) {
-        textMovieReleaseDate.setText(StringFormating.dateFormating(releaseDate));
+        textReleaseDate.setText(StringFormating.dateFormating(releaseDate));
     }
 
     @Override
     public void showNoReleaseDate() {
-        textMovieReleaseDate.setText(R.string.not_available);
+        textReleaseDate.setText(R.string.not_available);
     }
 
     @Override
     public void showDuration(int duration) {
-        textMovieDuration.setText(StringFormating.timeFormating(duration));
+        textDuration.setText(StringFormating.timeFormating(duration));
     }
 
     @Override
     public void showNoDuration() {
-        textMovieDuration.setText(R.string.not_available);
+        textDuration.setText(R.string.not_available);
     }
 
     @Override
     public void showDirectedBy(List<Crew> crewList) {
-        textMovieDirectedBy.setText(StringFormating.getDirectors(crewList));
+        textDirectedBy.setText(StringFormating.getDirectors(crewList));
     }
 
     @Override
     public void showNoDirectedBy() {
-        textMovieDirectedBy.setText(R.string.not_available);
+        textDirectedBy.setText(R.string.not_available);
     }
 
     @Override
     public void showWatchlist(boolean watchlist) {
-        Log.i("TAG", "showWatchlist");
         if (watchlist) {
             textWatchlist.setText(R.string.on_watchlist);
             imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
@@ -221,12 +217,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showRating(int rating) {
-        Log.i("TAG", "showRating");
         if (rating == 0) {
-            textRating.setText("Rate this movie");
+            textUserRating.setText("Rate this movie");
             imageButtonRating.setBackground(getResources().getDrawable(R.drawable.blue_circle));
         } else {
-            textRating.setText(String.valueOf(rating));
+            textUserRating.setText(String.valueOf(rating));
             imageButtonRating.setBackground(getResources().getDrawable(R.drawable.green_circle));
         }
     }
@@ -381,18 +376,28 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         if (id == R.id.image_button_watchlist) {
 
-            if (textWatchlist.getText().equals("Add to watchlist")) {
-                textWatchlist.setText("On watchlist");
-                imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
-                mPresenter.addMovieToWatchlist(movieId, true);
+            if (!sharedPreferencesManager.getSessionId().isEmpty()){
+
+                if (textWatchlist.getText().equals("Add to watchlist")) {
+                    textWatchlist.setText("On watchlist");
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
+                    mPresenter.addMovieToWatchlist(movieId, true);
+                } else {
+                    textWatchlist.setText("Add to watchlist");
+                    mPresenter.addMovieToWatchlist(movieId, false);
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+                }
             } else {
-                textWatchlist.setText("Add to watchlist");
-                mPresenter.addMovieToWatchlist(movieId, false);
-                imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+                Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
             }
 
         } else if (id == R.id.image_button_rating) {
-            createDialog(movieId);
+
+            if (!sharedPreferencesManager.getSessionId().isEmpty()) {
+                createDialog(movieId);
+            } else {
+                Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -412,22 +417,25 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         frameLayoutSimilar = (FrameLayout) view.findViewById(R.id.similar);
 
         textTitle = (TextView) view.findViewById(R.id.text_movie_title);
-        textMovieFullTitle = (TextView) view.findViewById(R.id.text_movie_full_title);
-        textMovieRating = (TextView) view.findViewById(R.id.text_movie_rating);
-        textMovieTagline = (TextView) view.findViewById(R.id.text_movie_tagline);
-        textMovieOverview = (TextView) view.findViewById(R.id.text_movie_overview);
-        textMovieReleaseDate = (TextView) view.findViewById(R.id.text_release_date);
-        textMovieDirectedBy = (TextView) view.findViewById(R.id.text_directed_by);
-        textMovieDuration = (TextView) view.findViewById(R.id.text_duration);
+        textRating = (TextView) view.findViewById(R.id.text_movie_rating);
+        textTagline = (TextView) view.findViewById(R.id.text_movie_tagline);
+        textOverview = (TextView) view.findViewById(R.id.text_movie_overview);
+        textReleaseDate = (TextView) view.findViewById(R.id.text_release_date);
+        textDirectedBy = (TextView) view.findViewById(R.id.text_directed_by);
+        textStatus = (TextView) view.findViewById(R.id.text_status);
+        textDuration = (TextView) view.findViewById(R.id.text_duration);
         textWatchlist = (TextView) view.findViewById(R.id.text_watchlist);
-        textRating = (TextView) view.findViewById(R.id.text_rating);
+        textUserRating = (TextView) view.findViewById(R.id.text_rating);
         textList = (TextView) view.findViewById(R.id.text_list);
         textCollectionName = (TextView) view.findViewById(R.id.text_collection_name);
-        textBelognsToCollection = (TextView) view.findViewById(R.id.text_belongs_to_collection_label);
+        textBelongsToCollection = (TextView) view.findViewById(R.id.text_belongs_to_collection_label);
         textCredits = (TextView) view.findViewById(R.id.text_credits_label);
         textCertification = (TextView) view.findViewById(R.id.text_certification);
         textReviewLabel = (TextView) view.findViewById(R.id.text_reviews_label);
         textInfoLabel = (TextView) view.findViewById(R.id.text_info_label);
+        textMovieFullTitle = (TextView) view.findViewById(R.id.text_movie_full_title);
+        textVoteRating = (TextView) view.findViewById(R.id.text_movie_vote_rating);
+        textVoteCount = (TextView) view.findViewById(R.id.text_movie_vote_count);
         textProductionCompanies = (TextView) view.findViewById(R.id.text_movie_production_companies);
         textProductionCountries = (TextView) view.findViewById(R.id.text_movie_production_countries);
         textSpokenLanguage = (TextView) view.findViewById(R.id.text_movie_spoken_language);
@@ -437,9 +445,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         textButtonImages = (TextView) linearLayoutImages.findViewById(R.id.text_button);
         textButtonVideos = (TextView) linearLayoutVideos.findViewById(R.id.text_button);
 
-        imageMovieBackdrop = (ImageView) view.findViewById(R.id.image_movie_backdrop);
-        imageMoviePoster = (ImageView) view.findViewById(R.id.image_movie_poster);
-        imageMovieCollection = (ImageView) view.findViewById(R.id.image_collection_backdrop);
+        imageBackdrop = (ImageView) view.findViewById(R.id.image_movie_backdrop);
+        imagePoster = (ImageView) view.findViewById(R.id.image_movie_poster);
+        imageCollection = (ImageView) view.findViewById(R.id.image_collection_backdrop);
         imageButtonImages = (ImageView) linearLayoutImages.findViewById(R.id.image_button);
         imageButtonVideos = (ImageView) linearLayoutVideos.findViewById(R.id.image_button);
         imagePlayButtonVideos = (ImageView) linearLayoutVideos.findViewById(R.id.play_button);
@@ -492,8 +500,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
             }
         });
 
-        if (textRating.getText().toString().equals("Rate this movie")) ratingBar.setStar(0);
-        else ratingBar.setStar(Integer.parseInt(textRating.getText().toString()));
+        if (textUserRating.getText().toString().equals("Rate this movie")) ratingBar.setStar(0);
+        else ratingBar.setStar(Integer.parseInt(textUserRating.getText().toString()));
 
         dialog.show();
     }

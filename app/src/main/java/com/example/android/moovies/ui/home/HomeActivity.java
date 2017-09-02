@@ -1,6 +1,5 @@
 package com.example.android.moovies.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +51,7 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         } else if (id == R.id.action_profile) {
 
             fragment = new ProfileFragment();
-            fragmentManager.beginTransaction().add(R.id.content_main, fragment).addToBackStack("tag").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_main, fragment).addToBackStack("tag").commit();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -57,7 +57,7 @@ public class MovieDetail {
     private String releaseDate;
     @SerializedName("revenue")
     @Expose
-    private int revenue;
+    private long revenue;
     @SerializedName("runtime")
     @Expose
     private int runtime;
@@ -232,7 +232,7 @@ public class MovieDetail {
         this.releaseDate = releaseDate;
     }
 
-    public int getRevenue() {
+    public long getRevenue() {
         return revenue;
     }
 

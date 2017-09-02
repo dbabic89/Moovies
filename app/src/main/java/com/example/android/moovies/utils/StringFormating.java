@@ -91,7 +91,7 @@ public class StringFormating {
 //        return name;
 //    }
 
-    public static String currencyFormating(int value) {
+    public static String currencyFormating(long value) {
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###,###");
         return decimalFormat.format(value);

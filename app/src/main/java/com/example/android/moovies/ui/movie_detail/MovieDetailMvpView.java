@@ -14,7 +14,7 @@ import java.util.List;
 
 interface MovieDetailMvpView  extends BaseMvpView {
 
-    void showMovieDetail(String movieTitle, float movieRating);
+    void showMovieDetail(String title, String voteRating, String voteCount, String status);
 
     void showBackdrop(String imageUrl);
 
@@ -45,8 +45,6 @@ interface MovieDetailMvpView  extends BaseMvpView {
     void showNoDirectedBy();
 
     void showOverview(String overview);
-
-    void showNoOverview();
 
     void showWatchlist(boolean watchlist);
 

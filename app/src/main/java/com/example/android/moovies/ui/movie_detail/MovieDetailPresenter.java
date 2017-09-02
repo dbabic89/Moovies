@@ -55,15 +55,11 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
                 .subscribeWith(new DisposableObserver<MovieDetail>() {
                     @Override
                     public void onNext(MovieDetail value) {
-
-                        if (value != null) {
                             setDetailsToView(value);
-                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
                         movieDetailFragment.showError();
                     }
 
@@ -77,7 +73,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
     private void setDetailsToView(MovieDetail movie) {
 
-        movieDetailFragment.showMovieDetail(movie.getTitle(), movie.getVoteAverage());
+        movieDetailFragment.showMovieDetail(movie.getTitle(), String.valueOf(movie.getVoteAverage()), String.valueOf(Math.round(movie.getVoteCount())), movie.getStatus());
 
         if (movie.getBackdropPath() != null) movieDetailFragment.showBackdrop(Constants.URL_IMG_BACKDROP + movie.getBackdropPath());
         else movieDetailFragment.showNoBackdrop();
@@ -92,7 +88,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         else movieDetailFragment.showNoPoster();
 
         if (movie.getOverview() != null) movieDetailFragment.showOverview(movie.getOverview());
-        else movieDetailFragment.showNoOverview();
+        else movieDetailFragment.showOverview("No overview");
 
         for (Country country : movie.getReleases().getCountries()){
             if (country.getIso31661().equals("US")) {
@@ -120,8 +116,6 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         if (!movie.getReviews().getResults().isEmpty()) movieDetailFragment.showReviews(movie.getReviews());
 
         movieDetailFragment.showCast(movie.getCredits().getCast());
-
-//        if (!movie.getHomepage().isEmpty())
 
         if (!movie.getProductionCompanies().isEmpty()) movieDetailFragment.showProductionCompanies(StringFormating.companyFormating(movie.getProductionCompanies()));
         else movieDetailFragment.showProductionCompanies("N/A");
@@ -185,6 +179,8 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
+                        movieDetailFragment.showWatchlist(false);
+                        movieDetailFragment.showRating(0);
                     }
 
                     @Override

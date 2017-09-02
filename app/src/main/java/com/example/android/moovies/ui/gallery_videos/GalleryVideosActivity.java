@@ -71,7 +71,7 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
         textVideoTitle.setText(intent.getExtras().getString("title"));
         textVideoOverview.setText(intent.getExtras().getString("overview"));
 
-        if (!videos.getResults().isEmpty()){
+        if (videos.getResults().size() > 1){
             GalleryVideosAdapter galleryVideosAdapter = new GalleryVideosAdapter(this, videos.getResults());
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 

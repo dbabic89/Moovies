@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.models.movie.Review;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;
 
@@ -48,13 +49,13 @@ class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>
     class ReviewViewHolder extends RecyclerView.ViewHolder {
 
         TextView reviewAuthor;
-        TextView reviewContent;
+        ExpandableTextView reviewContent;
 
         ReviewViewHolder(View v) {
             super(v);
 
             reviewAuthor = (TextView) v.findViewById(R.id.text_review_author);
-            reviewContent = (TextView) v.findViewById(R.id.text_review_content);
+            reviewContent = (ExpandableTextView) v.findViewById(R.id.text_review_content);
         }
 
     }

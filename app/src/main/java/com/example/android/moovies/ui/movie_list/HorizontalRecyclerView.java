@@ -88,7 +88,12 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
     }
 
     @Override
-    public void showMovieProgress(boolean show) {
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void removeProgress() {
 
     }
 

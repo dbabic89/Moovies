@@ -1,4 +1,4 @@
-package com.example.android.moovies.ui.celebrities;
+package com.example.android.moovies.ui.home;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
 
-public class CelebritiesFragment extends Fragment {
+public class HomeCelebsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

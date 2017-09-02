@@ -22,13 +22,11 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
     private TmdbInterface mTmdbInterface;
     private Observable<MovieListResponse> movieListObservable;
     private Observable<CollectionDetail> collectionListObservable;
-    private List<MovieListResult> mMovieListResultList;
     private int x = -1;
 
     MovieListPresenter(int x) {
 
         mTmdbInterface = TmdbClient.getTmdbClient().create(TmdbInterface.class);
-        mMovieListResultList = new ArrayList<>();
         this.x = x;
     }
 
@@ -44,13 +42,14 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
     void getMovies(int page, int movieId, int collection_id) {
 
+
         switch (x) {
             case 0:
-                movieListObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "DE");
+                movieListObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "US");
                 startMovieListObservable();
                 break;
             case 1:
-                movieListObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "DE");
+                movieListObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "US");
                 startMovieListObservable();
                 break;
             case 2:
@@ -74,6 +73,7 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
                             @Override
                             public void onNext(CollectionDetail value) {
                                 if (value != null) {
+                                    List<MovieListResult> mMovieListResultList = new ArrayList<>();
                                     mMovieListResultList.addAll(value.getParts());
                                     getMvpView().showMovies(mMovieListResultList);
                                 } else {
@@ -88,7 +88,6 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
                             @Override
                             public void onComplete() {
-
                             }
                         });
                 break;
@@ -103,6 +102,8 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
                     @Override
                     public void onNext(MovieListResponse value) {
                         if (value != null) {
+                            List<MovieListResult> mMovieListResultList = new ArrayList<MovieListResult>();
+//                            getMvpView().showProgress();
                             mMovieListResultList.addAll(value.getResults());
                             getMvpView().showMovies(mMovieListResultList);
                         } else {
@@ -117,7 +118,7 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
                     @Override
                     public void onComplete() {
-
+//                        getMvpView().removeProgress();
                     }
                 });
     }
