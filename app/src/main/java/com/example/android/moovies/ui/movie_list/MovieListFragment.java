@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.movie.MovieListResult;
 import com.example.android.moovies.utils.FragmentCommunication;
 import com.example.android.moovies.utils.PaginationScrollListener;
 
@@ -36,62 +36,15 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_movie_list, container, false);
-
         fragmentCommunication = (FragmentCommunication) getActivity();
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mMovieListAdapter = new MovieListAdapter(getActivity());
-
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recycler_view);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mMovieListAdapter);
-
-        mMovieListAdapter.setRecyclerViewInterface(new MovieListAdapter.RecyclerViewInterface() {
-            @Override
-            public void onCardClick(int position) {
-                MovieListResult movieListResult = mMovieListAdapter.getItem(position);
-                openMovieDetails(movieListResult.getId());
-
-            }
-        });
 
         final int collectionId = getArguments().getInt("collection_id");
 
-        mPresenter = new MovieListPresenter(getArguments().getInt("tab"));
-        mPresenter.attachView(this);
-        mPresenter.getMovies(1, 0, collectionId);
-
-        mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-
-            @Override
-            protected void loadMoreItems() {
-                currentPage += 1;
-
-                if (currentPage <= TOTAL_PAGES) {
-                    mPresenter.getMovies(currentPage, 0, collectionId);
-                }
-            }
-
-            @Override
-            public int getTotalPageCount() {
-                return TOTAL_PAGES;
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
+        setPresenter(collectionId);
+        setRecyclerViewAndAdapter(collectionId);
 
         return mView;
-    }
-
-    @Override
+    }    @Override
     public void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
@@ -105,12 +58,12 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
 
     @Override
     public void showProgress() {
-        mMovieListAdapter.addLoadingFooter();
+//        mMovieListAdapter.addLoadingFooter();
     }
 
     @Override
     public void removeProgress() {
-        mMovieListAdapter.removeLoadingFooter();
+//        mMovieListAdapter.removeLoadingFooter();
     }
 
     @Override
@@ -128,4 +81,59 @@ public class MovieListFragment extends Fragment implements MovieListMvpView {
     public void openMovieDetails(int id) {
         fragmentCommunication.startMovieDetail(id);
     }
+
+    private void setPresenter(int collectionId) {
+        mPresenter = new MovieListPresenter(getArguments().getInt("tab"));
+        mPresenter.attachView(this);
+        mPresenter.getMovies(1, 0, collectionId);
+    }
+
+    private void setRecyclerViewAndAdapter(final int collectionId) {
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mMovieListAdapter = new MovieListAdapter(getActivity());mMovieListAdapter.setRecyclerViewInterface(new MovieListAdapter.RecyclerViewInterface() {
+            @Override
+            public void onCardClick(int position) {
+                MovieListResult movieListResult = mMovieListAdapter.getItem(position);
+                openMovieDetails(movieListResult.getId());
+
+            }
+        });
+
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view_movies);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setAdapter(mMovieListAdapter);
+
+        if (collectionId == 0) {
+            mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+
+                @Override
+                protected void loadMoreItems() {
+                    currentPage += 1;
+
+                    if (currentPage <= TOTAL_PAGES) {
+                        mPresenter.getMovies(currentPage, 0, collectionId);
+                    }
+                }
+
+                @Override
+                public int getTotalPageCount() {
+                    return TOTAL_PAGES;
+                }
+
+                @Override
+                public boolean isLastPage() {
+                    return isLastPage;
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoading;
+                }
+            });
+        }
+
+    }
+
+
 }

@@ -6,7 +6,7 @@
     android:background="@color/lightGrey">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/movies_recycler_view"
+        android:id="@+id/recycler_view_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

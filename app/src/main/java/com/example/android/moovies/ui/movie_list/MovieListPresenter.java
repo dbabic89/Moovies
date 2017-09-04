@@ -1,9 +1,11 @@
 package com.example.android.moovies.ui.movie_list;
 
+import android.util.Log;
+
 import com.example.android.moovies.BuildConfig;
-import com.example.android.moovies.data.models.movie.CollectionDetail;
-import com.example.android.moovies.data.models.movie.MovieListResponse;
-import com.example.android.moovies.data.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.movie.CollectionDetail;
+import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.movie.MovieListResult;
 import com.example.android.moovies.data.remote.TmdbClient;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.ui.base.BasePresenter;
@@ -25,7 +27,6 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
     private int x = -1;
 
     MovieListPresenter(int x) {
-
         mTmdbInterface = TmdbClient.getTmdbClient().create(TmdbInterface.class);
         this.x = x;
     }
@@ -67,14 +68,19 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
             case 5:
                 collectionListObservable = mTmdbInterface.getCollection(collection_id, BuildConfig.TMDB_APIKEY);
 
+                Log.i("TAG", "collectionListObservable");
+
                 collectionListObservable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(new DisposableObserver<CollectionDetail>() {
                             @Override
                             public void onNext(CollectionDetail value) {
+                                Log.i("TAG", "onNext");
                                 if (value != null) {
-                                    List<MovieListResult> mMovieListResultList = new ArrayList<>();
+                                    List<MovieListResult> mMovieListResultList= new ArrayList<>();
+                                    Log.i("TAG", "mMovieListResultList");
                                     mMovieListResultList.addAll(value.getParts());
+                                    Log.i("TAG", "mMovieListResultList.addAll(value.getParts());");
                                     getMvpView().showMovies(mMovieListResultList);
                                 } else {
                                     getMvpView().showMoviesEmpty();
@@ -102,7 +108,7 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
                     @Override
                     public void onNext(MovieListResponse value) {
                         if (value != null) {
-                            List<MovieListResult> mMovieListResultList = new ArrayList<MovieListResult>();
+                            List<MovieListResult> mMovieListResultList = new ArrayList<>();
 //                            getMvpView().showProgress();
                             mMovieListResultList.addAll(value.getResults());
                             getMvpView().showMovies(mMovieListResultList);

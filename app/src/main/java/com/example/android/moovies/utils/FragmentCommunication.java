@@ -1,6 +1,6 @@
 package com.example.android.moovies.utils;
 
-import com.example.android.moovies.data.models.movie.Reviews;
+import com.example.android.moovies.domain.models.movie.Reviews;
 
 public interface FragmentCommunication {
 

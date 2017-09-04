@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.Review;
+import com.example.android.moovies.domain.models.movie.Review;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;

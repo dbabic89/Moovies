@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.Reviews;
+import com.example.android.moovies.domain.models.movie.Reviews;
 
 public class ReviewListFragment extends Fragment {
 

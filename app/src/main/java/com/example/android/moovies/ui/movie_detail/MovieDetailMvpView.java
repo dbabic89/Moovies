@@ -1,13 +1,13 @@
 package com.example.android.moovies.ui.movie_detail;
 
-import com.example.android.moovies.data.models.movie.Backdrop;
-import com.example.android.moovies.data.models.movie.Cast;
-import com.example.android.moovies.data.models.movie.CollectionDetail;
-import com.example.android.moovies.data.models.movie.Crew;
-import com.example.android.moovies.data.models.movie.Genre;
-import com.example.android.moovies.data.models.movie.Keyword;
-import com.example.android.moovies.data.models.movie.Reviews;
-import com.example.android.moovies.data.models.movie.Videos;
+import com.example.android.moovies.domain.models.movie.Backdrop;
+import com.example.android.moovies.domain.models.movie.Cast;
+import com.example.android.moovies.domain.models.movie.CollectionDetail;
+import com.example.android.moovies.domain.models.movie.Crew;
+import com.example.android.moovies.domain.models.movie.Genre;
+import com.example.android.moovies.domain.models.movie.Keyword;
+import com.example.android.moovies.domain.models.movie.Reviews;
+import com.example.android.moovies.domain.models.movie.Videos;
 import com.example.android.moovies.ui.base.BaseMvpView;
 
 import java.util.List;
@@ -65,6 +65,8 @@ interface MovieDetailMvpView  extends BaseMvpView {
     void showReviews(Reviews reviews);
 
     void showCast(List<Cast> castList);
+
+    void showOriginalTitle(String originalTitle);
 
     void showProductionCompanies(String productionCompanies);
 

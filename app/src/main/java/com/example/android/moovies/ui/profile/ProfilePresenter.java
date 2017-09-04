@@ -2,9 +2,9 @@ package com.example.android.moovies.ui.profile;
 
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
-import com.example.android.moovies.data.models.account.Account;
-import com.example.android.moovies.data.models.authentication.Session;
-import com.example.android.moovies.data.models.authentication.Token;
+import com.example.android.moovies.domain.models.account.Account;
+import com.example.android.moovies.domain.models.authentication.Session;
+import com.example.android.moovies.domain.models.authentication.Token;
 import com.example.android.moovies.data.remote.TmdbClient;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.ui.base.BasePresenter;

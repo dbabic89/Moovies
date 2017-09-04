@@ -17,6 +17,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentManager.O
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
+
     }
 
     @Override

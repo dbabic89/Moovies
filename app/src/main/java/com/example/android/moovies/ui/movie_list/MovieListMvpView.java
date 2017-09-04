@@ -1,6 +1,6 @@
 package com.example.android.moovies.ui.movie_list;
 
-import com.example.android.moovies.data.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.movie.MovieListResult;
 import com.example.android.moovies.ui.base.BaseMvpView;
 
 import java.util.List;

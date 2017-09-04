@@ -21,15 +21,15 @@ import android.widget.Toast;
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
-import com.example.android.moovies.data.models.movie.Backdrop;
-import com.example.android.moovies.data.models.movie.Cast;
-import com.example.android.moovies.data.models.movie.CollectionDetail;
-import com.example.android.moovies.data.models.movie.Crew;
-import com.example.android.moovies.data.models.movie.Genre;
-import com.example.android.moovies.data.models.movie.Keyword;
-import com.example.android.moovies.data.models.movie.Reviews;
-import com.example.android.moovies.data.models.movie.Video;
-import com.example.android.moovies.data.models.movie.Videos;
+import com.example.android.moovies.domain.models.movie.Backdrop;
+import com.example.android.moovies.domain.models.movie.Cast;
+import com.example.android.moovies.domain.models.movie.CollectionDetail;
+import com.example.android.moovies.domain.models.movie.Crew;
+import com.example.android.moovies.domain.models.movie.Genre;
+import com.example.android.moovies.domain.models.movie.Keyword;
+import com.example.android.moovies.domain.models.movie.Reviews;
+import com.example.android.moovies.domain.models.movie.Video;
+import com.example.android.moovies.domain.models.movie.Videos;
 import com.example.android.moovies.ui.gallery_videos.GalleryVideosActivity;
 import com.example.android.moovies.ui.movie_list.HorizontalRecyclerView;
 import com.example.android.moovies.utils.Constants;
@@ -45,7 +45,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     View mView;
     TextView textTitle, textRating, textTagline, textOverview, textStatus, textReleaseDate, textDirectedBy, textDuration, textWatchlist,
             textUserRating, textList, textCollectionName, textBelongsToCollection, textCredits, textCertification, textReviewLabel,
-            textInfoLabel, textMovieFullTitle, textVoteRating, textVoteCount, textProductionCompanies, textProductionCountries,
+            textInfoLabel, textFullTitle, textOriginalTitle, textOriginalTitleLabel, textVoteRating, textVoteCount, textProductionCompanies, textProductionCountries,
             textSpokenLanguage, textBudget, textRevenue, textKeywordsLabel, textButtonImages, textButtonVideos;
     ImageView imageBackdrop, imagePoster, imageCollection, imageButtonImages, imageButtonVideos, imagePlayButtonVideos;
     ImageButton imageButtonWatchlist, imageButtonRating;
@@ -98,7 +98,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         textVoteCount.setText(voteCount);
         textTitle.setText(title);
         textInfoLabel.setVisibility(View.VISIBLE);
-        textMovieFullTitle.setText(title);
+        textFullTitle.setText(title);
         textStatus.setText(status);
 
     }
@@ -303,10 +303,20 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
             TextView textView = (TextView) relativeLayout.findViewById(R.id.text_person);
             ImageView imageView = (ImageView) relativeLayout.findViewById(R.id.image_person);
             textView.setText(castList.get(i).getName());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.weight = 1;
+            relativeLayout.setLayoutParams(layoutParams);
             Picasso.with(getActivity()).load(Constants.URL_IMG_MOVIE_POSTER + castList.get(i).getProfilePath()).resize(400, 200).into(imageView);
             linearLayout.addView(relativeLayout);
 
         }
+    }
+
+    @Override
+    public void showOriginalTitle(String originalTitle) {
+        textOriginalTitleLabel.setVisibility(View.VISIBLE);
+        textOriginalTitle.setVisibility(View.VISIBLE);
+        textOriginalTitle.setText(originalTitle);
     }
 
     @Override
@@ -433,7 +443,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         textCertification = (TextView) view.findViewById(R.id.text_certification);
         textReviewLabel = (TextView) view.findViewById(R.id.text_reviews_label);
         textInfoLabel = (TextView) view.findViewById(R.id.text_info_label);
-        textMovieFullTitle = (TextView) view.findViewById(R.id.text_movie_full_title);
+        textFullTitle = (TextView) view.findViewById(R.id.text_movie_full_title);
+        textOriginalTitle = (TextView) view.findViewById(R.id.text_movie_original_title);
+        textOriginalTitleLabel = (TextView) view.findViewById(R.id.text_movie_original_title_label);
         textVoteRating = (TextView) view.findViewById(R.id.text_movie_vote_rating);
         textVoteCount = (TextView) view.findViewById(R.id.text_movie_vote_count);
         textProductionCompanies = (TextView) view.findViewById(R.id.text_movie_production_companies);

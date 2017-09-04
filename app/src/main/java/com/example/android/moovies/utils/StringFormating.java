@@ -1,11 +1,11 @@
 package com.example.android.moovies.utils;
 
-import com.example.android.moovies.data.models.movie.Crew;
-import com.example.android.moovies.data.models.movie.Genre;
-import com.example.android.moovies.data.models.movie.Keyword;
-import com.example.android.moovies.data.models.movie.ProductionCompany;
-import com.example.android.moovies.data.models.movie.ProductionCountry;
-import com.example.android.moovies.data.models.movie.SpokenLanguage;
+import com.example.android.moovies.domain.models.movie.Crew;
+import com.example.android.moovies.domain.models.movie.Genre;
+import com.example.android.moovies.domain.models.movie.Keyword;
+import com.example.android.moovies.domain.models.movie.ProductionCompany;
+import com.example.android.moovies.domain.models.movie.ProductionCountry;
+import com.example.android.moovies.domain.models.movie.SpokenLanguage;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;

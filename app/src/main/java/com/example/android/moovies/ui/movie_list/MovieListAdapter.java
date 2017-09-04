@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.movie.MovieListResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.android.moovies.utils.Constants.URL_IMG_MOVIE_POSTER;
 
 class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
 
@@ -47,10 +49,10 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
             case 0:
                 movieViewHolder = getViewHolder(parent, layoutInflater);
                 break;
-            case 1:
-                View v2 = layoutInflater.inflate(R.layout.list_item_loading, parent, false);
-                movieViewHolder = new MovieListAdapter.LoadingViewHolder(v2);
-                break;
+//            case 1:
+//                View v2 = layoutInflater.inflate(R.layout.list_item_loading, parent, false);
+//                movieViewHolder = new MovieListAdapter.LoadingViewHolder(v2);
+//                break;
         }
 
         return movieViewHolder;
@@ -71,13 +73,16 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
 
         MovieListResult movie = movies.get(position);
 
-        String titleAndDate = movie.getTitle() + " (" + movie.getReleaseDate().substring(0, 4) + ")";
+        String releaseDate = "-";
+        if(!movie.getReleaseDate().equals("")) releaseDate = movie.getReleaseDate().substring(0, 4);
+
+        String titleAndDate = movie.getTitle() + " (" + releaseDate + ")";
         holder.movieTitle.setText(titleAndDate);
         holder.movieDescription.setText(movie.getOverview());
         holder.moviePosition.setText(String.valueOf(x));
         holder.movieTmdbRating.setText(String.valueOf(movie.getVoteAverage()));
 
-        Picasso.with(context).load(BASE_IMAGE_URL + movies.get(position).getPosterPath()).into(holder.moviePoster);
+        Picasso.with(context).load(URL_IMG_MOVIE_POSTER + movies.get(position).getPosterPath()).into(holder.moviePoster);
     }
 
     @Override
@@ -106,7 +111,7 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
         }
     }
 
-    public void remove(MovieListResult movie) {
+    void remove(MovieListResult movie) {
         int position = movies.indexOf(movie);
         if (position > -1) {
             movies.remove(position);

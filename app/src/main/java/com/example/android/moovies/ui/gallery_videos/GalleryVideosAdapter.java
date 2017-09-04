@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.Video;
+import com.example.android.moovies.domain.models.movie.Video;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

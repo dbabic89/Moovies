@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.android.moovies.BuildConfig;
-import com.example.android.moovies.data.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.movie.MovieListResponse;
 import com.example.android.moovies.ui.common.IconAdapter;
 
 import retrofit2.Call;

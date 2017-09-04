@@ -358,13 +358,32 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/text_movie_full_title_label" />
 
+                <TextView
+                    android:id="@+id/text_movie_original_title_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    android:layout_below="@id/text_movie_full_title"
+                    android:text="Original title: " />
+
+                <TextView
+                    android:id="@+id/text_movie_original_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_below="@id/text_movie_full_title"
+                    android:layout_alignBaseline="@id/text_movie_original_title_label"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/text_movie_original_title_label" />
+
                 <LinearLayout
                     android:id="@+id/linear_layout_votes"
                     android:layout_width="match_parent"
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
-                    android:layout_below="@id/text_movie_full_title"
+                    android:layout_below="@id/text_movie_original_title"
                     android:layout_height="wrap_content">
 
                     <TextView

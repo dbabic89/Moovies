@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.movie.MovieListResult;
 import com.example.android.moovies.ui.common.IconAdapter;
 import com.example.android.moovies.utils.FragmentCommunication;
 

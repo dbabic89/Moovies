@@ -2,13 +2,13 @@ package com.example.android.moovies.ui.movie_detail;
 
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
-import com.example.android.moovies.data.models.account.AccountStatesRated;
-import com.example.android.moovies.data.models.account.AccountStatesRating;
-import com.example.android.moovies.data.models.account.PostMovieToWatchlist;
-import com.example.android.moovies.data.models.account.PostResponse;
-import com.example.android.moovies.data.models.account.Rated;
-import com.example.android.moovies.data.models.movie.Country;
-import com.example.android.moovies.data.models.movie.MovieDetail;
+import com.example.android.moovies.domain.models.account.AccountStatesRated;
+import com.example.android.moovies.domain.models.account.AccountStatesRating;
+import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.PostResponse;
+import com.example.android.moovies.domain.models.account.Rated;
+import com.example.android.moovies.domain.models.movie.Country;
+import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.data.remote.TmdbClient;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.ui.base.BasePresenter;
@@ -75,6 +75,8 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
         movieDetailFragment.showMovieDetail(movie.getTitle(), String.valueOf(movie.getVoteAverage()), String.valueOf(Math.round(movie.getVoteCount())), movie.getStatus());
 
+        if (!movie.getTitle().equals(movie.getOriginalTitle())) movieDetailFragment.showOriginalTitle(movie.getOriginalTitle());
+
         if (movie.getBackdropPath() != null) movieDetailFragment.showBackdrop(Constants.URL_IMG_BACKDROP + movie.getBackdropPath());
         else movieDetailFragment.showNoBackdrop();
 
@@ -115,7 +117,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         if (movie.getBelongsToCollection() != null) movieDetailFragment.showCollection(movie.getBelongsToCollection());
         if (!movie.getReviews().getResults().isEmpty()) movieDetailFragment.showReviews(movie.getReviews());
 
-        movieDetailFragment.showCast(movie.getCredits().getCast());
+        if (!movie.getCredits().getCast().isEmpty())movieDetailFragment.showCast(movie.getCredits().getCast());
 
         if (!movie.getProductionCompanies().isEmpty()) movieDetailFragment.showProductionCompanies(StringFormating.companyFormating(movie.getProductionCompanies()));
         else movieDetailFragment.showProductionCompanies("N/A");

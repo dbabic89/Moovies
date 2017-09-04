@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.Reviews;
+import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;

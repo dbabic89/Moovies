@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.movie.MovieListResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

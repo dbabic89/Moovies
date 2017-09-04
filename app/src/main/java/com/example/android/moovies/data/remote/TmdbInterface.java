@@ -1,16 +1,16 @@
 package com.example.android.moovies.data.remote;
 
-import com.example.android.moovies.data.models.account.Account;
-import com.example.android.moovies.data.models.account.AccountStatesRated;
-import com.example.android.moovies.data.models.account.AccountStatesRating;
-import com.example.android.moovies.data.models.account.PostMovieToWatchlist;
-import com.example.android.moovies.data.models.account.PostResponse;
-import com.example.android.moovies.data.models.account.Rated;
-import com.example.android.moovies.data.models.authentication.Session;
-import com.example.android.moovies.data.models.authentication.Token;
-import com.example.android.moovies.data.models.movie.CollectionDetail;
-import com.example.android.moovies.data.models.movie.MovieDetail;
-import com.example.android.moovies.data.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.account.Account;
+import com.example.android.moovies.domain.models.account.AccountStatesRated;
+import com.example.android.moovies.domain.models.account.AccountStatesRating;
+import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.PostResponse;
+import com.example.android.moovies.domain.models.account.Rated;
+import com.example.android.moovies.domain.models.authentication.Session;
+import com.example.android.moovies.domain.models.authentication.Token;
+import com.example.android.moovies.domain.models.movie.CollectionDetail;
+import com.example.android.moovies.domain.models.movie.MovieDetail;
+import com.example.android.moovies.domain.models.movie.MovieListResponse;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
