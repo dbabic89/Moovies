@@ -135,9 +135,10 @@
                     android:padding="2dp">
 
                     <ImageView
-                        android:id="@+id/image_movie_poster"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/image_poster"
+                        android:layout_width="110dp"
+                        android:layout_height="170dp"
+                        android:scaleType="fitXY" />
 
                 </RelativeLayout>
 
@@ -181,7 +182,7 @@
                         android:id="@+id/image_button_watchlist"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/blue_circle" />
+                        android:background="@drawable/orange_circle" />
 
                     <TextView
                         android:id="@+id/text_watchlist"
@@ -200,7 +201,7 @@
                         android:id="@+id/image_button_rating"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/blue_circle" />
+                        android:background="@drawable/orange_circle" />
 
                     <TextView
                         android:id="@+id/text_rating"
@@ -219,7 +220,7 @@
                         android:id="@+id/image_button_list"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/blue_circle" />
+                        android:background="@drawable/orange_circle" />
 
                     <TextView
                         android:id="@+id/text_list"
@@ -319,16 +320,30 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_credits_label"
-                style="@style/MovieTextLabel"
-                android:text="Credits" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_credits_label"
+                    style="@style/MovieTextLabel"
+                    android:text="Credits" />
+
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/button_see_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/see_more"/>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/linear_layout_cast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal" />
 

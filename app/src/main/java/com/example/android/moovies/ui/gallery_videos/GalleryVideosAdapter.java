@@ -25,7 +25,7 @@ class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdapter.Mov
         this.videos = videos;
     }
 
-    interface RecyclerViewInterface {
+    public interface RecyclerViewInterface {
         void onCardClick(int position);
     }
 

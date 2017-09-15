@@ -19,11 +19,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
+import com.example.android.moovies.Moovies;
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
+import com.example.android.moovies.di.component.DaggerMovieComponent;
+import com.example.android.moovies.di.component.MovieComponent;
+import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.domain.models.movie.Backdrop;
 import com.example.android.moovies.domain.models.movie.Cast;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
+import com.example.android.moovies.domain.models.movie.Credits;
 import com.example.android.moovies.domain.models.movie.Crew;
 import com.example.android.moovies.domain.models.movie.Genre;
 import com.example.android.moovies.domain.models.movie.Keyword;
@@ -40,6 +45,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
+import static com.example.android.moovies.R.id.button_see_more;
+
 public class MovieDetailFragment extends Fragment implements MovieDetailMvpView, View.OnClickListener {
 
     View mView;
@@ -49,19 +58,20 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
             textSpokenLanguage, textBudget, textRevenue, textKeywordsLabel, textButtonImages, textButtonVideos;
     ImageView imageBackdrop, imagePoster, imageCollection, imageButtonImages, imageButtonVideos, imagePlayButtonVideos;
     ImageButton imageButtonWatchlist, imageButtonRating;
-    Button buttonCheckCollection;
+    Button buttonCheckCollection, buttonCredits;
 
     RecyclerView recyclerViewGenres, recyclerViewKeywords;
     LinearLayout linearLayoutReviews, linearLayoutVideos, linearLayoutImages;
     RelativeLayout relativeLayoutCollection;
     FrameLayout frameLayoutSimilar;
 
-    LayoutInflater layoutInflater;
+    MovieComponent movieComponent;
+    @Inject Picasso picasso;
+    @Inject MovieDetailPresenter mPresenter;
+    @Inject SharedPreferencesManager sharedPreferencesManager;
 
-    MovieDetailPresenter mPresenter;
-    ChipsAdapter chipsAdapter;
-    SharedPreferencesManager sharedPreferencesManager;
     FragmentCommunication fragmentCommunication;
+    LayoutInflater layoutInflater;
 
     int currentRating, movieId = 0;
 
@@ -70,9 +80,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         movieId = getArguments().getInt("movie_id");
 
-        sharedPreferencesManager = new SharedPreferencesManager(getActivity());
         fragmentCommunication = (FragmentCommunication) getActivity();
         layoutInflater = getActivity().getLayoutInflater();
+
+        movieComponent = DaggerMovieComponent.builder()
+                .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
+                .activityModule(new ActivityModule(getActivity()))
+                .build();
+
+        movieComponent.inject(this);
 
         mView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         initializeViews(mView);
@@ -105,13 +121,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showBackdrop(String imageUrl) {
-        Picasso.with(getActivity()).load(imageUrl).into(imageBackdrop);
+        picasso.load(imageUrl).into(imageBackdrop);
     }
 
     @Override
     public void showNoBackdrop() {
         imagePoster.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageBackdrop);
+        Picasso.with(getActivity()).load(R.drawable.red_circle).into(imageBackdrop);
     }
 
     @Override
@@ -121,12 +137,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showPoster(String imageUrl) {
-        Picasso.with(getActivity()).load(imageUrl).into(imagePoster);
+        picasso.load(imageUrl).into(imagePoster);
     }
 
     @Override
     public void showNoPoster() {
-        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imagePoster);
+        Picasso.with(getActivity()).load(R.drawable.red_circle).into(imagePoster);
     }
 
     @Override
@@ -136,17 +152,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showGenres(List<Genre> genreList) {
-
-
-        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
-                .setScrollingEnabled(false)
-                .build();
-
-        chipsAdapter = new ChipsAdapter(StringFormating.getGenres(genreList));
-        recyclerViewGenres.setVisibility(View.VISIBLE);
-        recyclerViewGenres.setLayoutManager(chipsLayoutManager);
-        recyclerViewGenres.setAdapter(chipsAdapter);
-
+        createChips(StringFormating.getGenres(genreList), recyclerViewGenres);
     }
 
     @Override
@@ -154,7 +160,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         final int id = collectionDetail.getId();
 
-        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + collectionDetail.getBackdropPath()).into(imageCollection);
+        picasso.load(Constants.URL_BACKDROP + collectionDetail.getBackdropPath()).into(imageCollection);
         textCollectionName.setText(collectionDetail.getName());
         relativeLayoutCollection.setVisibility(View.VISIBLE);
         textBelongsToCollection.setVisibility(View.VISIBLE);
@@ -219,7 +225,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     public void showRating(int rating) {
         if (rating == 0) {
             textUserRating.setText("Rate this movie");
-            imageButtonRating.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+            imageButtonRating.setBackground(getResources().getDrawable(R.drawable.orange_circle));
         } else {
             textUserRating.setText(String.valueOf(rating));
             imageButtonRating.setBackground(getResources().getDrawable(R.drawable.green_circle));
@@ -235,13 +241,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     @Override
     public void showImages(List<Backdrop> backdropList) {
         textButtonImages.setText("Images (" + backdropList.size() + ")");
-        Picasso.with(getActivity()).load(Constants.URL_IMG_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButtonImages);
+        picasso.load(Constants.URL_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButtonImages);
     }
 
     @Override
     public void showNoImages() {
         textButtonImages.setText(R.string.no_images);
-        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageButtonImages);
+        picasso.load(R.drawable.red_circle).into(imageButtonImages);
     }
 
     @Override
@@ -264,14 +270,14 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         List<Video> videoList = videos.getResults();
         textButtonVideos.setText("Videos (" + videoList.size() + ")");
-        Picasso.with(getActivity()).load("http://img.youtube.com/vi/" + videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButtonVideos);
+        picasso.load("http://img.youtube.com/vi/" + videoList.get(new Random().nextInt(videoList.size())).getKey() + "/0.jpg").into(imageButtonVideos);
 
     }
 
     @Override
     public void showNoVideos() {
         textButtonVideos.setText(R.string.no_videos);
-        Picasso.with(getActivity()).load(R.drawable.blue_circle).into(imageButtonVideos);
+        Picasso.with(getActivity()).load(R.drawable.red_circle).into(imageButtonVideos);
 
     }
 
@@ -292,24 +298,37 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     }
 
     @Override
-    public void showCast(List<Cast> castList) {
+    public void showCast(final List<Cast> castList) {
 
         textCredits.setVisibility(View.VISIBLE);
+        buttonCredits.setVisibility(View.VISIBLE);
         LinearLayout linearLayout = (LinearLayout) mView.findViewById(R.id.linear_layout_cast);
 
         for (int i = 0; i < 3; i++) {
+            final Cast cast = castList.get(i);
 
             RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(R.layout.icon_person, null);
             TextView textView = (TextView) relativeLayout.findViewById(R.id.text_person);
             ImageView imageView = (ImageView) relativeLayout.findViewById(R.id.image_person);
-            textView.setText(castList.get(i).getName());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.weight = 1;
-            relativeLayout.setLayoutParams(layoutParams);
-            Picasso.with(getActivity()).load(Constants.URL_IMG_MOVIE_POSTER + castList.get(i).getProfilePath()).resize(400, 200).into(imageView);
+            textView.setText(cast.getName());
+            picasso.load(Constants.URL_POSTER + cast.getProfilePath()).resize(400, 200).into(imageView);
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fragmentCommunication.startCelebrityDetail(cast.getId());
+                }
+            });
             linearLayout.addView(relativeLayout);
-
         }
+
+        buttonCredits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Credits credits = new Credits();
+                credits.setCast(castList);
+                fragmentCommunication.startCelebrityList(credits);
+            }
+        });
     }
 
     @Override
@@ -361,17 +380,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showKeywords(List<Keyword> keywordsList) {
-
-        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
-                .setScrollingEnabled(false)
-                .build();
-
-        chipsAdapter = new ChipsAdapter(StringFormating.getKeywords(keywordsList));
         textKeywordsLabel.setVisibility(View.VISIBLE);
-        recyclerViewKeywords.setVisibility(View.VISIBLE);
-        recyclerViewKeywords.setLayoutManager(chipsLayoutManager);
-        recyclerViewKeywords.setAdapter(chipsAdapter);
-
+        createChips(StringFormating.getKeywords(keywordsList), recyclerViewKeywords);
     }
 
     @Override
@@ -395,7 +405,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
                 } else {
                     textWatchlist.setText("Add to watchlist");
                     mPresenter.addMovieToWatchlist(movieId, false);
-                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.blue_circle));
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.orange_circle));
                 }
             } else {
                 Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
@@ -412,7 +422,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     }
 
     private void setPresenter() {
-        mPresenter = new MovieDetailPresenter(this, sharedPreferencesManager);
         mPresenter.attachView(this);
         mPresenter.getMovieDetails(movieId);
         mPresenter.getAccountStatesRated(movieId);
@@ -458,7 +467,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         textButtonVideos = (TextView) linearLayoutVideos.findViewById(R.id.text_button);
 
         imageBackdrop = (ImageView) view.findViewById(R.id.image_movie_backdrop);
-        imagePoster = (ImageView) view.findViewById(R.id.image_movie_poster);
+        imagePoster = (ImageView) view.findViewById(R.id.image_poster);
         imageCollection = (ImageView) view.findViewById(R.id.image_collection_backdrop);
         imageButtonImages = (ImageView) linearLayoutImages.findViewById(R.id.image_button);
         imageButtonVideos = (ImageView) linearLayoutVideos.findViewById(R.id.image_button);
@@ -468,6 +477,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         imageButtonRating = (ImageButton) view.findViewById(R.id.image_button_rating);
 
         buttonCheckCollection = (Button) view.findViewById(R.id.button_check_collection);
+        buttonCredits = (Button) view.findViewById(button_see_more);
 
         recyclerViewGenres = (RecyclerView) view.findViewById(R.id.recycler_view_genres);
         recyclerViewKeywords = (RecyclerView) view.findViewById(R.id.recycler_view_keywords);
@@ -518,4 +528,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         dialog.show();
     }
 
+    private void createChips(List<String> list, RecyclerView recyclerView) {
+        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
+                .setScrollingEnabled(false)
+                .build();
+
+        ChipsAdapter chipsAdapter = new ChipsAdapter();
+        chipsAdapter.addAll(list);
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setLayoutManager(chipsLayoutManager);
+        recyclerView.setAdapter(chipsAdapter);
+    }
 }

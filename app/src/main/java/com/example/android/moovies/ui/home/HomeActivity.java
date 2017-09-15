@@ -3,23 +3,37 @@ package com.example.android.moovies.ui.home;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.moovies.R;
+import com.example.android.moovies.data.remote.TmdbInterface;
+import com.example.android.moovies.domain.models.movie.Credits;
 import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.ui.base.BaseActivity;
+import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
+import com.example.android.moovies.ui.celebs_list.CelebsListFragment;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
 import com.example.android.moovies.ui.movie_list.MovieListFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.review_list.ReviewListFragment;
+import com.example.android.moovies.ui.search.SearchFragment;
 import com.example.android.moovies.utils.FragmentCommunication;
+
+import javax.inject.Inject;
+
+import static android.R.attr.id;
 
 public class HomeActivity extends BaseActivity implements FragmentCommunication {
 
     Fragment fragment;
+    SearchFragment searchFragment;
     FragmentManager fragmentManager;
+    @Inject
+    TmdbInterface tmdbInteface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +53,21 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        final MenuItem search = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (!newText.isEmpty())searchFragment.searchMovies(newText);
+                else searchFragment.showMoviesEmpty();
+                return true;
+            }
+        });
         return true;
     }
 
@@ -48,8 +77,10 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_search) {
+            searchFragment = new SearchFragment();
+            fragmentManager.beginTransaction().add(R.id.content_main, searchFragment).addToBackStack("tag").commit();
         } else if (id == R.id.action_profile) {
-
             fragment = new ProfileFragment();
             fragmentManager.beginTransaction().replace(R.id.content_main, fragment).addToBackStack("tag").commit();
             return true;
@@ -102,6 +133,42 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         movieListFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, movieListFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startSearchDetail(int id) {
+
+        Fragment movieDetailFragment = new MovieDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("vpf", "movieDetailFragment");
+        bundle.putInt("movie_id", id);
+        movieDetailFragment.setArguments(bundle);
+
+        fragmentManager.popBackStack();
+        fragmentManager.beginTransaction().add(R.id.content_main, movieDetailFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startCelebrityDetail(int id) {
+
+        Fragment celebsDetailFragment = new CelebsDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("celebs_id", id);
+        celebsDetailFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, celebsDetailFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startCelebrityList(Credits credits) {
+
+        Fragment celebsListFragment = new CelebsListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("credits", credits);
+        bundle.putInt("celebs_id", id);
+        celebsListFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, celebsListFragment).addToBackStack("tag").commit();
     }
 
 }

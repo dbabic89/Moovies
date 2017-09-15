@@ -1,5 +1,6 @@
 package com.example.android.moovies.data.remote;
 
+import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.account.Account;
 import com.example.android.moovies.domain.models.account.AccountStatesRated;
 import com.example.android.moovies.domain.models.account.AccountStatesRating;
@@ -26,38 +27,25 @@ public interface TmdbInterface {
     //Movie lists
 
     @GET("movie/now_playing")
-    Call<MovieListResponse> getNowPlayingMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getNowPlayingMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex, @Query("region") String region);
 
     @GET("movie/upcoming")
-    Call<MovieListResponse> getUpcomingMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getUpcomingMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex, @Query("region") String region);
 
     @GET("movie/popular")
-    Call<MovieListResponse> getPopularMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getPopularMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
 
     @GET("movie/top_rated")
-    Call<MovieListResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
-
-    @GET("genre/{genre_id}/movies")
-    Observable<MovieListResponse> getMoviesByGenre(@Path("genre_id") int genre_id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
-
-
-    @GET("movie/now_playing")
-    Observable<MovieListResponse> getNowPlayingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex, @Query("region") String region);
-
-    @GET("movie/upcoming")
-    Observable<MovieListResponse> getUpcomingMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex, @Query("region") String region);
-
-    @GET("movie/popular")
-    Observable<MovieListResponse> getPopularMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
-
-    @GET("movie/top_rated")
-    Observable<MovieListResponse> getTopRatedMovies2(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
 
     @GET("movie/{movie_id}/similar")
     Observable<MovieListResponse> getSimilar(@Path("movie_id") int id, @Query("api_key") String apiKey);
 
     @GET("collection/{collection_id}")
     Observable<CollectionDetail> getCollection(@Path("collection_id") int id, @Query("api_key") String apiKey);
+
+    @GET("genre/{genre_id}/movies")
+    Observable<MovieListResponse> getMoviesByGenre(@Path("genre_id") int genre_id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
 
 
     //Movie details
@@ -67,6 +55,12 @@ public interface TmdbInterface {
 
     @GET("movie/{movie_id}/release_dates")
     Observable<MovieDetail> getMovieReleaseDateAndCertification(@Path("movie_id") int id, @Query("api_key") String apiKey);
+
+    // Celebrity Detail
+
+    @GET("person/{id}")
+    Observable<Celebrity> getCelebrity(@Path("id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
+
 
     //Certification
 
@@ -96,12 +90,24 @@ public interface TmdbInterface {
     Observable<AccountStatesRating> getAccountStatesRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     @POST("account/{account_id}/watchlist")
-    Call<PostResponse> addMovieToWatchlist (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostMovieToWatchlist movieToWatchlist);
+    Observable<PostResponse> addMovieToWatchlist (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostMovieToWatchlist movieToWatchlist);
 
     @POST("movie/{movie_id}/rating")
-    Call<PostResponse> addMovieRating (@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
+    Observable<PostResponse> addMovieRating (@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
 
     @DELETE("movie/{movie_id}/rating")
-    Call<PostResponse> deleteMovieRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
+    Observable<PostResponse> deleteMovieRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
+    @GET("account/{account_id}/rated/movies")
+    Observable<MovieListResponse> getRatedMovies (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language,  @Query("page") int pageIndex);
+
+    @GET("account/{account_id}/watchlist/movies")
+    Observable<MovieListResponse> getWatchlist (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language,  @Query("page") int pageIndex);
+
+
+
+    // Search
+
+    @GET("search/movie")
+    Observable<MovieListResponse> searchMovies(@Query("api_key") String apiKey, @Query("query") String query, @Query("page") int pageIndex);
 }

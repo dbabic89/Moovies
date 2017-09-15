@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
+import com.example.android.moovies.domain.models.celebrity.CelebsCredits;
+import com.example.android.moovies.domain.models.celebrity.Posters;
+import com.example.android.moovies.ui.common.mtv_grid.MtvGridFragment;
 import com.example.android.moovies.ui.home.HomeCelebsFragment;
 import com.example.android.moovies.ui.home.HomeMovieFragment;
 import com.example.android.moovies.ui.movie_list.MovieListFragment;
@@ -82,6 +85,26 @@ public class ViewPagerFragment extends Fragment {
                 fragmentList = Arrays.asList(nowPlayingMovieListFragment, soonPlayingMovieListFragment, popularMovieListFragment,
                         topRatedMovieListFragment);
                 stringList = Arrays.asList("Now", "Upcoming", "Popular", "Top 200");
+                break;
+
+            case "celebsDetailFragment":
+
+                CelebsCredits celebsCredits = (CelebsCredits) getArguments().getSerializable("credits");
+
+                Fragment posterGridFragment1 = new MtvGridFragment();
+                Bundle bundle5 = new Bundle();
+                Posters posters1 = new Posters(celebsCredits.getMoviePosters().getMtvPosterList());
+                bundle5.putSerializable("movies", posters1);
+                posterGridFragment1.setArguments(bundle5);
+
+                Fragment posterGridFragment2 = new MtvGridFragment();
+                Bundle bundle6 = new Bundle();
+                Posters posters2 = new Posters(celebsCredits.getTvPosters().getMtvPosterList());
+                bundle6.putSerializable("tvs", posters2);
+                posterGridFragment2.setArguments(bundle6);
+
+                fragmentList = Arrays.asList(posterGridFragment1, posterGridFragment2);
+                stringList = Arrays.asList("Movies", "TV shows");
                 break;
 
         }

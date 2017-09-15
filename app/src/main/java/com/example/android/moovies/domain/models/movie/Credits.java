@@ -3,10 +3,11 @@ package com.example.android.moovies.domain.models.movie;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Credits {
+public class Credits implements Serializable{
 
     @SerializedName("cast")
     @Expose

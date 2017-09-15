@@ -4,35 +4,56 @@ package com.example.android.moovies.ui.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.android.moovies.Moovies;
 import com.example.android.moovies.R;
-import com.example.android.moovies.data.local.SharedPreferencesManager;
+import com.example.android.moovies.di.component.DaggerMovieComponent;
+import com.example.android.moovies.di.component.MovieComponent;
+import com.example.android.moovies.di.module.ActivityModule;
+import com.example.android.moovies.ui.movie_list.MovieListFragment;
 
-public class ProfileFragment extends Fragment implements ProfileMvpView{
+import javax.inject.Inject;
 
-    Button buttonLogin, buttonLogout;
+public class ProfileFragment extends Fragment implements ProfileMvpView, View.OnClickListener {
+
+    Button buttonLogin, buttonLogout, buttonRatedMovies, buttonMoviesWatclist;
     View mView;
-    ProfilePresenter mPresenter;
+    @Inject ProfilePresenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getActivity());
+
+        MovieComponent movieComponent = DaggerMovieComponent.builder()
+                .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
+                .activityModule(new ActivityModule(getActivity()))
+                .build();
+
+        movieComponent.inject(this);
 
         mView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        buttonLogin = (Button) mView.findViewById(R.id.button_login);
-        buttonLogout = (Button) mView.findViewById(R.id.button_logout);
-
-        mPresenter = new ProfilePresenter(sharedPreferencesManager);
-        mPresenter.attachView(this);
-        mPresenter.userLogin();
+        initializeViews();
+        setPresenter();
 
         return mView;
+    }
+
+    private void setPresenter() {
+        mPresenter.attachView(this);
+        mPresenter.userLogin();
+    }
+
+    private void initializeViews() {
+        buttonLogin = (Button) mView.findViewById(R.id.button_login);
+        buttonLogout = (Button) mView.findViewById(R.id.button_logout);
+        buttonRatedMovies = (Button) mView.findViewById(R.id.button_rated_movies);
+        buttonMoviesWatclist = (Button) mView.findViewById(R.id.button_movie_watchlist);
     }
 
     @Override
@@ -83,11 +104,14 @@ public class ProfileFragment extends Fragment implements ProfileMvpView{
                 mPresenter.userLogout();
             }
         });
+        buttonRatedMovies.setVisibility(View.VISIBLE);
+        buttonMoviesWatclist.setVisibility(View.VISIBLE);
+        buttonRatedMovies.setOnClickListener(this);
+        buttonMoviesWatclist.setOnClickListener(this);
     }
 
     @Override
     public void displayWatchlist() {
-
     }
 
     @Override
@@ -98,5 +122,28 @@ public class ProfileFragment extends Fragment implements ProfileMvpView{
     @Override
     public void displayLists() {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        Fragment fragment = new MovieListFragment();
+
+        if (id == R.id.button_rated_movies){
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("tab", 6);
+            fragment.setArguments(bundle);
+        }else if (id == R.id.button_movie_watchlist){
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("tab", 7);
+            fragment.setArguments(bundle);
+
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_main, fragment).addToBackStack("Tag").commit();
     }
 }

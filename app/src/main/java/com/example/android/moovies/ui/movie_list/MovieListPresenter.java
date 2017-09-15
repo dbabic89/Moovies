@@ -2,33 +2,33 @@ package com.example.android.moovies.ui.movie_list;
 
 import android.util.Log;
 
-import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
 import com.example.android.moovies.domain.models.movie.MovieListResult;
-import com.example.android.moovies.data.remote.TmdbClient;
-import com.example.android.moovies.data.remote.TmdbInterface;
+import com.example.android.moovies.domain.use_case.GetMovieCollectionList;
+import com.example.android.moovies.domain.use_case.GetMovieList;
+import com.example.android.moovies.domain.use_case.SearchMovie;
 import com.example.android.moovies.ui.base.BasePresenter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
+import javax.inject.Inject;
 
+import io.reactivex.observers.DisposableObserver;
 
 class MovieListPresenter extends BasePresenter<MovieListMvpView> {
 
-    private TmdbInterface mTmdbInterface;
-    private Observable<MovieListResponse> movieListObservable;
-    private Observable<CollectionDetail> collectionListObservable;
-    private int x = -1;
+    @Inject GetMovieList getMovieList;
+    @Inject GetMovieCollectionList getMovieCollectionList;
+    @Inject SearchMovie searchMovie;
 
-    MovieListPresenter(int x) {
-        mTmdbInterface = TmdbClient.getTmdbClient().create(TmdbInterface.class);
-        this.x = x;
+    @Inject
+    MovieListPresenter(GetMovieList getMovieList, GetMovieCollectionList getMovieCollectionList, SearchMovie searchMovie) {
+        this.getMovieList = getMovieList;
+        this.getMovieCollectionList = getMovieCollectionList;
+        this.searchMovie = searchMovie;
     }
 
     @Override
@@ -39,93 +39,57 @@ class MovieListPresenter extends BasePresenter<MovieListMvpView> {
     @Override
     public void detachView() {
         super.detachView();
+        getMovieList.dispose();
     }
 
-    void getMovies(int page, int movieId, int collection_id) {
 
+    void getMovies(int page, int movieId, int collection_id, int tab) {
+        List<Integer> list = Arrays.asList(page, tab, movieId);
 
-        switch (x) {
-            case 0:
-                movieListObservable = mTmdbInterface.getNowPlayingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "US");
-                startMovieListObservable();
-                break;
-            case 1:
-                movieListObservable = mTmdbInterface.getUpcomingMovies2(BuildConfig.TMDB_APIKEY, "en-US", page, "US");
-                startMovieListObservable();
-                break;
-            case 2:
-                movieListObservable = mTmdbInterface.getPopularMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
-                startMovieListObservable();
-                break;
-            case 3:
-                movieListObservable = mTmdbInterface.getTopRatedMovies2(BuildConfig.TMDB_APIKEY, "en-US", page);
-                startMovieListObservable();
-                break;
-            case 4:
-                movieListObservable = mTmdbInterface.getSimilar(movieId, BuildConfig.TMDB_APIKEY);
-                startMovieListObservable();
-                break;
-            case 5:
-                collectionListObservable = mTmdbInterface.getCollection(collection_id, BuildConfig.TMDB_APIKEY);
-
-                Log.i("TAG", "collectionListObservable");
-
-                collectionListObservable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableObserver<CollectionDetail>() {
-                            @Override
-                            public void onNext(CollectionDetail value) {
-                                Log.i("TAG", "onNext");
-                                if (value != null) {
-                                    List<MovieListResult> mMovieListResultList= new ArrayList<>();
-                                    Log.i("TAG", "mMovieListResultList");
-                                    mMovieListResultList.addAll(value.getParts());
-                                    Log.i("TAG", "mMovieListResultList.addAll(value.getParts());");
-                                    getMvpView().showMovies(mMovieListResultList);
-                                } else {
-                                    getMvpView().showMoviesEmpty();
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                getMvpView().showError();
-                            }
-
-                            @Override
-                            public void onComplete() {
-                            }
-                        });
-                break;
+        if (tab == 5){
+            getMovieCollectionList.execute(new MovieCollectionObserver(), collection_id);
+        } else {
+            getMovieList.execute(new MovieListObserver(), list);
         }
     }
 
-    private void startMovieListObservable() {
-        movieListObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<MovieListResponse>() {
-                    @Override
-                    public void onNext(MovieListResponse value) {
-                        if (value != null) {
-                            List<MovieListResult> mMovieListResultList = new ArrayList<>();
-//                            getMvpView().showProgress();
-                            mMovieListResultList.addAll(value.getResults());
-                            getMvpView().showMovies(mMovieListResultList);
-                        } else {
-                            getMvpView().showMoviesEmpty();
-                        }
-                    }
+    private class MovieListObserver extends DisposableObserver<MovieListResponse> {
+        @Override
+        public void onNext(MovieListResponse value) {
+            List<MovieListResult> mMovieListResultList = new ArrayList<>();
+            mMovieListResultList.addAll(value.getResults());
+            getMvpView().showMovies(mMovieListResultList);
+        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showError();
-                    }
+        @Override
+        public void onError(Throwable e) {
+            getMvpView().showError();
+            Log.i("TAG", e.getMessage());
+        }
 
-                    @Override
-                    public void onComplete() {
-//                        getMvpView().removeProgress();
-                    }
-                });
+        @Override
+        public void onComplete() {
+
+        }
+    }
+
+    private class MovieCollectionObserver extends DisposableObserver<CollectionDetail> {
+        @Override
+        public void onNext(CollectionDetail value) {
+            List<MovieListResult> mMovieListResultList = new ArrayList<>();
+            mMovieListResultList.addAll(value.getParts());
+            getMvpView().showMovies(mMovieListResultList);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            getMvpView().showError();
+            Log.i("TAG", e.getMessage());
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }

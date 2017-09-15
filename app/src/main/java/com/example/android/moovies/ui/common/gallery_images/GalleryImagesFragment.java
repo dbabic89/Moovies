@@ -1,4 +1,4 @@
-package com.example.android.moovies.ui.gallery_images;
+package com.example.android.moovies.ui.common.gallery_images;
 
 
 import android.os.Bundle;

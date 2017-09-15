@@ -33,7 +33,8 @@
         <TextView
             android:id="@id/expandable_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:autoLink="web" />
 
         <ImageButton
             android:id="@id/expand_collapse"

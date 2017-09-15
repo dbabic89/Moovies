@@ -11,13 +11,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.moovies.Moovies;
 import com.example.android.moovies.R;
+import com.example.android.moovies.di.component.DaggerMovieComponent;
+import com.example.android.moovies.di.component.MovieComponent;
+import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.domain.models.movie.MovieListResult;
+import com.example.android.moovies.domain.use_case.GetMovieList;
 import com.example.android.moovies.ui.common.IconAdapter;
 import com.example.android.moovies.utils.FragmentCommunication;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,12 +40,17 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
     @BindView(R.id.button_see_more)
     Button buttonSeeMore;
 
+    View mView;
+
+    private FragmentCommunication mFragmentCommunication;
+
+    MovieComponent movieComponent;
+    @Inject MovieListPresenter mPresenter;
+    @Inject GetMovieList getMovieList;
+    @Inject IconAdapter mIconAdapter;
+
     int currentRv, movieId = 0;
 
-    private IconAdapter mIconAdapter;
-    private FragmentCommunication mFragmentCommunication;
-    private MovieListPresenter mPresenter;
-    View mView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -46,40 +58,29 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
         mView = inflater.inflate(R.layout.horizontal_list, container, false);
         ButterKnife.bind(this, mView);
 
+        mFragmentCommunication = (FragmentCommunication) getActivity();
+
+        movieComponent = DaggerMovieComponent.builder()
+                .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
+                .activityModule(new ActivityModule(getActivity()))
+                .build();
+
+        movieComponent.inject(this);
+
         currentRv = getArguments().getInt("tab");
         movieId = getArguments().getInt("movie_id");
 
-        if (mPresenter == null) mPresenter = new MovieListPresenter(currentRv);
-        mPresenter.getMovies(1, movieId, 0);
-        mPresenter.attachView(this);
-
-        mFragmentCommunication = (FragmentCommunication) getActivity();
-
-        mIconAdapter = new IconAdapter(getActivity());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mRecyclerView.setAdapter(mIconAdapter);
-        mIconAdapter.setRecyclerViewInterface(new IconAdapter.RecyclerViewInterface() {
-            @Override
-            public void onCardClick(int position) {
-                MovieListResult movieListResult = mIconAdapter.getItem(position);
-                openMovieDetails(movieListResult.getId());
-            }
-        });
-
-        List<String> movieListNames = Arrays.asList("Now", "Upcoming", "Popular", "Top rated", "Similar");
-        mTextMovieList.setText(movieListNames.get(currentRv));
-
-        if (currentRv == 4) buttonSeeMore.setVisibility(View.INVISIBLE);
-        else buttonSeeMore.setOnClickListener(this);
-
+        setPresenter();
+        setRecyclerViewAndAdapter();
 
         return mView;
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        mPresenter.detachView();
+        mPresenter.detachView();
     }
 
     @Override
@@ -107,7 +108,6 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
         Toast.makeText(getActivity(), "Nema interneta", Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
     public void openMovieDetails(int id) {
         mFragmentCommunication.startMovieDetail(id);
@@ -117,4 +117,29 @@ public class HorizontalRecyclerView extends Fragment implements MovieListMvpView
     public void onClick(View view) {
         mFragmentCommunication.startMovieTabs(currentRv);
     }
+
+    private void setPresenter() {
+        mPresenter.getMovies(1, movieId, 0, currentRv);
+        mPresenter.attachView(this);
+    }
+
+    private void setRecyclerViewAndAdapter() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerView.setAdapter(mIconAdapter);
+        mIconAdapter.setRecyclerViewInterface(new IconAdapter.RecyclerViewInterface() {
+            @Override
+            public void onCardClick(int position) {
+                MovieListResult movieListResult = mIconAdapter.getItem(position);
+                openMovieDetails(movieListResult.getId());
+            }
+        });
+
+
+        List<String> movieListNames = Arrays.asList("Now", "Upcoming", "Popular", "Top rated", "Similar");
+        mTextMovieList.setText(movieListNames.get(currentRv));
+
+        if (currentRv == 4) buttonSeeMore.setVisibility(View.INVISIBLE);
+        else buttonSeeMore.setOnClickListener(this);
+    }
+
 }

@@ -8,14 +8,15 @@ import android.widget.TextView;
 
 import com.example.android.moovies.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class ChipsAdapter extends RecyclerView.Adapter<ChipsAdapter.MovieViewHolder> {
 
     private List<String> keywords;
 
-    ChipsAdapter(List<String> keywords) {
-        this.keywords = keywords;
+    ChipsAdapter() {
+        this.keywords = new ArrayList<>();
     }
 
     @Override
@@ -26,13 +27,24 @@ class ChipsAdapter extends RecyclerView.Adapter<ChipsAdapter.MovieViewHolder> {
 
     @Override
     public void onBindViewHolder(ChipsAdapter.MovieViewHolder holder, final int position) {
-
         holder.textKeyword.setText(keywords.get(position));
     }
 
     @Override
     public int getItemCount() {
         return keywords.size();
+    }
+
+    public void add(String keyword) {
+        keywords.add(keyword);
+        notifyItemInserted(keywords.size() - 1);
+    }
+
+    void addAll(List<String> keywords) {
+
+        for (String keyword : keywords) {
+            add(keyword);
+        }
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {

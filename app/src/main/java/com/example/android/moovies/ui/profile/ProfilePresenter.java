@@ -2,12 +2,14 @@ package com.example.android.moovies.ui.profile;
 
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
+import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.domain.models.account.Account;
 import com.example.android.moovies.domain.models.authentication.Session;
 import com.example.android.moovies.domain.models.authentication.Token;
-import com.example.android.moovies.data.remote.TmdbClient;
-import com.example.android.moovies.data.remote.TmdbInterface;
+import com.example.android.moovies.domain.use_case.GetMovieList;
 import com.example.android.moovies.ui.base.BasePresenter;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,12 +21,14 @@ import retrofit2.Response;
 
 class ProfilePresenter extends BasePresenter<ProfileMvpView> {
 
-    private TmdbInterface mTmdbInterface;
-    private SharedPreferencesManager sharedPreferencesManager;
+    @Inject TmdbInterface mTmdbInterface;
+    @Inject SharedPreferencesManager sharedPreferencesManager;
+    @Inject GetMovieList getMovieList;
 
-    ProfilePresenter(SharedPreferencesManager sharedPreferencesManager) {
+    @Inject
+    ProfilePresenter(SharedPreferencesManager sharedPreferencesManager, TmdbInterface tmdbInterface) {
         this.sharedPreferencesManager = sharedPreferencesManager;
-        mTmdbInterface = TmdbClient.getTmdbClient().create(TmdbInterface.class);
+        this.mTmdbInterface = tmdbInterface;
     }
 
     @Override

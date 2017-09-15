@@ -1,5 +1,6 @@
 package com.example.android.moovies.utils;
 
+import com.example.android.moovies.domain.models.movie.Credits;
 import com.example.android.moovies.domain.models.movie.Reviews;
 
 public interface FragmentCommunication {
@@ -11,4 +12,10 @@ public interface FragmentCommunication {
     void startReviewList(Reviews reviews);
 
     void startCollectionList(int id);
+
+    void startSearchDetail(int id);
+
+    void startCelebrityDetail(int id);
+
+    void startCelebrityList(Credits credits);
 }

@@ -10,6 +10,7 @@
     </style>
 
     <style name="PositionIndicator">
+        <item name="android:textSize">10sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:gravity">center_horizontal|center_vertical</item>
         <item name="android:layout_margin">6dp</item>
@@ -98,7 +99,7 @@
     <style name="MovieListDescription">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:maxLines">7</item>
+        <item name="android:maxLines">5</item>
         <item name="android:ellipsize">end</item>
     </style>
 
