@@ -17,21 +17,6 @@ import java.util.List;
 
 public class StringFormating {
 
-    public static String getGentesFromList(List<Genre> genres) {
-
-        String allGenres = "";
-        for (int i = 0; i < genres.size(); i++) {
-            Genre genre = genres.get(i);
-            String currentGenre = genre.getName();
-            if (i == 0) {
-                allGenres = allGenres + currentGenre;
-            } else{
-                allGenres = allGenres + ", " + currentGenre;
-            }
-        }
-        return allGenres;
-    }
-
     public static List<String> getGenres(List<Genre> genres) {
 
         ArrayList<String> allGenres = new ArrayList<>();
@@ -74,22 +59,6 @@ public class StringFormating {
         }
         return directors;
     }
-
-//
-//    public static String getKnownFromList(List<KnownFor> knownFors) {
-//
-//        String name = "";
-//        for (int i = 0; i < knownFors.size(); i++) {
-//            KnownFor knownFor = knownFors.get(i);
-//            String string = knownFor.getTitle();
-//            if (i == 0) {
-//                name = name + string;
-//            } else{
-//                name = name + ", " + string;
-//            }
-//        }
-//        return name;
-//    }
 
     public static String currencyFormating(long value) {
 
