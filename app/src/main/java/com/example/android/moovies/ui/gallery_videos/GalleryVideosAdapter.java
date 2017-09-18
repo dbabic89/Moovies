@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.domain.models.movie.Video;
+import com.example.android.moovies.domain.models.mtv.Video;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,14 +25,6 @@ class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdapter.Mov
         this.videos = videos;
     }
 
-    public interface RecyclerViewInterface {
-        void onCardClick(int position);
-    }
-
-    void setRecyclerViewInterface(GalleryVideosAdapter.RecyclerViewInterface recyclerViewInterface) {
-        this.recyclerViewInterface = recyclerViewInterface;
-    }
-
     @Override
     public GalleryVideosAdapter.MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_video, parent, false);
@@ -45,7 +37,7 @@ class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdapter.Mov
         Video video = videos.get(position);
 
         holder.videoTitle.setText(video.getName());
-        Picasso.with(context).load("http://img.youtube.com/vi/" +  video.getKey() + "/0.jpg").into(holder.videoImage);
+        Picasso.with(context).load("http://img.youtube.com/vi/" + video.getKey() + "/0.jpg").into(holder.videoImage);
 
     }
 
@@ -54,7 +46,15 @@ class GalleryVideosAdapter extends RecyclerView.Adapter<GalleryVideosAdapter.Mov
         return videos.size();
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public interface RecyclerViewInterface {
+        void onCardClick(int position);
+    }
+
+    void setRecyclerViewInterface(GalleryVideosAdapter.RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
+    }
+
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView videoImage;
         TextView videoTitle;

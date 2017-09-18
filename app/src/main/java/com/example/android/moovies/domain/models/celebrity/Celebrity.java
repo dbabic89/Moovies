@@ -1,6 +1,6 @@
 package com.example.android.moovies.domain.models.celebrity;
 
-import com.example.android.moovies.domain.models.movie.Images;
+import com.example.android.moovies.domain.models.mtv.Images;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

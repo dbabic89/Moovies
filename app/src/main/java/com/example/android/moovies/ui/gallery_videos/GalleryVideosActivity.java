@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.R;
-import com.example.android.moovies.domain.models.movie.Video;
-import com.example.android.moovies.domain.models.movie.Videos;
+import com.example.android.moovies.domain.models.mtv.Video;
+import com.example.android.moovies.domain.models.mtv.Videos;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -30,7 +30,7 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
     @BindView(R.id.recycler_view_videos)
     RecyclerView recyclerViewVideos;
 
-    YouTubePlayer youTubePlayer2;
+    YouTubePlayer mYouTubePlayer;
 
     private boolean fullScreen;
 
@@ -52,9 +52,9 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 Video video = videos.getResults().get(0);
 
-                youTubePlayer2 = youTubePlayer;
-                youTubePlayer2.loadVideo(video.getKey());
-                youTubePlayer2.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
+                mYouTubePlayer = youTubePlayer;
+                mYouTubePlayer.loadVideo(video.getKey());
+                mYouTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
                     @Override
                     public void onFullscreen(boolean b) {
                         fullScreen = b;
@@ -71,7 +71,7 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
         textVideoTitle.setText(intent.getExtras().getString("title"));
         textVideoOverview.setText(intent.getExtras().getString("overview"));
 
-        if (videos.getResults().size() > 1){
+        if (videos.getResults().size() > 1) {
             GalleryVideosAdapter galleryVideosAdapter = new GalleryVideosAdapter(this, videos.getResults());
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
@@ -81,7 +81,7 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
             galleryVideosAdapter.setRecyclerViewInterface(new GalleryVideosAdapter.RecyclerViewInterface() {
                 @Override
                 public void onCardClick(int position) {
-                    youTubePlayer2.loadVideo(videos.getResults().get(position).getKey());
+                    mYouTubePlayer.loadVideo(videos.getResults().get(position).getKey());
                 }
             });
         } else recyclerViewVideos.setVisibility(View.GONE);
@@ -90,9 +90,9 @@ public class GalleryVideosActivity extends YouTubeBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (fullScreen){
-            youTubePlayer2.setFullscreen(false);
-        } else{
+        if (fullScreen) {
+            mYouTubePlayer.setFullscreen(false);
+        } else {
             super.onBackPressed();
         }
     }

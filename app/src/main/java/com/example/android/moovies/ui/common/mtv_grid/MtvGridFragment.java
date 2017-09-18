@@ -16,19 +16,23 @@ import com.example.android.moovies.utils.FragmentCommunication;
 public class MtvGridFragment extends Fragment {
 
     View mView;
-    RecyclerView recyclerView;
-    MtvGridAdapter mtvGridAdapter;
     FragmentCommunication fragmentCommunication;
-    Posters posters;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_poster_grid, container, false);
+
         fragmentCommunication = (FragmentCommunication) getActivity();
 
-        posters = (Posters) getArguments().getSerializable("movies");
+        Posters posters = (Posters) getArguments().getSerializable("movies");
+        createRecyclerViewAndAdapter(posters);
 
-        mtvGridAdapter = new MtvGridAdapter(posters, getActivity());
+        return mView;
+    }
+
+    private void createRecyclerViewAndAdapter(final Posters posters) {
+
+        MtvGridAdapter mtvGridAdapter = new MtvGridAdapter(posters, getActivity());
         mtvGridAdapter.setRecyclerViewInterface(new MtvGridAdapter.RecyclerViewInterface() {
             @Override
             public void onCardClick(int position) {
@@ -36,11 +40,9 @@ public class MtvGridFragment extends Fragment {
             }
         });
 
-        recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setAdapter(mtvGridAdapter);
-
-        return mView;
     }
 }

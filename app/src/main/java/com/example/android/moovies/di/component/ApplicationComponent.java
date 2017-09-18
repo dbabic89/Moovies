@@ -1,6 +1,5 @@
 package com.example.android.moovies.di.component;
 
-import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.di.module.ApplicationModule;
 import com.example.android.moovies.di.module.PicassoModule;

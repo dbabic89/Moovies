@@ -1,6 +1,7 @@
 package com.example.android.moovies.di.module;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.android.moovies.di.scope.MooviesAppScope;
 
@@ -11,7 +12,6 @@ import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import timber.log.Timber;
 
 @Module(includes = ApplicationModule.class)
 public class NetworkModule {
@@ -22,7 +22,7 @@ public class NetworkModule {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                Timber.i(message);
+                Log.i("HttpLoggingInterceptor ", message);
             }
         });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);

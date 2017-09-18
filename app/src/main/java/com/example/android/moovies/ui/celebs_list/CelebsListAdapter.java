@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.domain.models.movie.Cast;
+import com.example.android.moovies.domain.models.mtv.Cast;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,16 +20,6 @@ class CelebsListAdapter extends RecyclerView.Adapter<CelebsListAdapter.CelebsHol
     private List<Cast> cast;
     private Context context;
     private RecyclerViewInterface recyclerViewInterface;
-
-    public interface RecyclerViewInterface {
-
-        void onCastClick(int position);
-
-    }
-
-    public void setRecyclerViewInterface(final CelebsListAdapter.RecyclerViewInterface recyclerViewInterface) {
-        this.recyclerViewInterface = recyclerViewInterface;
-    }
 
     CelebsListAdapter(List<Cast> cast, Context context) {
         this.cast = cast;
@@ -63,6 +53,16 @@ class CelebsListAdapter extends RecyclerView.Adapter<CelebsListAdapter.CelebsHol
     @Override
     public int getItemCount() {
         return cast.size();
+    }
+
+    public interface RecyclerViewInterface {
+
+        void onCastClick(int position);
+
+    }
+
+    public void setRecyclerViewInterface(final CelebsListAdapter.RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     class CelebsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

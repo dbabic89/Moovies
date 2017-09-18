@@ -23,10 +23,6 @@ class MtvGridAdapter extends RecyclerView.Adapter<MtvGridAdapter.MovieViewHolder
         this.context = context;
     }
 
-    public void setRecyclerViewInterface(MtvGridAdapter.RecyclerViewInterface recyclerViewInterface) {
-        this.recyclerViewInterface = recyclerViewInterface;
-    }
-
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.icon_poster, parent, false);
@@ -43,6 +39,15 @@ class MtvGridAdapter extends RecyclerView.Adapter<MtvGridAdapter.MovieViewHolder
         return posterList.getMtvPosterList().size();
     }
 
+    interface RecyclerViewInterface {
+
+        void onCardClick(int position);
+
+    }
+
+    public void setRecyclerViewInterface(MtvGridAdapter.RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
+    }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -58,12 +63,6 @@ class MtvGridAdapter extends RecyclerView.Adapter<MtvGridAdapter.MovieViewHolder
         public void onClick(View view) {
             recyclerViewInterface.onCardClick(getAdapterPosition());
         }
-
-    }
-
-    interface RecyclerViewInterface {
-
-        void onCardClick(int position);
 
     }
 }

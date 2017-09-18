@@ -11,17 +11,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.base.BaseActivity" />
+
         <activity android:name=".ui.gallery_videos.GalleryVideosActivity" />
+
         <activity android:name=".ui.profile.WebViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
     </application>
 
 </manifest>

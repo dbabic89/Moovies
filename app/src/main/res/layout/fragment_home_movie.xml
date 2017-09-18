@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/lightGrey"
-    tools:context="com.example.android.moovies.ui.home.HomeMovieFragment"
+    tools:context="com.example.android.moovies.ui.home.HomeMtvFragment"
     android:paddingBottom="8dp">
 
     <LinearLayout

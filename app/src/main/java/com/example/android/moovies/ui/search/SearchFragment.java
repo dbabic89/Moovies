@@ -23,14 +23,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SearchFragment extends Fragment implements SearchMvpView {
 
     View mView;
-    RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view_search) RecyclerView mRecyclerView;
     FragmentCommunication fragmentCommunication;
 
-    @Inject SearchPresenter mPresenter;
-    @Inject SearchAdapter searchAdapter;
+    @Inject
+    SearchPresenter mPresenter;
+    @Inject
+    SearchAdapter searchAdapter;
 
     private int currentPage;
     private int TOTAL_PAGES = 10;
@@ -40,7 +45,9 @@ public class SearchFragment extends Fragment implements SearchMvpView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentPage = 1;
+
         mView = inflater.inflate(R.layout.fragment_search, container, false);
+        ButterKnife.bind(this, mView);
         fragmentCommunication = (FragmentCommunication) getActivity();
 
         MovieComponent movieComponent = DaggerMovieComponent.builder()
@@ -50,13 +57,8 @@ public class SearchFragment extends Fragment implements SearchMvpView {
 
         movieComponent.inject(this);
         setPresenter();
-        return mView;
-    }
 
-    public void searchMovies(String query) {
-        setRecyclerViewAndAdapter(query);
-        mPresenter.getMovies(query, currentPage);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        return mView;
     }
 
     @Override
@@ -87,6 +89,12 @@ public class SearchFragment extends Fragment implements SearchMvpView {
 
     }
 
+    public void searchMovies(String query) {
+        setRecyclerViewAndAdapter(query);
+        mPresenter.getMovies(query, currentPage);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
     private void setPresenter() {
         mPresenter.attachView(this);
     }
@@ -102,7 +110,6 @@ public class SearchFragment extends Fragment implements SearchMvpView {
             }
         });
 
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view_search);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(searchAdapter);
 

@@ -1,6 +1,6 @@
 package com.example.android.moovies.data.remote;
 
-import com.example.android.moovies.domain.models.celebrity.Celebrity;
+import com.example.android.moovies.domain.models.MtvRating;
 import com.example.android.moovies.domain.models.account.Account;
 import com.example.android.moovies.domain.models.account.AccountStatesRated;
 import com.example.android.moovies.domain.models.account.AccountStatesRating;
@@ -9,9 +9,12 @@ import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.Rated;
 import com.example.android.moovies.domain.models.authentication.Session;
 import com.example.android.moovies.domain.models.authentication.Token;
+import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.TvDetail;
+import com.example.android.moovies.domain.models.tv.TvListResponse;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
@@ -39,7 +42,7 @@ public interface TmdbInterface {
     Observable<MovieListResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
 
     @GET("movie/{movie_id}/similar")
-    Observable<MovieListResponse> getSimilar(@Path("movie_id") int id, @Query("api_key") String apiKey);
+    Observable<MovieListResponse> getSimilarMovies(@Path("movie_id") int id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
 
     @GET("collection/{collection_id}")
     Observable<CollectionDetail> getCollection(@Path("collection_id") int id, @Query("api_key") String apiKey);
@@ -53,8 +56,29 @@ public interface TmdbInterface {
     @GET("movie/{id}")
     Observable<MovieDetail> getMovieDetails(@Path("id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
 
-    @GET("movie/{movie_id}/release_dates")
-    Observable<MovieDetail> getMovieReleaseDateAndCertification(@Path("movie_id") int id, @Query("api_key") String apiKey);
+
+    // Tv show list
+
+    @GET("tv/airing_today")
+    Observable<TvListResponse> getAiringTodayTv(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+
+    @GET("tv/on_the_air")
+    Observable<TvListResponse> getOnAirTv(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+
+    @GET("tv/popular")
+    Observable<TvListResponse> getPopularTv(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+
+    @GET("tv/top_rated")
+    Observable<TvListResponse> getTopRatedTv(@Query("api_key") String apiKey, @Query("language") String language, @Query("page") int pageIndex);
+
+    @GET("tv/{tv_id}/similar")
+    Observable<TvListResponse> getSimilarTv(@Path("tv_id") int id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
+
+    // Tv show details
+
+    @GET("tv/{tv_id}")
+    Observable<TvDetail> getTvDetail(@Path("tv_id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
+
 
     // Celebrity Detail
 
@@ -70,6 +94,7 @@ public interface TmdbInterface {
     @GET("certification/tv/list")
     Observable<MovieDetail> getTvCertification(@Query("api_key") String apiKey);
 
+
     //User authentication
 
     @GET("authentication/token/new")
@@ -78,10 +103,14 @@ public interface TmdbInterface {
     @GET("authentication/session/new")
     Call<Session> getSessionId(@Query("api_key") String apiKey, @Query("request_token") String token);
 
+
     //User account
 
     @GET("account")
     Observable<Account> getAccountDetail(@Query("api_key") String apiKey, @Query("session_id") String session_id);
+
+    @GET("tv/{tv_id}/account_states")
+    Observable<MtvRating> getAccountTvStates(@Path("tv_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     @GET("movie/{movie_id}/account_states")
     Observable<AccountStatesRated> getAccountStatesRated(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
@@ -90,20 +119,19 @@ public interface TmdbInterface {
     Observable<AccountStatesRating> getAccountStatesRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     @POST("account/{account_id}/watchlist")
-    Observable<PostResponse> addMovieToWatchlist (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostMovieToWatchlist movieToWatchlist);
+    Observable<PostResponse> addMovieToWatchlist(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostMovieToWatchlist movieToWatchlist);
 
     @POST("movie/{movie_id}/rating")
-    Observable<PostResponse> addMovieRating (@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
+    Observable<PostResponse> addMovieRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
 
     @DELETE("movie/{movie_id}/rating")
     Observable<PostResponse> deleteMovieRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     @GET("account/{account_id}/rated/movies")
-    Observable<MovieListResponse> getRatedMovies (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language,  @Query("page") int pageIndex);
+    Observable<MovieListResponse> getRatedMovies(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
 
     @GET("account/{account_id}/watchlist/movies")
-    Observable<MovieListResponse> getWatchlist (@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language,  @Query("page") int pageIndex);
-
+    Observable<MovieListResponse> getWatchlist(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
 
 
     // Search

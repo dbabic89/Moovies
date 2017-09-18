@@ -4,7 +4,7 @@ import com.example.android.moovies.domain.models.celebrity.MovieCredits;
 import com.example.android.moovies.domain.models.celebrity.TvCredits;
 import com.example.android.moovies.ui.base.BaseMvpView;
 
-public interface CelebsDetailMvpView extends BaseMvpView{
+public interface CelebsDetailMvpView extends BaseMvpView {
 
     void showPoster(String poster);
 
@@ -19,4 +19,5 @@ public interface CelebsDetailMvpView extends BaseMvpView{
     void showBiography(String birthday);
 
     void showCredits(MovieCredits movieCredits, TvCredits tvCredits);
+
 }

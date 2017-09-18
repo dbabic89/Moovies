@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class Reviews implements Serializable{
+public class Reviews implements Serializable {
 
     @SerializedName("page")
     @Expose

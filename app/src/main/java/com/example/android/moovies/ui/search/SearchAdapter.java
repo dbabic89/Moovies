@@ -33,14 +33,6 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MovieViewHolder> 
         movies = new ArrayList<>();
     }
 
-    interface RecyclerViewInterface {
-        void onCardClick(int position);
-    }
-
-    void setRecyclerViewInterface(SearchAdapter.RecyclerViewInterface recyclerViewInterface) {
-        this.recyclerViewInterface = recyclerViewInterface;
-    }
-
     @Override
     public SearchAdapter.MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -49,7 +41,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MovieViewHolder> 
 
     @NonNull
     private SearchAdapter.MovieViewHolder getViewHolder(ViewGroup parent, LayoutInflater inflater) {
-        View v1 = inflater.inflate(R.layout.list_item_movie, parent, false);
+        View v1 = inflater.inflate(R.layout.list_item_mtv, parent, false);
         return new SearchAdapter.MovieViewHolder(v1);
     }
 
@@ -99,8 +91,16 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MovieViewHolder> 
         }
     }
 
-    void clear(){
+    void clear() {
         movies = new ArrayList<>();
+    }
+
+    interface RecyclerViewInterface {
+        void onCardClick(int position);
+    }
+
+    void setRecyclerViewInterface(SearchAdapter.RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

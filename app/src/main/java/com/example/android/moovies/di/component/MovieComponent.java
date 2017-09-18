@@ -4,22 +4,25 @@ import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.di.scope.ActivityScope;
 import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
-import com.example.android.moovies.ui.movie_list.HorizontalRecyclerView;
-import com.example.android.moovies.ui.movie_list.MovieListFragment;
+import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
+import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.search.SearchFragment;
+import com.example.android.moovies.ui.tv_detail.TvDetailFragment;
 
 import dagger.Component;
 
 @ActivityScope
-@Component( modules = ActivityModule.class, dependencies = ApplicationComponent.class)
+@Component(modules = ActivityModule.class, dependencies = ApplicationComponent.class)
 public interface MovieComponent {
 
-    void inject(MovieListFragment userListFragment);
+    void inject(ListFragment userListFragment);
 
     void inject(HorizontalRecyclerView horizontalRecyclerView);
 
     void inject(MovieDetailFragment movieDetailFragment);
+
+    void inject(TvDetailFragment tvDetailFragment);
 
     void inject(SearchFragment searchFragment);
 

@@ -3,8 +3,7 @@ package com.example.android.moovies.domain.models.account;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
-public class PostMovieToWatchlist{
+public class PostMovieToWatchlist {
 
     @SerializedName("media_type")
     @Expose

@@ -10,17 +10,19 @@ import android.view.MenuItem;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.data.remote.TmdbInterface;
-import com.example.android.moovies.domain.models.movie.Credits;
 import com.example.android.moovies.domain.models.movie.Reviews;
+import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
 import com.example.android.moovies.ui.celebs_list.CelebsListFragment;
+import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
-import com.example.android.moovies.ui.movie_list.MovieListFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.review_list.ReviewListFragment;
 import com.example.android.moovies.ui.search.SearchFragment;
+import com.example.android.moovies.ui.tv_detail.TvDetailFragment;
+import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
 
 import javax.inject.Inject;
@@ -63,7 +65,7 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.isEmpty())searchFragment.searchMovies(newText);
+                if (!newText.isEmpty()) searchFragment.searchMovies(newText);
                 else searchFragment.showMoviesEmpty();
                 return true;
             }
@@ -89,15 +91,34 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     }
 
     @Override
-    public void startMovieTabs(int tab) {
+    public void startTabs(int tab, int type) {
 
         Fragment fragment = new ViewPagerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("vpf", "movieFragment");
-        bundle.putInt("currentTab", tab);
-        fragment.setArguments(bundle);
+
+        if (type == 1) {
+            Bundle bundle = new Bundle();
+            bundle.putString("vpf", "movieFragment");
+            bundle.putInt(Constants.LIST_ID, tab);
+            fragment.setArguments(bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("vpf", "tvFragment");
+            bundle.putInt(Constants.LIST_ID, tab);
+            fragment.setArguments(bundle);
+        }
 
         fragmentManager.beginTransaction().add(R.id.content_main, fragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startList(int id, int tab) {
+
+        Fragment listFragment = new ListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        bundle.putInt(Constants.LIST_ID, tab);
+        listFragment.setArguments(bundle);
+        fragmentManager.beginTransaction().add(R.id.content_main, listFragment).addToBackStack("tag").commit();
     }
 
     @Override
@@ -110,6 +131,17 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         movieDetailFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, movieDetailFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startTvDetail(int id) {
+
+        Fragment tvDetailFragment = new TvDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("tv_id", id);
+        tvDetailFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, tvDetailFragment).addToBackStack("tag").commit();
     }
 
     @Override
@@ -126,10 +158,10 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     @Override
     public void startCollectionList(int id) {
 
-        Fragment movieListFragment = new MovieListFragment();
+        Fragment movieListFragment = new ListFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("collection_id", id);
-        bundle.putInt("tab", 5);
+        bundle.putInt(Constants.LIST_ID, 9);
         movieListFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, movieListFragment).addToBackStack("tag").commit();
@@ -140,7 +172,6 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
         Fragment movieDetailFragment = new MovieDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("vpf", "movieDetailFragment");
         bundle.putInt("movie_id", id);
         movieDetailFragment.setArguments(bundle);
 

@@ -39,7 +39,10 @@ class CustomViewPager {
             adapter.addFrag(mFragmentList.get(i), mStringList.get(i));
         }
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(currentTab);
+        if (currentTab <= 3) viewPager.setCurrentItem(currentTab);
+        else if (currentTab == 6)viewPager.setCurrentItem(2);
+        else if (currentTab == 7)viewPager.setCurrentItem(3);
+        else viewPager.setCurrentItem(currentTab%2);
     }
 
     private void setupTabLayout() {

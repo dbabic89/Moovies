@@ -10,13 +10,4 @@ public interface ProfileMvpView extends BaseMvpView {
 
     void displayProfile(String sessionId);
 
-    void displayWatchlist();
-
-    void displayRatedMovies();
-
-    void displayLists();
-//        void displayProgress();
-//        void addMovieProgress();
-//        void addTvProgress();
-//        void addCelebrityProgress();
 }

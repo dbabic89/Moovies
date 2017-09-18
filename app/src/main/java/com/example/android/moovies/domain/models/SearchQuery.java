@@ -25,4 +25,5 @@ public class SearchQuery {
     public void setPage(int page) {
         this.page = page;
     }
+
 }

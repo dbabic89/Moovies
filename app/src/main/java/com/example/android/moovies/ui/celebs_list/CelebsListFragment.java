@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.domain.models.movie.Credits;
+import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.utils.FragmentCommunication;
 
 public class CelebsListFragment extends Fragment {
@@ -27,22 +27,26 @@ public class CelebsListFragment extends Fragment {
         fragmentCommunication = (FragmentCommunication) getActivity();
         final Credits credits = (Credits) getArguments().getSerializable("credits");
 
-        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view_celebs);
+        createRecyclerView(credits);
 
+        return mView;
+    }
+
+    private void createRecyclerView(final Credits credits) {
+
+        CelebsListAdapter castAdapter = new CelebsListAdapter(credits.getCast(), getActivity());
+
+        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view_celebs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        CelebsListAdapter castAdapter = new CelebsListAdapter(credits.getCast(),  getActivity());
-        recyclerView.setAdapter(castAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(castAdapter);
+
         castAdapter.setRecyclerViewInterface(new CelebsListAdapter.RecyclerViewInterface() {
             @Override
             public void onCastClick(int position) {
                 fragmentCommunication.startCelebrityDetail(credits.getCast().get(position).getId());
             }
         });
-
-
-
-        return mView;
     }
 
 }

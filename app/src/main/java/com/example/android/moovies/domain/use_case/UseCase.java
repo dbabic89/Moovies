@@ -12,8 +12,8 @@ abstract class UseCase<T, Params> {
 
     abstract Observable<T> createObservable(Params params);
 
-    public void execute(DisposableObserver<T> observer, Params params){
-        final Observable<T> observable =  this.createObservable(params)
+    public void execute(DisposableObserver<T> observer, Params params) {
+        final Observable<T> observable = this.createObservable(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 

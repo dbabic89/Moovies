@@ -15,45 +15,44 @@ import com.example.android.moovies.R;
 import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
-import com.example.android.moovies.ui.movie_list.MovieListFragment;
+import com.example.android.moovies.ui.common.mtv_list.ListFragment;
+import com.example.android.moovies.utils.Constants;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ProfileFragment extends Fragment implements ProfileMvpView, View.OnClickListener {
 
-    Button buttonLogin, buttonLogout, buttonRatedMovies, buttonMoviesWatclist;
+    @BindView(R.id.button_login) Button buttonLogin;
+    @BindView(R.id.button_logout) Button buttonLogout;
+    @BindView(R.id.button_rated_movies) Button buttonRatedMovies;
+    @BindView(R.id.button_movie_watchlist) Button buttonMoviesWatclist;
     View mView;
-    @Inject ProfilePresenter mPresenter;
+    @Inject
+    ProfilePresenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        createComponent();
 
+        mView = inflater.inflate(R.layout.fragment_profile, container, false);
+        ButterKnife.bind(this, mView);
+
+        setPresenter();
+
+        return mView;
+    }
+
+    private void createComponent() {
         MovieComponent movieComponent = DaggerMovieComponent.builder()
                 .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
                 .activityModule(new ActivityModule(getActivity()))
                 .build();
 
         movieComponent.inject(this);
-
-        mView = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        initializeViews();
-        setPresenter();
-
-        return mView;
-    }
-
-    private void setPresenter() {
-        mPresenter.attachView(this);
-        mPresenter.userLogin();
-    }
-
-    private void initializeViews() {
-        buttonLogin = (Button) mView.findViewById(R.id.button_login);
-        buttonLogout = (Button) mView.findViewById(R.id.button_logout);
-        buttonRatedMovies = (Button) mView.findViewById(R.id.button_rated_movies);
-        buttonMoviesWatclist = (Button) mView.findViewById(R.id.button_movie_watchlist);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 11) {
+        if (requestCode == 11) {
             mPresenter.getSessionID(data.getExtras().getString("token"));
         }
     }
@@ -111,39 +110,30 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     }
 
     @Override
-    public void displayWatchlist() {
-    }
-
-    @Override
-    public void displayRatedMovies() {
-
-    }
-
-    @Override
-    public void displayLists() {
-
-    }
-
-    @Override
     public void onClick(View view) {
         int id = view.getId();
 
-        Fragment fragment = new MovieListFragment();
+        Fragment fragment = new ListFragment();
 
-        if (id == R.id.button_rated_movies){
+        if (id == R.id.button_rated_movies) {
 
             Bundle bundle = new Bundle();
-            bundle.putInt("tab", 6);
+            bundle.putInt(Constants.LIST_ID, 11);
             fragment.setArguments(bundle);
-        }else if (id == R.id.button_movie_watchlist){
+        } else if (id == R.id.button_movie_watchlist) {
 
             Bundle bundle = new Bundle();
-            bundle.putInt("tab", 7);
+            bundle.putInt(Constants.LIST_ID, 12);
             fragment.setArguments(bundle);
 
         }
 
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_main, fragment).addToBackStack("Tag").commit();
+    }
+
+    private void setPresenter() {
+        mPresenter.attachView(this);
+        mPresenter.userLogin();
     }
 }

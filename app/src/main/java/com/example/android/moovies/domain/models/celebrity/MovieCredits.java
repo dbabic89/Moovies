@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class MovieCredits implements Serializable{
+public class MovieCredits implements Serializable {
 
     @SerializedName("cast")
     @Expose

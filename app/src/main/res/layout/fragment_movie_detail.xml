@@ -8,7 +8,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:background="@android:color/white"
         android:fitsSystemWindows="true">
 
@@ -265,7 +265,7 @@
             <TextView
                 android:id="@+id/text_belongs_to_collection_label"
                 style="@style/MovieTextLabel"
-                android:text="@string/this_movie_belongs_to" />
+                android:text="@string/label_collection" />
 
             <RelativeLayout
                 android:id="@+id/relative_layout_collection"
@@ -350,7 +350,7 @@
             <TextView
                 android:id="@+id/text_info_label"
                 style="@style/MovieTextLabel"
-                android:text="@string/info_label" />
+                android:text="@string/label_info" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -517,7 +517,7 @@
             <TextView
                 android:id="@+id/text_keywords_label"
                 style="@style/MovieTextLabel"
-                android:text="@string/keywords_label" />
+                android:text="@string/label_keywords" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_keywords"

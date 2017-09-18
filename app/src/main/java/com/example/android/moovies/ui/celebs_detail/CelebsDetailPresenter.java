@@ -17,7 +17,7 @@ public class CelebsDetailPresenter extends BasePresenter<CelebsDetailMvpView> {
     CelebsDetail celebsDetail;
 
     @Inject
-    public CelebsDetailPresenter(CelebsDetail celebsDetail) {
+    CelebsDetailPresenter(CelebsDetail celebsDetail) {
         this.celebsDetail = celebsDetail;
     }
 
@@ -38,14 +38,18 @@ public class CelebsDetailPresenter extends BasePresenter<CelebsDetailMvpView> {
     private class CelebsDetailObserver extends DisposableObserver<Celebrity> {
         @Override
         public void onNext(Celebrity value) {
-            if (value != null){
+            if (value != null) {
                 getMvpView().showPoster(value.getProfilePath());
                 getMvpView().showName(value.getName());
-                if (value.getBirthday() != null) getMvpView().showBirthday(StringFormating.dateFormating(value.getBirthday()));
-                if (value.getPlaceOfBirth() != null) getMvpView().showBirthplace(value.getPlaceOfBirth());
-                if (value.getDeathday() != null) getMvpView().showDeathday(StringFormating.dateFormating(value.getDeathday()));
+                if (value.getBirthday() != null)
+                    getMvpView().showBirthday(StringFormating.dateFormating(value.getBirthday()));
+                if (value.getPlaceOfBirth() != null)
+                    getMvpView().showBirthplace(value.getPlaceOfBirth());
+                if (value.getDeathday() != null)
+                    getMvpView().showDeathday(StringFormating.dateFormating(value.getDeathday()));
                 if (value.getBiography() != null) getMvpView().showBiography(value.getBiography());
-                if (value.getMovieCredits() != null && value.getTvCredits() != null) getMvpView().showCredits(value.getMovieCredits(), value.getTvCredits());
+                if (value.getMovieCredits() != null && value.getTvCredits() != null)
+                    getMvpView().showCredits(value.getMovieCredits(), value.getTvCredits());
             }
         }
 

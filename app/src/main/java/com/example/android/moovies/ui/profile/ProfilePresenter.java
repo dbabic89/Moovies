@@ -21,9 +21,12 @@ import retrofit2.Response;
 
 class ProfilePresenter extends BasePresenter<ProfileMvpView> {
 
-    @Inject TmdbInterface mTmdbInterface;
-    @Inject SharedPreferencesManager sharedPreferencesManager;
-    @Inject GetMovieList getMovieList;
+    @Inject
+    TmdbInterface mTmdbInterface;
+    @Inject
+    SharedPreferencesManager sharedPreferencesManager;
+    @Inject
+    GetMovieList getMovieList;
 
     @Inject
     ProfilePresenter(SharedPreferencesManager sharedPreferencesManager, TmdbInterface tmdbInterface) {
@@ -87,7 +90,7 @@ class ProfilePresenter extends BasePresenter<ProfileMvpView> {
         });
     }
 
-    void getAccountId(){
+    void getAccountId() {
         Observable<Account> observable = mTmdbInterface.getAccountDetail(BuildConfig.TMDB_APIKEY, sharedPreferencesManager.getSessionId());
         observable
                 .subscribeOn(Schedulers.io())

@@ -7,13 +7,12 @@ import javax.inject.Inject;
 
 public class SharedPreferencesManager {
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
     private static final String PREF_NAME = "MooviesPref";
     private static final String KEY_LOGIN = "isLoggedIn";
     private static final String KEY_ACCOUNT_ID = "accountId";
     private static final String KEY_SESSION_ID = "sessionId";
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Inject
     public SharedPreferencesManager(Context context) {
@@ -21,30 +20,30 @@ public class SharedPreferencesManager {
         editor = sharedPreferences.edit();
     }
 
-    public void createLoggingSession(String sessionId){
+    public void createLoggingSession(String sessionId) {
         editor.putBoolean(KEY_LOGIN, true);
         editor.putString(KEY_SESSION_ID, sessionId);
         editor.commit();
     }
 
-    public void logout(){
+    public void logout() {
         editor.clear();
         editor.commit();
     }
 
-    public String getSessionId(){
+    public String getSessionId() {
         return sharedPreferences.getString(KEY_SESSION_ID, "");
     }
 
-    public void setAccountId(int accountId){
-        editor.putInt(KEY_ACCOUNT_ID, accountId).commit();
-    }
-
-    public int getAccountId(){
+    public int getAccountId() {
         return sharedPreferences.getInt(KEY_ACCOUNT_ID, 0);
     }
 
-    public boolean isLoggedIn(){
+    public void setAccountId(int accountId) {
+        editor.putInt(KEY_ACCOUNT_ID, accountId).commit();
+    }
+
+    public boolean isLoggedIn() {
         return sharedPreferences.getBoolean(KEY_LOGIN, false);
     }
 

@@ -13,11 +13,11 @@ import com.example.android.moovies.R;
 import com.example.android.moovies.domain.models.celebrity.CelebsCredits;
 import com.example.android.moovies.domain.models.celebrity.Posters;
 import com.example.android.moovies.ui.common.mtv_grid.MtvGridFragment;
+import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.home.HomeCelebsFragment;
-import com.example.android.moovies.ui.home.HomeMovieFragment;
-import com.example.android.moovies.ui.movie_list.MovieListFragment;
+import com.example.android.moovies.ui.home.HomeMtvFragment;
 import com.example.android.moovies.ui.progress.ProgressFragment;
-import com.example.android.moovies.ui.tv.TvFragment;
+import com.example.android.moovies.utils.Constants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,8 +36,8 @@ public class ViewPagerFragment extends Fragment {
     List<Fragment> fragmentList;
     List<String> stringList;
 
-    String vpf;
-    int x, currentTab, movieId = 0;
+    String viewPagerFragment;
+    int currentTab, movieId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,45 +46,44 @@ public class ViewPagerFragment extends Fragment {
 
         ButterKnife.bind(this, mView);
 
-        currentTab = getArguments().getInt("currentTab");
+        currentTab = getArguments().getInt(Constants.LIST_ID);
         movieId = getArguments().getInt("movie_id");
-        vpf = getArguments().getString("vpf");
+        viewPagerFragment = getArguments().getString("vpf");
 
-        switch (vpf) {
+        switch (viewPagerFragment) {
 
             case "homeFragment":
-                fragmentList = Arrays.asList(new HomeMovieFragment(), new TvFragment(), new HomeCelebsFragment(),
+
+                Fragment homeMovieFragment = new HomeMtvFragment();
+                Bundle homeMovieFragmentBundle = new Bundle();
+                homeMovieFragmentBundle.putString(Constants.HOME_MOVIE_FRAGMENT, Constants.HOME_MOVIE_FRAGMENT);
+                homeMovieFragment.setArguments(homeMovieFragmentBundle);
+
+                Fragment homeTvFragment = new HomeMtvFragment();
+                Bundle homeTvFragmentBundle = new Bundle();
+                homeTvFragmentBundle.putString(Constants.HOME_TV_FRAGMENT, Constants.HOME_TV_FRAGMENT);
+                homeTvFragment.setArguments(homeTvFragmentBundle);
+
+                fragmentList = Arrays.asList(homeMovieFragment, homeTvFragment, new HomeCelebsFragment(),
                         new ProgressFragment());
                 stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
 
                 break;
 
             case "movieFragment":
-                x = getArguments().getInt("curretTab");
 
-                Fragment nowPlayingMovieListFragment = new MovieListFragment();
-                Bundle bundle1 = new Bundle();
-                bundle1.putInt("tab", 0);
-                nowPlayingMovieListFragment.setArguments(bundle1);
+                List<Integer> movieTabs = Arrays.asList(0, 1, 2, 3);
+                List<String> movieTitles = Arrays.asList("Now", "Upcoming", "Popular", "Top rated");
+                startListFragments(movieTabs, movieTitles);
 
-                Fragment soonPlayingMovieListFragment = new MovieListFragment();
-                Bundle bundle2 = new Bundle();
-                bundle2.putInt("tab", 1);
-                soonPlayingMovieListFragment.setArguments(bundle2);
+                break;
 
-                Fragment popularMovieListFragment = new MovieListFragment();
-                Bundle bundle3 = new Bundle();
-                bundle3.putInt("tab", 2);
-                popularMovieListFragment.setArguments(bundle3);
+            case "tvFragment":
 
-                Fragment topRatedMovieListFragment = new MovieListFragment();
-                Bundle bundle4 = new Bundle();
-                bundle4.putInt("tab", 3);
-                topRatedMovieListFragment.setArguments(bundle4);
+                List<Integer> tvTabs = Arrays.asList(4, 5, 6, 7);
+                List<String> tvTitles = Arrays.asList("Today", "On air", "Popular", "Top rated");
+                startListFragments(tvTabs, tvTitles);
 
-                fragmentList = Arrays.asList(nowPlayingMovieListFragment, soonPlayingMovieListFragment, popularMovieListFragment,
-                        topRatedMovieListFragment);
-                stringList = Arrays.asList("Now", "Upcoming", "Popular", "Top 200");
                 break;
 
             case "celebsDetailFragment":
@@ -112,6 +111,32 @@ public class ViewPagerFragment extends Fragment {
         new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout, currentTab);
 
         return mView;
+    }
+
+    private void startListFragments(List<Integer> list, List<String> titles) {
+
+        Fragment listFragment1 = new ListFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt(Constants.LIST_ID, list.get(0));
+        listFragment1.setArguments(bundle1);
+
+        Fragment listFragment2 = new ListFragment();
+        Bundle bundle2 = new Bundle();
+        bundle2.putInt(Constants.LIST_ID, list.get(1));
+        listFragment2.setArguments(bundle2);
+
+        Fragment listFragment3 = new ListFragment();
+        Bundle bundle3 = new Bundle();
+        bundle3.putInt(Constants.LIST_ID, list.get(2));
+        listFragment3.setArguments(bundle3);
+
+        Fragment listFragment4 = new ListFragment();
+        Bundle bundle4 = new Bundle();
+        bundle4.putInt(Constants.LIST_ID, list.get(3));
+        listFragment4.setArguments(bundle4);
+
+        fragmentList = Arrays.asList(listFragment1, listFragment2, listFragment3, listFragment4);
+        stringList = titles;
     }
 
 }

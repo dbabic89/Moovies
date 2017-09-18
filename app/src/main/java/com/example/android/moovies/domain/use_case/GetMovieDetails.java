@@ -1,7 +1,7 @@
 package com.example.android.moovies.domain.use_case;
 
 import com.example.android.moovies.domain.models.movie.MovieDetail;
-import com.example.android.moovies.domain.repository.MovieRepositoryImpl;
+import com.example.android.moovies.domain.repository.Repository;
 
 import javax.inject.Inject;
 
@@ -10,15 +10,16 @@ import io.reactivex.Observable;
 public class GetMovieDetails extends UseCase<MovieDetail, Integer> {
 
     @Inject
-    MovieRepositoryImpl movieRepositoryImpl;
+    Repository Repository;
 
     @Inject
-    public GetMovieDetails(MovieRepositoryImpl movieRepositoryImpl) {
-        this.movieRepositoryImpl = movieRepositoryImpl;
+    GetMovieDetails(Repository Repository) {
+        this.Repository = Repository;
     }
 
     @Override
     Observable<MovieDetail> createObservable(Integer movieId) {
-        return movieRepositoryImpl.getMovieDetails(movieId);
+        return Repository.getMovieDetails(movieId);
     }
+
 }

@@ -8,12 +8,35 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="ButtonSeeMore">
+        <item name="android:id">@id/button_see_more</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:text">@string/see_more</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+
+    <style name="TextLabel">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">8dp</item>
+
+    </style>
+
+
+
+    //
 
     <style name="PositionIndicator">
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">8sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:gravity">center_horizontal|center_vertical</item>
-        <item name="android:layout_margin">6dp</item>
+        <item name="android:layout_margin">4dp</item>
     </style>
 
     <style name="MovieRating">
@@ -24,7 +47,7 @@
         <item name="android:shadowDx">2</item>
         <item name="android:shadowDy">2</item>
         <item name="android:shadowRadius">2</item>
-        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -93,7 +116,7 @@
         <item name="android:maxLines">2</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="MovieListDescription">

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:id="@+id/text_credits_label"
+        style="@style/MovieTextLabel"
+        android:text="@string/credits" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/text_created_by_label"
+            style="@style/MovieTextLabel"
+            android:text="@string/label_created_by" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_crew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/text_cast_label"
+            style="@style/MovieTextLabel"
+            android:text="@string/label_cast" />
+
+        <Button style="@style/ButtonSeeMore" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_cast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" />
+
+</LinearLayout>

@@ -15,6 +15,7 @@ public class Moovies extends Application {
     public static Moovies get(Activity activity) {
         return (Moovies) activity.getApplication();
     }
+
     @Override
     public void onCreate() {
         super.onCreate();

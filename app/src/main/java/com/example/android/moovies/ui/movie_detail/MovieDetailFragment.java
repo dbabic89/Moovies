@@ -25,18 +25,19 @@ import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
-import com.example.android.moovies.domain.models.movie.Backdrop;
-import com.example.android.moovies.domain.models.movie.Cast;
+import com.example.android.moovies.domain.models.mtv.Backdrop;
+import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
-import com.example.android.moovies.domain.models.movie.Credits;
-import com.example.android.moovies.domain.models.movie.Crew;
-import com.example.android.moovies.domain.models.movie.Genre;
+import com.example.android.moovies.domain.models.mtv.Credits;
+import com.example.android.moovies.domain.models.mtv.Crew;
+import com.example.android.moovies.domain.models.mtv.Genre;
 import com.example.android.moovies.domain.models.movie.Keyword;
 import com.example.android.moovies.domain.models.movie.Reviews;
-import com.example.android.moovies.domain.models.movie.Video;
-import com.example.android.moovies.domain.models.movie.Videos;
+import com.example.android.moovies.domain.models.mtv.Video;
+import com.example.android.moovies.domain.models.mtv.Videos;
+import com.example.android.moovies.ui.common.adapters.ChipsAdapter;
 import com.example.android.moovies.ui.gallery_videos.GalleryVideosActivity;
-import com.example.android.moovies.ui.movie_list.HorizontalRecyclerView;
+import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
 import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
 import com.example.android.moovies.utils.StringFormating;
@@ -65,10 +66,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     RelativeLayout relativeLayoutCollection;
     FrameLayout frameLayoutSimilar;
 
-    MovieComponent movieComponent;
-    @Inject Picasso picasso;
-    @Inject MovieDetailPresenter mPresenter;
-    @Inject SharedPreferencesManager sharedPreferencesManager;
+    @Inject
+    Picasso picasso;
+    @Inject
+    MovieDetailPresenter mPresenter;
+    @Inject
+    SharedPreferencesManager sharedPreferencesManager;
 
     FragmentCommunication fragmentCommunication;
     LayoutInflater layoutInflater;
@@ -83,12 +86,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         fragmentCommunication = (FragmentCommunication) getActivity();
         layoutInflater = getActivity().getLayoutInflater();
 
-        movieComponent = DaggerMovieComponent.builder()
-                .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
-                .activityModule(new ActivityModule(getActivity()))
-                .build();
-
-        movieComponent.inject(this);
+        createComponent();
 
         mView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         initializeViews(mView);
@@ -127,7 +125,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     @Override
     public void showNoBackdrop() {
         imagePoster.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        Picasso.with(getActivity()).load(R.drawable.red_circle).into(imageBackdrop);
+        picasso.load(R.drawable.red_circle).into(imageBackdrop);
     }
 
     @Override
@@ -142,7 +140,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     @Override
     public void showNoPoster() {
-        Picasso.with(getActivity()).load(R.drawable.red_circle).into(imagePoster);
+        picasso.load(R.drawable.red_circle).into(imagePoster);
     }
 
     @Override
@@ -277,7 +275,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     @Override
     public void showNoVideos() {
         textButtonVideos.setText(R.string.no_videos);
-        Picasso.with(getActivity()).load(R.drawable.red_circle).into(imageButtonVideos);
+        picasso.load(R.drawable.red_circle).into(imageButtonVideos);
 
     }
 
@@ -370,7 +368,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         Fragment similar = new HorizontalRecyclerView();
         Bundle bundle = new Bundle();
-        bundle.putInt("tab", 4);
+        bundle.putInt(Constants.LIST_ID, 8);
         bundle.putInt("movie_id", movieId);
         similar.setArguments(bundle);
         frameLayoutSimilar.setVisibility(View.VISIBLE);
@@ -396,7 +394,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
         if (id == R.id.image_button_watchlist) {
 
-            if (!sharedPreferencesManager.getSessionId().isEmpty()){
+            if (!sharedPreferencesManager.getSessionId().isEmpty()) {
 
                 if (textWatchlist.getText().equals("Add to watchlist")) {
                     textWatchlist.setText("On watchlist");
@@ -421,6 +419,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         }
     }
 
+    private void createComponent() {
+        MovieComponent movieComponent = DaggerMovieComponent.builder()
+                .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
+                .activityModule(new ActivityModule(getActivity()))
+                .build();
+
+        movieComponent.inject(this);
+    }
+
     private void setPresenter() {
         mPresenter.attachView(this);
         mPresenter.getMovieDetails(movieId);
@@ -429,9 +436,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     private void initializeViews(View view) {
 
-        linearLayoutReviews = (LinearLayout) mView.findViewById(R.id.linear_layout_reviews);
-        linearLayoutImages = (LinearLayout) mView.findViewById(R.id.linear_layout_images);
-        linearLayoutVideos = (LinearLayout) mView.findViewById(R.id.linear_layout_videos);
+        linearLayoutReviews = (LinearLayout) view.findViewById(R.id.linear_layout_reviews);
+        linearLayoutImages = (LinearLayout) view.findViewById(R.id.linear_layout_images);
+        linearLayoutVideos = (LinearLayout) view.findViewById(R.id.linear_layout_videos);
         relativeLayoutCollection = (RelativeLayout) view.findViewById(R.id.relative_layout_collection);
         frameLayoutSimilar = (FrameLayout) view.findViewById(R.id.similar);
 

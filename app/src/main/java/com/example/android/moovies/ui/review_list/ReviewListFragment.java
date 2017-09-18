@@ -14,12 +14,10 @@ import com.example.android.moovies.domain.models.movie.Reviews;
 
 public class ReviewListFragment extends Fragment {
 
-    View mView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_review_list, container, false);
+        View mView = inflater.inflate(R.layout.fragment_review_list, container, false);
 
         Reviews reviews = (Reviews) getArguments().getSerializable("reviews");
         ReviewAdapter reviewAdapter = new ReviewAdapter(reviews.getResults());

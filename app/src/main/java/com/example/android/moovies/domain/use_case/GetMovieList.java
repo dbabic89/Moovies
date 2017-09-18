@@ -1,9 +1,7 @@
 package com.example.android.moovies.domain.use_case;
 
-import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
-import com.example.android.moovies.domain.models.movie.MovieListResult;
-import com.example.android.moovies.domain.repository.MovieRepositoryImpl;
+import com.example.android.moovies.domain.repository.Repository;
 
 import java.util.List;
 
@@ -11,45 +9,45 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-public class GetMovieList extends  UseCase<MovieListResponse, List<Integer>>{
-
-    @Inject MovieRepositoryImpl movieRepositoryImpl;
-
-    private Observable<MovieListResponse> observable;
-    private List<MovieListResult> observable2;
-    private Observable<MovieDetail> detailObservable;
+public class GetMovieList extends UseCase<MovieListResponse, List<Integer>> {
 
     @Inject
-    public GetMovieList(MovieRepositoryImpl movieRepositoryImpl) {
-        this.movieRepositoryImpl = movieRepositoryImpl;
+    Repository movieRepository;
+
+    private Observable<MovieListResponse> observable;
+
+    @Inject
+    public GetMovieList(Repository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @Override
     Observable<MovieListResponse> createObservable(List<Integer> params) {
 
-        switch (params.get(1)){
+        switch (params.get(1)) {
             case 0:
-                observable = movieRepositoryImpl.getNowPlayingMovies(params.get(0));
+                observable = movieRepository.getNowPlayingMovies(params.get(0));
                 break;
             case 1:
-                observable = movieRepositoryImpl.getUpcomingMovies(params.get(0));
+                observable = movieRepository.getUpcomingMovies(params.get(0));
                 break;
             case 2:
-                observable = movieRepositoryImpl.getPopularMovies(params.get(0));
+                observable = movieRepository.getPopularMovies(params.get(0));
                 break;
             case 3:
-                observable =  movieRepositoryImpl.getTopRatedMovies(params.get(0));
+                observable = movieRepository.getTopRatedMovies(params.get(0));
                 break;
-            case 4:
-                observable =  movieRepositoryImpl.getSimilar(params.get(2));
+            case 8:
+                observable = movieRepository.getSimilarMovies(params.get(2), params.get(0));
                 break;
-            case 6:
-                observable =  movieRepositoryImpl.getRatedMovies(params.get(0));
+            case 11:
+                observable = movieRepository.getRatedMovies(params.get(0));
                 break;
-            case 7:
-                observable =  movieRepositoryImpl.getMovieWatchlist(params.get(0));
+            case 12:
+                observable = movieRepository.getMovieWatchlist(params.get(0));
                 break;
         }
         return observable;
     }
+
 }

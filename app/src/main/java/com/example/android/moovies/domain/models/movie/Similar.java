@@ -1,5 +1,6 @@
 package com.example.android.moovies.domain.models.movie;
 
+import com.example.android.moovies.domain.models.tv.TvListResult;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -12,7 +13,7 @@ public class Similar {
     private int page;
     @SerializedName("results")
     @Expose
-    private List<Object> results = null;
+    private List<TvListResult> results = null;
     @SerializedName("total_pages")
     @Expose
     private int totalPages;
@@ -28,11 +29,11 @@ public class Similar {
         this.page = page;
     }
 
-    public List<Object> getResults() {
+    public List<TvListResult> getResults() {
         return results;
     }
 
-    public void setResults(List<Object> results) {
+    public void setResults(List<TvListResult> results) {
         this.results = results;
     }
 

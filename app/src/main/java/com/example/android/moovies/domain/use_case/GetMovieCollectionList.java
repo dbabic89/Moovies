@@ -1,7 +1,7 @@
 package com.example.android.moovies.domain.use_case;
 
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
-import com.example.android.moovies.domain.repository.MovieRepositoryImpl;
+import com.example.android.moovies.domain.repository.Repository;
 
 import javax.inject.Inject;
 
@@ -11,15 +11,16 @@ public class GetMovieCollectionList extends UseCase<CollectionDetail, Integer> {
 
 
     @Inject
-    MovieRepositoryImpl movieRepositoryImpl;
+    Repository movieRepository;
 
     @Inject
-    GetMovieCollectionList(MovieRepositoryImpl movieRepositoryImpl) {
-        this.movieRepositoryImpl = movieRepositoryImpl;
+    GetMovieCollectionList(Repository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @Override
     Observable<CollectionDetail> createObservable(Integer movieId) {
-        return movieRepositoryImpl.getCollection(movieId);
+        return movieRepository.getCollection(movieId);
     }
+
 }

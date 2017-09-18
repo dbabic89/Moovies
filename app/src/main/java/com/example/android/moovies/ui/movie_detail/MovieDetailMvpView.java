@@ -1,18 +1,18 @@
 package com.example.android.moovies.ui.movie_detail;
 
-import com.example.android.moovies.domain.models.movie.Backdrop;
-import com.example.android.moovies.domain.models.movie.Cast;
+import com.example.android.moovies.domain.models.mtv.Backdrop;
+import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
-import com.example.android.moovies.domain.models.movie.Crew;
-import com.example.android.moovies.domain.models.movie.Genre;
+import com.example.android.moovies.domain.models.mtv.Crew;
+import com.example.android.moovies.domain.models.mtv.Genre;
 import com.example.android.moovies.domain.models.movie.Keyword;
 import com.example.android.moovies.domain.models.movie.Reviews;
-import com.example.android.moovies.domain.models.movie.Videos;
+import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.ui.base.BaseMvpView;
 
 import java.util.List;
 
-interface MovieDetailMvpView  extends BaseMvpView {
+interface MovieDetailMvpView extends BaseMvpView {
 
     void showMovieDetail(String title, String voteRating, String voteCount, String status);
 
@@ -32,7 +32,7 @@ interface MovieDetailMvpView  extends BaseMvpView {
 
     void showNoCertification();
 
-    void showReleaseDate (String releaseDate);
+    void showReleaseDate(String releaseDate);
 
     void showNoReleaseDate();
 

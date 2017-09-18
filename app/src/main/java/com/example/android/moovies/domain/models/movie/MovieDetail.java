@@ -1,5 +1,10 @@
 package com.example.android.moovies.domain.models.movie;
 
+import com.example.android.moovies.domain.models.mtv.Credits;
+import com.example.android.moovies.domain.models.mtv.Genre;
+import com.example.android.moovies.domain.models.mtv.Images;
+import com.example.android.moovies.domain.models.mtv.ProductionCompany;
+import com.example.android.moovies.domain.models.mtv.Videos;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -3,7 +3,6 @@ package com.example.android.moovies.di.module;
 import android.content.Context;
 
 import com.example.android.moovies.Moovies;
-import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.di.scope.MooviesAppScope;
 
 import dagger.Module;

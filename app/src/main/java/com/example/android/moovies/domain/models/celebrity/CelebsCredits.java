@@ -2,7 +2,7 @@ package com.example.android.moovies.domain.models.celebrity;
 
 import java.io.Serializable;
 
-public class CelebsCredits implements Serializable{
+public class CelebsCredits implements Serializable {
 
     private Posters moviePosters;
     private Posters tvPosters;
@@ -27,4 +27,5 @@ public class CelebsCredits implements Serializable{
     public void setTvPosters(Posters tvPosters) {
         this.tvPosters = tvPosters;
     }
+
 }

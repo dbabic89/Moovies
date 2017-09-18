@@ -1,24 +1,25 @@
 package com.example.android.moovies.domain.use_case;
 
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
-import com.example.android.moovies.domain.repository.MovieRepositoryImpl;
+import com.example.android.moovies.domain.repository.Repository;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-public class CelebsDetail extends UseCase<Celebrity, Integer>{
+public class CelebsDetail extends UseCase<Celebrity, Integer> {
 
     @Inject
-    MovieRepositoryImpl movieRepositoryImpl;
+    Repository movieRepository;
 
     @Inject
-    public CelebsDetail(MovieRepositoryImpl movieRepositoryImpl) {
-        this.movieRepositoryImpl = movieRepositoryImpl;
+    CelebsDetail(Repository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     @Override
     Observable<Celebrity> createObservable(Integer integer) {
-        return movieRepositoryImpl.getCelebrity(integer);
+        return movieRepository.getCelebrity(integer);
     }
+
 }

@@ -12,7 +12,6 @@ import com.example.android.moovies.R;
 public class WebViewActivity extends Activity {
 
     String token;
-    WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +21,7 @@ public class WebViewActivity extends Activity {
 
         token = getIntent().getExtras().getString("token");
 
-        webView = (WebView) findViewById(R.id.webview);
+        WebView webView = (WebView) findViewById(R.id.webview);
         webView.loadUrl("https://www.themoviedb.org/authenticate/" + token);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
@@ -37,7 +36,7 @@ public class WebViewActivity extends Activity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                if (url.contains("/allow")){
+                if (url.contains("/allow")) {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

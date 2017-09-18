@@ -27,13 +27,20 @@ import io.reactivex.observers.DisposableObserver;
 
 class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
-    @Inject SharedPreferencesManager mSharedPreferencesManager;
-    @Inject GetMovieDetails getMovieDetails;
-    @Inject GetAccountStatesRated getAccountStatesRated;
-    @Inject GetAccountStatesRating getAccountStatesRating;
-    @Inject AddToWatchlist addToWatchlist;
-    @Inject AddRating addRating;
-    @Inject DeleteRating deleteRating;
+    @Inject
+    SharedPreferencesManager mSharedPreferencesManager;
+    @Inject
+    GetMovieDetails getMovieDetails;
+    @Inject
+    GetAccountStatesRated getAccountStatesRated;
+    @Inject
+    GetAccountStatesRating getAccountStatesRating;
+    @Inject
+    AddToWatchlist addToWatchlist;
+    @Inject
+    AddRating addRating;
+    @Inject
+    DeleteRating deleteRating;
 
     int movieId, rating = 0;
 
@@ -65,11 +72,11 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         getAccountStatesRating.execute(new AccountStatesRatingObserver(), movieId);
     }
 
-    void addMovieToWatchlist(final int movieId, boolean watchlist){
+    void addMovieToWatchlist(final int movieId, boolean watchlist) {
         addToWatchlist.execute(new AddToWatchlistObserver(), new PostMovieToWatchlist("movie", movieId, watchlist));
     }
 
-    void addMovieRating(int movieId, int rating){
+    void addMovieRating(int movieId, int rating) {
         addRating.execute(new AddRatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
@@ -220,7 +227,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         }
     }
 
-    private class AddToWatchlistObserver extends DisposableObserver<PostResponse>  {
+    private class AddToWatchlistObserver extends DisposableObserver<PostResponse> {
         @Override
         public void onNext(PostResponse value) {
 
