@@ -4,10 +4,12 @@ package com.example.android.moovies.ui.common.mtv_list;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.moovies.Moovies;
@@ -38,6 +40,9 @@ public class ListFragment extends Fragment implements ListMvpView {
     ListPresenter mPresenter;
     @Inject
     ListAdapter mListAdapter;
+
+    @BindView(R.id.text_scroll_to_top)
+    TextView textScrollToTop;
 
     private int currentPage, type;
     private int TOTAL_PAGES = 10;
@@ -117,7 +122,7 @@ public class ListFragment extends Fragment implements ListMvpView {
 
     private void setRecyclerViewAndAdapter(final int id, final int collectionId, final int tab) {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mListAdapter.setRecyclerViewInterface(new ListAdapter.RecyclerViewInterface() {
             @Override
             public void onCardClick(int position) {
@@ -154,6 +159,23 @@ public class ListFragment extends Fragment implements ListMvpView {
                 @Override
                 public boolean isLoading() {
                     return isLoading;
+                }
+            });
+
+            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int visibility = (linearLayoutManager.findFirstCompletelyVisibleItemPosition() != 0) ? View.VISIBLE : View.GONE;
+                    textScrollToTop.setVisibility(visibility);
+                    textScrollToTop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getActivity());
+                            smoothScroller.setTargetPosition(0);
+                            linearLayoutManager.startSmoothScroll(smoothScroller);
+                        }
+                    });
                 }
             });
         }

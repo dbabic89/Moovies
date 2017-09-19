@@ -70,7 +70,7 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
             getMvpView().showSimilarTvs(value.getId());
             if (value.getCredits() != null){
                 if (value.getCreatedBy() != null) getMvpView().showCreatedBy(value.getCreatedBy());
-                if (value.getCredits().getCast() != null)getMvpView().showCast(value.getCredits().getCast());
+                if (value.getCredits().getCast().size() != 0)getMvpView().showCast(value.getCredits().getCast());
             }
 
         }

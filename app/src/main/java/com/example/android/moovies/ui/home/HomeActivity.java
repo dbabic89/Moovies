@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,10 +33,13 @@ import static android.R.attr.id;
 public class HomeActivity extends BaseActivity implements FragmentCommunication {
 
     Fragment fragment;
+    MenuItem search;
+    SearchView searchView;
     SearchFragment searchFragment;
     FragmentManager fragmentManager;
     @Inject
     TmdbInterface tmdbInteface;
+    int x;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         Bundle bundle = new Bundle();
         bundle.putString("vpf", "homeFragment");
         viewPager.setArguments(bundle);
-
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_main, viewPager).commit();
     }
@@ -55,8 +58,8 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        final MenuItem search = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        search = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -65,8 +68,19 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.isEmpty()) searchFragment.searchMovies(newText);
-                else searchFragment.showMoviesEmpty();
+                if (newText.length() == 1 && x == 0) {
+                    searchFragment = new SearchFragment();
+                    fragmentManager.beginTransaction().add(R.id.content_main, searchFragment).commit();
+                    searchFragment.showMoviesEmpty();
+                    x++;
+                } else if (newText.isEmpty()) {
+                    if (searchFragment != null) {
+                        fragmentManager.beginTransaction().remove(searchFragment).commit();
+                        x = 0;
+                    }
+                } else {
+                    searchFragment.searchMovies(newText);
+                }
                 return true;
             }
         });
@@ -79,15 +93,19 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == R.id.action_search) {
-            searchFragment = new SearchFragment();
-            fragmentManager.beginTransaction().add(R.id.content_main, searchFragment).addToBackStack("tag").commit();
         } else if (id == R.id.action_profile) {
             fragment = new ProfileFragment();
             fragmentManager.beginTransaction().replace(R.id.content_main, fragment).addToBackStack("tag").commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.i("TAG", "onBackPressed");
+        search.collapseActionView();
+        super.onBackPressed();
     }
 
     @Override
@@ -200,6 +218,11 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         celebsListFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, celebsListFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void closeSearch() {
+        search.collapseActionView();
     }
 
 }

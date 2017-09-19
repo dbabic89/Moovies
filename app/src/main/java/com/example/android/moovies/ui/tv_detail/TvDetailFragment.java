@@ -321,7 +321,12 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
         textCastLabel.setVisibility(View.VISIBLE);
         buttonCast.setVisibility(View.VISIBLE);
 
-        for (int i = 0; i < 3; i++) {
+        int x;
+        if (castList.size() < 3){
+            x = castList.size();
+        } else x = 3;
+
+        for (int i = 0; i < x; i++) {
             final Cast cast = castList.get(i);
 
             RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(R.layout.icon_person, null);

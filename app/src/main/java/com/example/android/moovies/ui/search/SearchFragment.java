@@ -86,6 +86,7 @@ public class SearchFragment extends Fragment implements SearchMvpView {
     @Override
     public void openMovieDetails(int id) {
         fragmentCommunication.startSearchDetail(id);
+        fragmentCommunication.closeSearch();
 
     }
 
@@ -95,7 +96,7 @@ public class SearchFragment extends Fragment implements SearchMvpView {
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void setPresenter() {
+    private void setPresenter()  {
         mPresenter.attachView(this);
     }
 

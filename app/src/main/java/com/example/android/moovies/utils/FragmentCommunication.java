@@ -23,4 +23,5 @@ public interface FragmentCommunication {
 
     void startCelebrityList(Credits credits);
 
+    void closeSearch();
 }
