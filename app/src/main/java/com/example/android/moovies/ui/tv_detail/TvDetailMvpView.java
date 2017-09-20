@@ -4,7 +4,6 @@ import com.example.android.moovies.domain.models.mtv.Backdrop;
 import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.mtv.Genre;
 import com.example.android.moovies.domain.models.mtv.Videos;
-import com.example.android.moovies.domain.models.tv.ContentRatingResult;
 import com.example.android.moovies.domain.models.tv.CreatedBy;
 import com.example.android.moovies.domain.models.tv.KeywordsResults;
 import com.example.android.moovies.ui.base.BaseMvpView;
@@ -25,7 +24,7 @@ interface TvDetailMvpView extends BaseMvpView {
 
     void showNoPoster();
 
-    void showContentRating(List<ContentRatingResult> contentRating);
+    void showSeasonAndEpisode(String season, String episode);
 
     void showReleaseDate(String releaseDate);
 

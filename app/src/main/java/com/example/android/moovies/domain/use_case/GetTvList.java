@@ -1,7 +1,5 @@
 package com.example.android.moovies.domain.use_case;
 
-import android.util.Log;
-
 import com.example.android.moovies.domain.models.tv.TvListResponse;
 import com.example.android.moovies.domain.repository.Repository;
 
@@ -14,13 +12,13 @@ import io.reactivex.Observable;
 public class GetTvList extends UseCase<TvListResponse, List<Integer>>{
 
     @Inject
-    Repository movieRepository;
+    Repository repository;
 
     private Observable<TvListResponse> observable;
 
     @Inject
-    public GetTvList(Repository movieRepository) {
-        this.movieRepository = movieRepository;
+    GetTvList(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
@@ -28,19 +26,25 @@ public class GetTvList extends UseCase<TvListResponse, List<Integer>>{
 
         switch (params.get(1)) {
             case 4:
-                observable = movieRepository.getAiringTodayTvs(params.get(0));
+                observable = repository.getAiringTodayTvs(params.get(0));
                 break;
             case 5:
-                observable = movieRepository.getOnAirTvs(params.get(0));
+                observable = repository.getOnAirTvs(params.get(0));
                 break;
             case 6:
-                observable = movieRepository.getPopularTvs(params.get(0));
+                observable = repository.getPopularTvs(params.get(0));
                 break;
             case 7:
-                observable = movieRepository.getTopRatedTvs(params.get(0));
+                observable = repository.getTopRatedTvs(params.get(0));
                 break;
             case 9:
-                observable = movieRepository.getSimilarTvs(params.get(2), params.get(0));
+                observable = repository.getSimilarTvs(params.get(2), params.get(0));
+                break;
+            case 13:
+                observable = repository.getWatchlistTvs(params.get(0));
+                break;
+            case 14:
+                observable = repository.getRatedTvs(params.get(0));
                 break;
         }
         return observable;

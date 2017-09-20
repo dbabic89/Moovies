@@ -3,11 +3,9 @@ package com.example.android.moovies.data.remote;
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.DataSource;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
-import com.example.android.moovies.domain.models.MtvRating;
 import com.example.android.moovies.domain.models.SearchQuery;
-import com.example.android.moovies.domain.models.account.AccountStatesRated;
-import com.example.android.moovies.domain.models.account.AccountStatesRating;
-import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
@@ -111,8 +109,28 @@ public class DataSourceNetwork implements DataSource {
     }
 
     @Override
-    public Observable<MtvRating> getAccountTvStates(int tvId) {
-        return tmdbInterface.getAccountTvStates(tvId, apiKey, sessionId);
+    public Observable<AccountStates> getAccountStatesTv(int tvId) {
+        return tmdbInterface.getAccountStatesTv(tvId, apiKey, sessionId);
+    }
+
+    @Override
+    public Observable<PostResponse> addTvRating(Rating rating) {
+        return tmdbInterface.addTvRating(rating.getId(), apiKey, sessionId, rating.getRated());
+    }
+
+    @Override
+    public Observable<PostResponse> deleteTvRating(Rating rating) {
+        return tmdbInterface.deleteTvRating(rating.getId(), apiKey, sessionId);
+    }
+
+    @Override
+    public Observable<TvListResponse> getRatedTvs(int page) {
+        return tmdbInterface.getRatedTvs(accoutId, apiKey, sessionId, language,page);
+    }
+
+    @Override
+    public Observable<TvListResponse> getWatchlistTvs(int page) {
+        return tmdbInterface.getWatchlistTvs(accoutId, apiKey, sessionId, language,page);
     }
 
     @Override
@@ -121,28 +139,23 @@ public class DataSourceNetwork implements DataSource {
     }
 
     @Override
-    public Observable<AccountStatesRated> getAccountStatesRated(int movieId) {
-        return tmdbInterface.getAccountStatesRated(movieId, apiKey, sessionId);
+    public Observable<AccountStates> getAccountStatesMovie(int movieId) {
+        return tmdbInterface.getAccountStatesMovie(movieId, apiKey, sessionId);
     }
 
     @Override
-    public Observable<AccountStatesRating> getAccountStatesRating(int movieId) {
-        return tmdbInterface.getAccountStatesRating(movieId, apiKey, sessionId);
-    }
-
-    @Override
-    public Observable<PostResponse> addMovieToWatchlist(PostMovieToWatchlist movieToWatchlist) {
-        return tmdbInterface.addMovieToWatchlist(accoutId, apiKey, sessionId, movieToWatchlist);
+    public Observable<PostResponse> addToWatchlist(PostToWatchlist movieToWatchlist) {
+        return tmdbInterface.addToWatchlist(accoutId, apiKey, sessionId, movieToWatchlist);
     }
 
     @Override
     public Observable<PostResponse> addMovieRating(Rating rating) {
-        return tmdbInterface.addMovieRating(rating.getMovieId(), apiKey, sessionId, rating.getRated());
+        return tmdbInterface.addMovieRating(rating.getId(), apiKey, sessionId, rating.getRated());
     }
 
     @Override
     public Observable<PostResponse> deleteMovieRating(Rating rating) {
-        return tmdbInterface.deleteMovieRating(rating.getMovieId(), apiKey, sessionId);
+        return tmdbInterface.deleteMovieRating(rating.getId(), apiKey, sessionId);
     }
 
     @Override
@@ -151,8 +164,8 @@ public class DataSourceNetwork implements DataSource {
     }
 
     @Override
-    public Observable<MovieListResponse> getMovieWatchlist(int page) {
-        return tmdbInterface.getWatchlist(accoutId, apiKey, sessionId, language, page);
+    public Observable<MovieListResponse> getWatchlistMovies(int page) {
+        return tmdbInterface.getWatchlistMovies(accoutId, apiKey, sessionId, language, page);
     }
 
     @Override

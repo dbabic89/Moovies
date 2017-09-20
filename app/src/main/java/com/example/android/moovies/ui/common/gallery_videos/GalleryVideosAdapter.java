@@ -1,4 +1,4 @@
-package com.example.android.moovies.ui.gallery_videos;
+package com.example.android.moovies.ui.common.gallery_videos;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

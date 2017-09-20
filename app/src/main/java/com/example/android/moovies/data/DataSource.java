@@ -1,10 +1,8 @@
 package com.example.android.moovies.data;
 
-import com.example.android.moovies.domain.models.MtvRating;
 import com.example.android.moovies.domain.models.SearchQuery;
-import com.example.android.moovies.domain.models.account.AccountStatesRated;
-import com.example.android.moovies.domain.models.account.AccountStatesRating;
-import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
@@ -35,6 +33,7 @@ public interface DataSource {
 
     Observable<CollectionDetail> getCollection(int movieId);
 
+
     Observable<TvListResponse> getAiringTodayTvs(int page);
 
     Observable<TvListResponse> getOnAirTvs(int page);
@@ -48,13 +47,20 @@ public interface DataSource {
     Observable<TvDetail> getTvDetail(int tvId);
 
 
-    Observable<MtvRating> getAccountTvStates(int movieId);
+    Observable<AccountStates> getAccountStatesTv(int movieId);
 
-    Observable<AccountStatesRated> getAccountStatesRated(int movieId);
+    Observable<PostResponse> addTvRating(Rating rating);
 
-    Observable<AccountStatesRating> getAccountStatesRating(int movieId);
+    Observable<PostResponse> deleteTvRating(Rating rating);
 
-    Observable<PostResponse> addMovieToWatchlist(PostMovieToWatchlist movieToWatchlist);
+    Observable<TvListResponse> getRatedTvs(int page);
+
+    Observable<TvListResponse> getWatchlistTvs(int page);
+
+
+    Observable<AccountStates> getAccountStatesMovie(int movieId);
+
+    Observable<PostResponse> addToWatchlist(PostToWatchlist postToWatchlist);
 
     Observable<PostResponse> addMovieRating(Rating rating);
 
@@ -62,7 +68,7 @@ public interface DataSource {
 
     Observable<MovieListResponse> getRatedMovies(int page);
 
-    Observable<MovieListResponse> getMovieWatchlist(int page);
+    Observable<MovieListResponse> getWatchlistMovies(int page);
 
 
     Observable<Celebrity> getCelebrity(int id);

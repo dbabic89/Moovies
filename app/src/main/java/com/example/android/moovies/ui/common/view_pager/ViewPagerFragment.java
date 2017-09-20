@@ -16,7 +16,7 @@ import com.example.android.moovies.ui.common.mtv_grid.MtvGridFragment;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.home.HomeCelebsFragment;
 import com.example.android.moovies.ui.home.HomeMtvFragment;
-import com.example.android.moovies.ui.progress.ProgressFragment;
+import com.example.android.moovies.ui.home.HomeProgressFragment;
 import com.example.android.moovies.utils.Constants;
 
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public class ViewPagerFragment extends Fragment {
                 homeTvFragment.setArguments(homeTvFragmentBundle);
 
                 fragmentList = Arrays.asList(homeMovieFragment, homeTvFragment, new HomeCelebsFragment(),
-                        new ProgressFragment());
+                        new HomeProgressFragment());
                 stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
 
                 break;

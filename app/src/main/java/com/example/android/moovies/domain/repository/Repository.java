@@ -2,11 +2,9 @@ package com.example.android.moovies.domain.repository;
 
 import com.example.android.moovies.data.DataSource;
 import com.example.android.moovies.data.remote.DataSourceNetwork;
-import com.example.android.moovies.domain.models.MtvRating;
 import com.example.android.moovies.domain.models.SearchQuery;
-import com.example.android.moovies.domain.models.account.AccountStatesRated;
-import com.example.android.moovies.domain.models.account.AccountStatesRating;
-import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
@@ -96,8 +94,28 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<MtvRating> getAccountTvStates(int tvId) {
-        return dataSourceNetwork.getAccountTvStates(tvId);
+    public Observable<AccountStates> getAccountStatesTv(int tvId) {
+        return dataSourceNetwork.getAccountStatesTv(tvId);
+    }
+
+    @Override
+    public Observable<PostResponse> addTvRating(Rating rating) {
+        return dataSourceNetwork.addTvRating(rating);
+    }
+
+    @Override
+    public Observable<PostResponse> deleteTvRating(Rating rating) {
+        return dataSourceNetwork.deleteTvRating(rating);
+    }
+
+    @Override
+    public Observable<TvListResponse> getRatedTvs(int page) {
+        return dataSourceNetwork.getRatedTvs(page);
+    }
+
+    @Override
+    public Observable<TvListResponse> getWatchlistTvs(int page) {
+        return dataSourceNetwork.getWatchlistTvs(page);
     }
 
     @Override
@@ -106,18 +124,13 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<AccountStatesRated> getAccountStatesRated(int movieId) {
-        return dataSourceNetwork.getAccountStatesRated(movieId);
+    public Observable<AccountStates> getAccountStatesMovie(int movieId) {
+        return dataSourceNetwork.getAccountStatesMovie(movieId);
     }
 
     @Override
-    public Observable<AccountStatesRating> getAccountStatesRating(int movieId) {
-        return dataSourceNetwork.getAccountStatesRating(movieId);
-    }
-
-    @Override
-    public Observable<PostResponse> addMovieToWatchlist(PostMovieToWatchlist movieToWatchlist) {
-        return dataSourceNetwork.addMovieToWatchlist(movieToWatchlist);
+    public Observable<PostResponse> addToWatchlist(PostToWatchlist movieToWatchlist) {
+        return dataSourceNetwork.addToWatchlist(movieToWatchlist);
     }
 
     @Override
@@ -136,8 +149,8 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<MovieListResponse> getMovieWatchlist(int page) {
-        return dataSourceNetwork.getMovieWatchlist(page);
+    public Observable<MovieListResponse> getWatchlistMovies(int page) {
+        return dataSourceNetwork.getWatchlistMovies(page);
     }
 
     @Override

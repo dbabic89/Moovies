@@ -1,5 +1,7 @@
 package com.example.android.moovies.ui.profile;
 
+import android.util.Log;
+
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.data.remote.TmdbInterface;
@@ -81,6 +83,7 @@ class ProfilePresenter extends BasePresenter<ProfileMvpView> {
             public void onResponse(Call<Session> call, Response<Session> response) {
                 getMvpView().displayProfile(response.body().getSessionId());
                 sharedPreferencesManager.createLoggingSession(response.body().getSessionId());
+                getAccountId();
             }
 
             @Override
@@ -100,6 +103,7 @@ class ProfilePresenter extends BasePresenter<ProfileMvpView> {
                     public void onNext(Account value) {
                         if (value != null) {
                             sharedPreferencesManager.setAccountId(value.getId());
+                            Log.i("TAG", value.getAvatar().getGravatar().getHash());
                         }
                     }
 

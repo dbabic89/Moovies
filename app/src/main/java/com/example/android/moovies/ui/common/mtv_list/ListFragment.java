@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class ListFragment extends Fragment implements ListMvpView {
         int id = getArguments().getInt("id");
         int tab = getArguments().getInt(Constants.LIST_ID);
 
-        if (tab <= 3 || tab == 8) type = 1;
+        if (tab <= 3 || tab == 8 || tab == 10 || tab == 11 || tab == 12 ) type = 1;
         else type = 0;
 
         setPresenter(id, collectionId, tab);
@@ -103,6 +104,7 @@ public class ListFragment extends Fragment implements ListMvpView {
     public void openMovieDetails(int id) {
         if (type == 1) mFragmentCommunication.startMovieDetail(id);
         else mFragmentCommunication.startTvDetail(id);
+        Log.i("TAG", "openMovieDetails type " + type);
     }
 
     private void createComponent() {
@@ -117,6 +119,7 @@ public class ListFragment extends Fragment implements ListMvpView {
 
     private void setPresenter(int id, int collectionId, int tab) {
         mPresenter.attachView(this);
+        Log.i("TAG", "setPresenter tab " + tab);
         mPresenter.getList(currentPage, id, collectionId, tab);
     }
 

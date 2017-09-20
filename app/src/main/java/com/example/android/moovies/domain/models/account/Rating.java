@@ -2,20 +2,20 @@ package com.example.android.moovies.domain.models.account;
 
 public class Rating {
 
-    private int movieId;
+    private int id;
     private Rated rated;
 
-    public Rating(int movieId, Rated rated) {
-        this.movieId = movieId;
+    public Rating(int id, Rated rated) {
+        this.id = id;
         this.rated = rated;
     }
 
-    public int getMovieId() {
-        return movieId;
+    public int getId() {
+        return id;
     }
 
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Rated getRated() {

@@ -29,6 +29,8 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     @BindView(R.id.button_logout) Button buttonLogout;
     @BindView(R.id.button_rated_movies) Button buttonRatedMovies;
     @BindView(R.id.button_movie_watchlist) Button buttonMoviesWatclist;
+    @BindView(R.id.button_rated_tvs) Button buttonRatedTvs;
+    @BindView(R.id.button_tv_watchlist) Button buttonTvsWatclist;
     View mView;
     @Inject
     ProfilePresenter mPresenter;
@@ -93,7 +95,6 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     @Override
     public void displayProfile(String sessionId) {
 
-        mPresenter.getAccountId();
 
         buttonLogin.setVisibility(View.GONE);
         buttonLogout.setVisibility(View.VISIBLE);
@@ -105,8 +106,13 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
         });
         buttonRatedMovies.setVisibility(View.VISIBLE);
         buttonMoviesWatclist.setVisibility(View.VISIBLE);
+        buttonRatedTvs.setVisibility(View.VISIBLE);
+        buttonTvsWatclist.setVisibility(View.VISIBLE);
+
         buttonRatedMovies.setOnClickListener(this);
         buttonMoviesWatclist.setOnClickListener(this);
+        buttonRatedTvs.setOnClickListener(this);
+        buttonTvsWatclist.setOnClickListener(this);
     }
 
     @Override
@@ -124,6 +130,18 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
 
             Bundle bundle = new Bundle();
             bundle.putInt(Constants.LIST_ID, 12);
+            fragment.setArguments(bundle);
+
+        } else if (id == R.id.button_rated_tvs) {
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.LIST_ID, 14);
+            fragment.setArguments(bundle);
+
+        } else if (id == R.id.button_tv_watchlist) {
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.LIST_ID, 13);
             fragment.setArguments(bundle);
 
         }

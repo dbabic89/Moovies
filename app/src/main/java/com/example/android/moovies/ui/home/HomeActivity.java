@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -94,6 +93,7 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_profile) {
+            search.collapseActionView();
             fragment = new ProfileFragment();
             fragmentManager.beginTransaction().replace(R.id.content_main, fragment).addToBackStack("tag").commit();
             return true;
@@ -103,7 +103,6 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
     @Override
     public void onBackPressed() {
-        Log.i("TAG", "onBackPressed");
         search.collapseActionView();
         super.onBackPressed();
     }
@@ -179,7 +178,7 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         Fragment movieListFragment = new ListFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("collection_id", id);
-        bundle.putInt(Constants.LIST_ID, 9);
+        bundle.putInt(Constants.LIST_ID, 10);
         movieListFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, movieListFragment).addToBackStack("tag").commit();

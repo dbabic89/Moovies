@@ -44,7 +44,7 @@ public class GetMovieList extends UseCase<MovieListResponse, List<Integer>> {
                 observable = movieRepository.getRatedMovies(params.get(0));
                 break;
             case 12:
-                observable = movieRepository.getMovieWatchlist(params.get(0));
+                observable = movieRepository.getWatchlistMovies(params.get(0));
                 break;
         }
         return observable;

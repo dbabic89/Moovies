@@ -57,10 +57,11 @@ class ListPresenter extends BasePresenter<ListMvpView> {
     void getList(int page, int id, int collection_id, int tab) {
 
         List<Integer> list = Arrays.asList(page, tab, id);
+        Log.i("TAG", "getList tab " + tab);
 
         if (tab == 0 || tab == 1 || tab == 2 || tab == 3 || tab == 8 || tab == 11 || tab == 12) {
             getMovieList.execute(new MovieListObserver(), list);
-        } else if (tab == 4 || tab == 5 || tab == 6 || tab == 7 || tab == 9) {
+        } else if (tab == 4 || tab == 5 || tab == 6 || tab == 7 || tab == 9 || tab == 13 || tab == 14) {
             getTvList.execute(new TvListObserver(), list);
         } else if (tab == 10) {
             getMovieCollectionList.execute(new MovieCollectionObserver(), collection_id);
@@ -70,6 +71,7 @@ class ListPresenter extends BasePresenter<ListMvpView> {
     private class MovieListObserver extends DisposableObserver<MovieListResponse> {
         @Override
         public void onNext(MovieListResponse value) {
+            Log.i("TAG", "MovieListResponse onNext");
             List<MovieListResult> mMovieListResultList = new ArrayList<>();
             mMovieListResultList.addAll(value.getResults());
 
@@ -116,6 +118,7 @@ class ListPresenter extends BasePresenter<ListMvpView> {
     private class TvListObserver extends DisposableObserver<TvListResponse> {
         @Override
         public void onNext(TvListResponse value) {
+            Log.i("TAG", "TvListObserver onNext");
             List<TvListResult> mTvListResultList = new ArrayList<>();
             mTvListResultList.addAll(value.getResults());
 

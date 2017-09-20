@@ -1,4 +1,4 @@
-package com.example.android.moovies.ui.gallery_videos;
+package com.example.android.moovies.ui.common.gallery_videos;
 
 import android.content.Intent;
 import android.os.Bundle;

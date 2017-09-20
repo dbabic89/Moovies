@@ -21,7 +21,7 @@
 
         <activity android:name=".ui.base.BaseActivity" />
 
-        <activity android:name=".ui.gallery_videos.GalleryVideosActivity" />
+        <activity android:name=".ui.common.gallery_videos.GalleryVideosActivity" />
 
         <activity android:name=".ui.profile.WebViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>

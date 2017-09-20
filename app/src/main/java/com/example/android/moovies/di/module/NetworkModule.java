@@ -18,7 +18,7 @@ public class NetworkModule {
 
     @Provides
     @MooviesAppScope
-    public HttpLoggingInterceptor loggingInterceptor() {
+    HttpLoggingInterceptor loggingInterceptor() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
@@ -31,19 +31,19 @@ public class NetworkModule {
 
     @Provides
     @MooviesAppScope
-    public Cache cache(File cacheFile) {
+    Cache cache(File cacheFile) {
         return new Cache(cacheFile, 10 * 1000 * 1000);
     }
 
     @Provides
     @MooviesAppScope
-    public File cacheFile(Context context) {
+    File cacheFile(Context context) {
         return new File(context.getCacheDir(), "okhttp_cache");
     }
 
     @Provides
     @MooviesAppScope
-    public OkHttpClient okHttpClient(HttpLoggingInterceptor loggingInterceptor, Cache cache) {
+    OkHttpClient okHttpClient(HttpLoggingInterceptor loggingInterceptor, Cache cache) {
         return new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .cache(cache)

@@ -1,11 +1,9 @@
 package com.example.android.moovies.data.remote;
 
-import com.example.android.moovies.domain.models.MtvRating;
 import com.example.android.moovies.domain.models.account.Account;
-import com.example.android.moovies.domain.models.account.AccountStatesRated;
-import com.example.android.moovies.domain.models.account.AccountStatesRating;
-import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.AccountStates;
 import com.example.android.moovies.domain.models.account.PostResponse;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.Rated;
 import com.example.android.moovies.domain.models.authentication.Session;
 import com.example.android.moovies.domain.models.authentication.Token;
@@ -109,17 +107,12 @@ public interface TmdbInterface {
     @GET("account")
     Observable<Account> getAccountDetail(@Query("api_key") String apiKey, @Query("session_id") String session_id);
 
-    @GET("tv/{tv_id}/account_states")
-    Observable<MtvRating> getAccountTvStates(@Path("tv_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
-
-    @GET("movie/{movie_id}/account_states")
-    Observable<AccountStatesRated> getAccountStatesRated(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
-
-    @GET("movie/{movie_id}/account_states")
-    Observable<AccountStatesRating> getAccountStatesRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
-
     @POST("account/{account_id}/watchlist")
-    Observable<PostResponse> addMovieToWatchlist(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostMovieToWatchlist movieToWatchlist);
+    Observable<PostResponse> addToWatchlist(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body PostToWatchlist postToWatchlist);
+
+
+    @GET("movie/{movie_id}/account_states")
+    Observable<AccountStates> getAccountStatesMovie(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     @POST("movie/{movie_id}/rating")
     Observable<PostResponse> addMovieRating(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
@@ -131,7 +124,23 @@ public interface TmdbInterface {
     Observable<MovieListResponse> getRatedMovies(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
 
     @GET("account/{account_id}/watchlist/movies")
-    Observable<MovieListResponse> getWatchlist(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
+    Observable<MovieListResponse> getWatchlistMovies(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
+
+
+    @GET("tv/{tv_id}/account_states")
+    Observable<AccountStates> getAccountStatesTv(@Path("tv_id") int movie_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
+
+    @POST("tv/{tv_id}/rating")
+    Observable<PostResponse> addTvRating(@Path("tv_id") int tv_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated movieRated);
+
+    @DELETE("tv/{tv_id}/rating")
+    Observable<PostResponse> deleteTvRating(@Path("tv_id") int tv_id, @Query("api_key") String apiKey, @Query("session_id") String session_id);
+
+    @GET("account/{account_id}/rated/tv")
+    Observable<TvListResponse> getRatedTvs(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
+
+    @GET("account/{account_id}/watchlist/tv")
+    Observable<TvListResponse> getWatchlistTvs(@Path("account_id") int account_id, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Query("language") String language, @Query("page") int pageIndex);
 
 
     // Search

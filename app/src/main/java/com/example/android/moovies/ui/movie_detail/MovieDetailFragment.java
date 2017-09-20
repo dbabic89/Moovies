@@ -36,7 +36,7 @@ import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.domain.models.mtv.Video;
 import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.ui.common.adapters.ChipsAdapter;
-import com.example.android.moovies.ui.gallery_videos.GalleryVideosActivity;
+import com.example.android.moovies.ui.common.gallery_videos.GalleryVideosActivity;
 import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
 import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
@@ -431,7 +431,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
     private void setPresenter() {
         mPresenter.attachView(this);
         mPresenter.getMovieDetails(movieId);
-        mPresenter.getAccountStatesRated(movieId);
+        mPresenter.getAccountStatesRating(movieId);
     }
 
     private void initializeViews(View view) {

@@ -2,6 +2,7 @@ package com.example.android.moovies.di.module;
 
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.di.scope.MooviesAppScope;
+import com.example.android.moovies.domain.models.account.AccountStates;
 import com.example.android.moovies.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +19,7 @@ public class RetrofitModule {
 
         @Provides
         @MooviesAppScope
-        public TmdbInterface tmdbService(Retrofit retrofit) {
+        TmdbInterface tmdbService(Retrofit retrofit) {
             return retrofit.create(TmdbInterface.class);
         }
 
@@ -26,12 +27,13 @@ public class RetrofitModule {
         @MooviesAppScope
         public Gson gson() {
             GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(AccountStates.class, new AccountStates.AccountStatesDeserializer());
             return gsonBuilder.create();
         }
 
         @Provides
         @MooviesAppScope
-        public Retrofit retrofit(OkHttpClient okHttpClient, Gson gson) {
+        Retrofit retrofit(OkHttpClient okHttpClient, Gson gson) {
             return new Retrofit.Builder()
                     .baseUrl(Constants.TMDB_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))

@@ -14,10 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.example.android.moovies.Moovies;
 import com.example.android.moovies.R;
+import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
@@ -27,12 +29,11 @@ import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.domain.models.mtv.Genre;
 import com.example.android.moovies.domain.models.mtv.Video;
 import com.example.android.moovies.domain.models.mtv.Videos;
-import com.example.android.moovies.domain.models.tv.ContentRatingResult;
 import com.example.android.moovies.domain.models.tv.CreatedBy;
 import com.example.android.moovies.domain.models.tv.KeywordsResults;
 import com.example.android.moovies.ui.common.adapters.ChipsAdapter;
+import com.example.android.moovies.ui.common.gallery_videos.GalleryVideosActivity;
 import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
-import com.example.android.moovies.ui.gallery_videos.GalleryVideosActivity;
 import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
 import com.example.android.moovies.utils.StringFormating;
@@ -48,7 +49,10 @@ import butterknife.ButterKnife;
 
 import static com.example.android.moovies.R.id.button_see_more;
 
-public class TvDetailFragment extends Fragment implements TvDetailMvpView {
+public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.OnClickListener {
+
+    @Inject
+    SharedPreferencesManager sharedPreferencesManager;
 
     @Inject
     TvDetailPresenter mPresenter;
@@ -57,7 +61,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
     Picasso picasso;
 
     @BindView(R.id.text_mtv_rating)
-    TextView textRating;
+    TextView textMtvRating;
 
     @BindView(R.id.image_mtv_backdrop)
     ImageView imageBackdrop;
@@ -116,9 +120,6 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
     @BindView(R.id.text_spoken_language)
     TextView textSpokenLanguage;
 
-    @BindView(R.id.text_mtv_content_rating)
-    TextView textContentRating;
-
     @BindView(R.id.text_first_air_date)
     TextView textFirstAirDate;
 
@@ -140,11 +141,29 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
     @BindView(button_see_more)
     Button buttonCast;
 
+    @BindView(R.id.text_season)
+    TextView textSeason;
+
+    @BindView(R.id.text_episode)
+    TextView textEpisode;
+
+    @BindView(R.id.image_button_watchlist)
+    ImageView imageButtonWatchlist;
+
+    @BindView(R.id.image_button_rating)
+    ImageView imageButtonRating;
+
+    @BindView(R.id.text_watchlist)
+    TextView textWatchlist;
+
+    @BindView(R.id.text_rating)
+    TextView textUserRating;
+
     @BindView(R.id.view_mtv_images_n_videos)
             LinearLayout linearLayoutImagesVideos;
 
     View mView;
-    int tvId;
+    int tvId, currentRating;
     private LayoutInflater layoutInflater;
     private FragmentCommunication fragmentCommunication;
 
@@ -159,6 +178,9 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
         ButterKnife.bind(this, mView);
         createComponent();
         setPresenter();
+
+        imageButtonWatchlist.setOnClickListener(this);
+        imageButtonRating.setOnClickListener(this);
 
         return mView;
     }
@@ -179,7 +201,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
 
     @Override
     public void showDetails(String rating, String title, String voteCount) {
-        textRating.setText(rating);
+        textMtvRating.setText(rating);
         textTitle.setText(title);
         textFullTitle.setText(title);
         textVoteRating.setText(rating);
@@ -212,12 +234,9 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
     }
 
     @Override
-    public void showContentRating(List<ContentRatingResult> contentRating) {
-
-        for (int i = 0; i <= contentRating.size() - 1; i++){
-            ContentRatingResult contentRatingResult = contentRating.get(i);
-            if (contentRatingResult.getIso31661().equals("US")) textContentRating.setText(contentRatingResult.getRating());
-        }
+    public void showSeasonAndEpisode(String season, String episode) {
+        textSeason.setText(season);
+        textEpisode.setText(episode);
     }
 
     @Override
@@ -237,12 +256,23 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
 
     @Override
     public void showWatchlist(boolean watchlist) {
+        if (watchlist) {
+            textWatchlist.setText(R.string.on_watchlist);
+            imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
+        } else textWatchlist.setText(R.string.add_to_watchlist);
 
     }
 
     @Override
     public void showRating(int rating) {
 
+        if (rating == 0) {
+            textUserRating.setText("Rate this movie");
+            imageButtonRating.setBackground(getResources().getDrawable(R.drawable.orange_circle));
+        } else {
+            textUserRating.setText(String.valueOf(rating));
+            imageButtonRating.setBackground(getResources().getDrawable(R.drawable.green_circle));
+        }
     }
 
     @Override
@@ -422,4 +452,38 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView {
         recyclerViewGenres.setAdapter(chipsAdapter);
     }
 
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        if (id == R.id.image_button_watchlist) {
+
+            if (!sharedPreferencesManager.getSessionId().isEmpty()) {
+
+                if (textWatchlist.getText().equals("Add to watchlist")) {
+                    textWatchlist.setText("On watchlist");
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
+                    mPresenter.addMovieToWatchlist(tvId, true);
+                } else {
+                    textWatchlist.setText("Add to watchlist");
+                    mPresenter.addMovieToWatchlist(tvId, false);
+                    imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.orange_circle));
+                }
+            } else {
+                Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
+            }
+
+        } else if (id == R.id.image_button_rating) {
+
+            if (!sharedPreferencesManager.getSessionId().isEmpty()) {
+                createDialog(tvId);
+            } else {
+                Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void createDialog(int tvId) {
+
+    }
 }

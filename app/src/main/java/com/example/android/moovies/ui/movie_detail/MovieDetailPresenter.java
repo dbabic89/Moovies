@@ -3,19 +3,18 @@ package com.example.android.moovies.ui.movie_detail;
 import android.util.Log;
 
 import com.example.android.moovies.data.local.SharedPreferencesManager;
-import com.example.android.moovies.domain.models.account.AccountStatesRated;
-import com.example.android.moovies.domain.models.account.AccountStatesRating;
-import com.example.android.moovies.domain.models.account.PostMovieToWatchlist;
+import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.Rated;
 import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.movie.Country;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
+import com.example.android.moovies.domain.observers.AddToWatchlistObserver;
 import com.example.android.moovies.domain.use_case.AddRating;
 import com.example.android.moovies.domain.use_case.AddToWatchlist;
 import com.example.android.moovies.domain.use_case.DeleteRating;
-import com.example.android.moovies.domain.use_case.GetAccountStatesRated;
-import com.example.android.moovies.domain.use_case.GetAccountStatesRating;
+import com.example.android.moovies.domain.use_case.GetAccountStatesMovie;
 import com.example.android.moovies.domain.use_case.GetMovieDetails;
 import com.example.android.moovies.ui.base.BasePresenter;
 import com.example.android.moovies.utils.Constants;
@@ -32,9 +31,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     @Inject
     GetMovieDetails getMovieDetails;
     @Inject
-    GetAccountStatesRated getAccountStatesRated;
-    @Inject
-    GetAccountStatesRating getAccountStatesRating;
+    GetAccountStatesMovie getAccountStatesMovie;
     @Inject
     AddToWatchlist addToWatchlist;
     @Inject
@@ -57,6 +54,10 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     @Override
     public void detachView() {
         super.detachView();
+        getMovieDetails.dispose();
+        getAccountStatesMovie.dispose();
+        addToWatchlist.dispose();
+        addRating.dispose();
     }
 
     void getMovieDetails(final int movieId) {
@@ -64,25 +65,21 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         this.movieId = movieId;
     }
 
-    void getAccountStatesRated(int movieId) {
-        getAccountStatesRated.execute(new AccountStatesRatedObserver(), movieId);
-    }
-
-    private void getAccountStatesRating(int movieId) {
-        getAccountStatesRating.execute(new AccountStatesRatingObserver(), movieId);
+    void getAccountStatesRating(int movieId) {
+        getAccountStatesMovie.execute(new AccountStatesRatingObserver(), movieId);
     }
 
     void addMovieToWatchlist(final int movieId, boolean watchlist) {
-        addToWatchlist.execute(new AddToWatchlistObserver(), new PostMovieToWatchlist("movie", movieId, watchlist));
+        addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("movie", movieId, watchlist));
     }
 
     void addMovieRating(int movieId, int rating) {
-        addRating.execute(new AddRatingObserver(), new Rating(movieId, new Rated(rating)));
+        addRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
     void deleteMovieRating(int movieId, int rating) {
-        deleteRating.execute(new DeleteRatingObserver(), new Rating(movieId, new Rated(rating)));
+        deleteRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
@@ -188,31 +185,12 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         }
     }
 
-    private class AccountStatesRatedObserver extends DisposableObserver<AccountStatesRated> {
+    private class AccountStatesRatingObserver extends DisposableObserver<AccountStates> {
         @Override
-        public void onNext(AccountStatesRated value) {
+        public void onNext(AccountStates value) {
             getMvpView().showWatchlist(value.isWatchlist());
-            if (!value.isRated()) {
-                getMvpView().showRating(0);
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            getAccountStatesRating(movieId);
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    }
-
-    private class AccountStatesRatingObserver extends DisposableObserver<AccountStatesRating> {
-        @Override
-        public void onNext(AccountStatesRating value) {
-            getMvpView().showWatchlist(value.isWatchlist());
-            getMvpView().showRating(value.getRated().getValue());
+            if (value.getRating() != 0)getMvpView().showRating(value.getRating());
+            else getMvpView().showRating(0);
         }
 
         @Override
@@ -227,41 +205,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         }
     }
 
-    private class AddToWatchlistObserver extends DisposableObserver<PostResponse> {
-        @Override
-        public void onNext(PostResponse value) {
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    }
-
-    private class AddRatingObserver extends DisposableObserver<PostResponse> {
-        @Override
-        public void onNext(PostResponse value) {
-            getMvpView().showRating(rating);
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-        }
-
-        @Override
-        public void onComplete() {
-
-        }
-    }
-
-    private class DeleteRatingObserver extends DisposableObserver<PostResponse> {
+    private class RatingObserver extends DisposableObserver<PostResponse> {
         @Override
         public void onNext(PostResponse value) {
             getMvpView().showRating(rating);
