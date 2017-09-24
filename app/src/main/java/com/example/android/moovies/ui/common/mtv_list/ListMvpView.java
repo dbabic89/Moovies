@@ -15,6 +15,6 @@ interface ListMvpView extends BaseMvpView {
 
     void showError();
 
-    void openMovieDetails(int id);
+    void openDetails(int id);
 
 }

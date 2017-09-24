@@ -31,6 +31,7 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     @BindView(R.id.button_movie_watchlist) Button buttonMoviesWatclist;
     @BindView(R.id.button_rated_tvs) Button buttonRatedTvs;
     @BindView(R.id.button_tv_watchlist) Button buttonTvsWatclist;
+    @BindView(R.id.button_lists) Button buttonList;
     View mView;
     @Inject
     ProfilePresenter mPresenter;
@@ -77,6 +78,12 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
 
         buttonLogin.setVisibility(View.VISIBLE);
         buttonLogout.setVisibility(View.GONE);
+        buttonRatedMovies.setVisibility(View.GONE);
+        buttonMoviesWatclist.setVisibility(View.GONE);
+        buttonRatedTvs.setVisibility(View.GONE);
+        buttonTvsWatclist.setVisibility(View.GONE);
+        buttonList.setVisibility(View.GONE);
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,12 +109,15 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
             @Override
             public void onClick(View view) {
                 mPresenter.userLogout();
+                buttonLogout.setVisibility(View.GONE);
             }
         });
+
         buttonRatedMovies.setVisibility(View.VISIBLE);
         buttonMoviesWatclist.setVisibility(View.VISIBLE);
         buttonRatedTvs.setVisibility(View.VISIBLE);
         buttonTvsWatclist.setVisibility(View.VISIBLE);
+        buttonList.setVisibility(View.VISIBLE);
 
         buttonRatedMovies.setOnClickListener(this);
         buttonMoviesWatclist.setOnClickListener(this);

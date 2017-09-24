@@ -1,5 +1,7 @@
 package com.example.android.moovies.domain.observers;
 
+import android.util.Log;
+
 import com.example.android.moovies.domain.models.account.PostResponse;
 
 import io.reactivex.observers.DisposableObserver;

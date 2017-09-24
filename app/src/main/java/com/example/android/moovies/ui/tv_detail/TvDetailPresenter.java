@@ -89,25 +89,27 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
         public void onNext(TvDetail value) {
 
             getMvpView().showDetails(String.valueOf(value.getVoteAverage()), value.getName(), String.valueOf(value.getVoteCount()));
-            getMvpView().showPoster(Constants.URL_POSTER + value.getPosterPath());
-            getMvpView().showBackdrop(Constants.URL_BACKDROP + value.getBackdropPath());
+            if (!value.getPosterPath().isEmpty())getMvpView().showPoster(Constants.URL_POSTER + value.getPosterPath());
+            else getMvpView().showNoPoster();
+            if (!value.getBackdropPath().isEmpty())getMvpView().showBackdrop(Constants.URL_BACKDROP + value.getBackdropPath());
+            else getMvpView().showNoBackdrop();
             getMvpView().showGenres(value.getGenres());
             getMvpView().showSeasonAndEpisode("S " + String.valueOf(value.getNumberOfSeasons()), "E " + String.valueOf(value.getNumberOfEpisodes()));
             getMvpView().showReleaseDate(StringFormating.dateFormating(value.getFirstAirDate()));
             getMvpView().showDuration(value.getEpisodeRunTime().get(0) + " min");
             getMvpView().showOverview(value.getOverview());
             getMvpView().showReleaseDate(StringFormating.dateFormating(value.getFirstAirDate()));
-            getMvpView().showImages(value.getImages().getBackdrops());
-            if (value.getVideos().getResults().size() != 0)
-                getMvpView().showVideos(value.getVideos(), value.getName(), value.getOverview());
+            if (value.getImages().getBackdrops().size() != 0)getMvpView().showImages(value.getImages().getBackdrops());
+            else getMvpView().showNoImages();
+            if (value.getVideos().getResults().size() != 0) getMvpView().showVideos(value.getVideos(), value.getName(), value.getOverview());
             else getMvpView().showNoVideos();
             getMvpView().showKeywords(value.getKeywords().getResults());
-            getMvpView().showOriginalTitle(value.getOriginalName());
-            getMvpView().showNetwork(StringFormating.getNetworks(value.getNetworks()));
-            getMvpView().showStatus(value.getStatus() + " (" + value.isInProduction() + ")");
-            getMvpView().showProductionCompanies(StringFormating.companyFormating(value.getProductionCompanies()));
-            getMvpView().showProductionCountries(value.getOriginCountry().toString());
-            getMvpView().showSpokenLanguage(value.getOriginalLanguage());
+            getMvpView().showOriginalTitle(" " + value.getOriginalName());
+            getMvpView().showNetwork(" " + StringFormating.getNetworks(value.getNetworks()));
+            getMvpView().showStatus(" " + value.getStatus());
+            getMvpView().showProductionCompanies(" " + StringFormating.companyFormating(value.getProductionCompanies()));
+            getMvpView().showProductionCountries(" " + value.getOriginCountry().toString());
+            getMvpView().showSpokenLanguage(" " + value.getOriginalLanguage());
             getMvpView().showSimilarTvs(value.getId());
             if (value.getCredits() != null) {
                 if (value.getCreatedBy() != null) getMvpView().showCreatedBy(value.getCreatedBy());

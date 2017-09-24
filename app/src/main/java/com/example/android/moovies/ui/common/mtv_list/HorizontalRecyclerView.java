@@ -70,7 +70,7 @@ public class HorizontalRecyclerView extends Fragment implements ListMvpView, Vie
 
         currentRv = getArguments().getInt(Constants.LIST_ID);
 
-        if (currentRv < 4) type = 1;
+        if (currentRv < 4 || currentRv == 8) type = 1;
         else type = 0;
 
         itemId = getArguments().getInt("movie_id");
@@ -84,7 +84,8 @@ public class HorizontalRecyclerView extends Fragment implements ListMvpView, Vie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.detachView();
+        getMovieList.dispose();
+        getTvList.dispose();
     }
 
     @Override
@@ -108,7 +109,7 @@ public class HorizontalRecyclerView extends Fragment implements ListMvpView, Vie
     }
 
     @Override
-    public void openMovieDetails(int id) {
+    public void openDetails(int id) {
         if (type == 1) mFragmentCommunication.startMovieDetail(id);
         else mFragmentCommunication.startTvDetail(id);
     }
@@ -142,7 +143,7 @@ public class HorizontalRecyclerView extends Fragment implements ListMvpView, Vie
             @Override
             public void onCardClick(int position) {
                 MtvListItem mtvListItem = mIconAdapter.getItem(position);
-                openMovieDetails(mtvListItem.getId());
+                openDetails(mtvListItem.getId());
             }
         });
 

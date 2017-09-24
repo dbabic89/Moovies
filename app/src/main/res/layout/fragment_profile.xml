@@ -1,71 +1,250 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:padding="8dp"
-    tools:context="com.example.android.moovies.ui.profile.ProfileFragment">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button_login"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/chip_square"
-        android:text="Login"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_movie_watchlist"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/chip_square"
-        android:text="Movie on watchlist"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp">
 
-    <Button
-        android:id="@+id/button_rated_movies"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/button_movie_watchlist"
-        android:background="@drawable/chip_square"
-        android:text="Rated Movies"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="130dp"
+                android:background="@drawable/default_background"
+                android:scaleType="centerCrop" />
 
-    <Button
-        android:id="@+id/button_tv_watchlist"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/button_rated_movies"
-        android:background="@drawable/chip_square"
-        android:text="Tv shows on watchlist"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="130dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="135dp"
+                android:src="@drawable/default_profile"
+                app:civ_border_color="#EEEEEE"
+                app:civ_border_width="4dp"
+                app:civ_shadow="true"
+                app:civ_shadow_color="@color/transparentBlack"
+                app:civ_shadow_radius="10" />
 
-    <Button
-        android:id="@+id/button_rated_tvs"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/button_tv_watchlist"
-        android:background="@drawable/chip_square"
-        android:text="Rated Tv shows"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:layout_margin="8dp">
 
-    <Button
-        android:id="@+id/button_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/chip_square"
-        android:text="Logout"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
-</RelativeLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="bottom">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Movies seen"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center_horizontal"
+                        android:textColor="@android:color/white"
+                        android:id="@+id/textView" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="999"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Time spent: "
+                        android:textColor="@android:color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="999 days"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="23 hours "
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="59 minutes"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/text_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center_horizontal"
+                        android:text="Dario Babić" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="bottom">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TV shows seen"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center_horizontal"
+                        android:textColor="@android:color/white" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="999"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center_horizontal"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Time spent:"
+                        android:gravity="end"
+                        android:textColor="@android:color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="999 days"
+                        android:gravity="end"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="23 hours "
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="59 minutes"
+                        android:gravity="end"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#33ffffff"
+            android:layout_gravity="center"
+            android:layout_marginTop="70dp"
+            android:text="Login"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_movie_watchlist"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#33ffffff"
+            android:text="Movies on watchlist"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_rated_movies"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#33ffffff"
+            android:text="Rated Movies"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_tv_watchlist"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#33ffffff"
+            android:text="Tv shows on watchlist"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_rated_tvs"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#33ffffff"
+            android:text="Rated Tv shows"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_lists"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="List"
+            android:background="#33ffffff"
+            android:visibility="gone"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
+            android:text="Logout"
+            android:background="#33ffffff"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>

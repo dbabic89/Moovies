@@ -66,20 +66,20 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     }
 
     void getAccountStatesRating(int movieId) {
-        getAccountStatesMovie.execute(new AccountStatesRatingObserver(), movieId);
+        if (mSharedPreferencesManager.getSessionId() != null) getAccountStatesMovie.execute(new AccountStatesRatingObserver(), movieId);
     }
 
     void addMovieToWatchlist(final int movieId, boolean watchlist) {
-        addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("movie", movieId, watchlist));
+        if (mSharedPreferencesManager.getSessionId() != null) addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("movie", movieId, watchlist));
     }
 
     void addMovieRating(int movieId, int rating) {
-        addRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        if (mSharedPreferencesManager.getSessionId() != null) addRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
     void deleteMovieRating(int movieId, int rating) {
-        deleteRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        if (mSharedPreferencesManager.getSessionId() != null) deleteRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 

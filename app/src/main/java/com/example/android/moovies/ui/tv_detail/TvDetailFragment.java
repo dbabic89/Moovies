@@ -203,9 +203,9 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     public void showDetails(String rating, String title, String voteCount) {
         textMtvRating.setText(rating);
         textTitle.setText(title);
-        textFullTitle.setText(title);
-        textVoteRating.setText(rating);
-        textVoteCount.setText(voteCount);
+        textFullTitle.setText(" " + title);
+        textVoteRating.setText(" " + rating);
+        textVoteCount.setText(" " + voteCount);
     }
 
     @Override
