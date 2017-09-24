@@ -56,8 +56,6 @@ This application is still under construction, and there is a lot more features t
 
 [Dagger](https://google.github.io/dagger/)
 
-[Retrofit](https://square.github.io/retrofit)
-
 [Picasso](http://square.github.io/picasso/)
 
 [Butter Knife](http://jakewharton.github.io/butterknife/)
@@ -70,14 +68,15 @@ This application is still under construction, and there is a lot more features t
 
 ## References
 
-[TMDb] (https://www.themoviedb.org)
+[TMDb](https://www.themoviedb.org)
 
 [Android Clean Architecture](https://github.com/android10/Android-CleanArchitecture)
 
-[Twisted Equations playlist on Youtube about Dagger 2] (https://www.youtube.com/watch?v=Qwk7ESmaCq0&list=PLuR1PJnGR-Ih-HXnGSpnqjdhdvqcwhfFU&index=1)
+[Twisted Equations playlist on Youtube about Dagger 2](https://www.youtube.com/watch?v=Qwk7ESmaCq0&list=PLuR1PJnGR-Ih-HXnGSpnqjdhdvqcwhfFU&index=1)
 
 
 ## Credits
 
+![312x276-primary-green](https://user-images.githubusercontent.com/13087441/30783014-d5fcecb0-a13c-11e7-8cba-ecd7605ac9aa.png)
 
 This product uses the TMDb API but is not endorsed or certified by TMDb.
