@@ -62,7 +62,7 @@ This application is still under construction, and there is a lot more features t
 
 [Expandable Text](https://github.com/Manabu-GT/ExpandableTextView)
 
-[Hedge hog rating bar](https://github.com/hedge-hog/RatingBar)
+[Hedge Hog Rating Bar](https://github.com/hedge-hog/RatingBar)
 
 [Chips Layout Manager](https://github.com/BelooS/ChipsLayoutManager)
 
