@@ -27,7 +27,7 @@ This application is still under construction, and there is a lot more features t
    <img src="images/movie_detail%20(1).png" width="250">   <img src="images/movie_detail%20(2).png" width="250">   <img src="images/movie_detail%20(3).png" width="250">   
    <img src="images/movie_detail%20(4).png" width="250">   <img src="images/movie_collection.png" width="250">   <img src="images/movie_rating.png" width="250">
 
-* Check trailers
+* Watch trailers and other videos
 
    <img src="images/movie_trailer.png" width="250">
 
