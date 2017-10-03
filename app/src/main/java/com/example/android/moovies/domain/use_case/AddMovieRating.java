@@ -8,19 +8,19 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-public class DeleteRating extends UseCase<PostResponse, Rating> {
+public class AddMovieRating extends UseCase<PostResponse, Rating> {
 
     @Inject
     Repository movieRepository;
 
     @Inject
-    DeleteRating(Repository movieRepository) {
+    AddMovieRating(Repository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
     @Override
     Observable<PostResponse> createObservable(Rating rating) {
-        return movieRepository.deleteMovieRating(rating);
+        return movieRepository.addMovieRating(rating);
     }
 
 }

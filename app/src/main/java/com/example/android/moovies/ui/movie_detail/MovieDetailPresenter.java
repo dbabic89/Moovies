@@ -4,16 +4,16 @@ import android.util.Log;
 
 import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.domain.models.account.AccountStates;
-import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.PostResponse;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.Rated;
 import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.movie.Country;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.observers.AddToWatchlistObserver;
-import com.example.android.moovies.domain.use_case.AddRating;
+import com.example.android.moovies.domain.use_case.AddMovieRating;
 import com.example.android.moovies.domain.use_case.AddToWatchlist;
-import com.example.android.moovies.domain.use_case.DeleteRating;
+import com.example.android.moovies.domain.use_case.DeleteMovieRating;
 import com.example.android.moovies.domain.use_case.GetAccountStatesMovie;
 import com.example.android.moovies.domain.use_case.GetMovieDetails;
 import com.example.android.moovies.ui.base.BasePresenter;
@@ -35,9 +35,9 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     @Inject
     AddToWatchlist addToWatchlist;
     @Inject
-    AddRating addRating;
+    AddMovieRating addMovieRating;
     @Inject
-    DeleteRating deleteRating;
+    DeleteMovieRating deleteMovieRating;
 
     int movieId, rating = 0;
 
@@ -57,7 +57,8 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         getMovieDetails.dispose();
         getAccountStatesMovie.dispose();
         addToWatchlist.dispose();
-        addRating.dispose();
+        addMovieRating.dispose();
+        deleteMovieRating.dispose();
     }
 
     void getMovieDetails(final int movieId) {
@@ -69,17 +70,17 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         if (mSharedPreferencesManager.getSessionId() != null) getAccountStatesMovie.execute(new AccountStatesRatingObserver(), movieId);
     }
 
-    void addMovieToWatchlist(final int movieId, boolean watchlist) {
+    void addToWatchlist(final int movieId, boolean watchlist) {
         if (mSharedPreferencesManager.getSessionId() != null) addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("movie", movieId, watchlist));
     }
 
-    void addMovieRating(int movieId, int rating) {
-        if (mSharedPreferencesManager.getSessionId() != null) addRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+    void addRating(int movieId, int rating) {
+        if (mSharedPreferencesManager.getSessionId() != null) addMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
-    void deleteMovieRating(int movieId, int rating) {
-        if (mSharedPreferencesManager.getSessionId() != null) deleteRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+    void deleteRating(int movieId, int rating) {
+        if (mSharedPreferencesManager.getSessionId() != null) deleteMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
@@ -99,7 +100,6 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
         if (!movie.getCredits().getCrew().isEmpty())
             getMvpView().showDirectedBy(movie.getCredits().getCrew());
-        else getMvpView().showNoDirectedBy();
 
         if (movie.getPosterPath() != null)
             getMvpView().showPoster(Constants.URL_POSTER + movie.getPosterPath());
@@ -127,7 +127,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
         getMvpView().showGenres(movie.getGenres());
 
         if (!movie.getImages().getBackdrops().isEmpty())
-            getMvpView().showImages(movie.getImages().getBackdrops());
+            getMvpView().showImages(movie.getImages());
         else getMvpView().showNoImages();
 
         if (!movie.getVideos().getResults().isEmpty())
@@ -213,7 +213,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
         @Override
         public void onError(Throwable e) {
-
+            Log.i("TAG", e.getMessage());
         }
 
         @Override

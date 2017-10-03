@@ -87,34 +87,22 @@
             android:layout_toLeftOf="@id/relative_layout_poster"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="16dp"
+                <TextView
+                    android:id="@+id/text_certification"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/rating_circle"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/text_season"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:id="@+id/text_episode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -127,11 +115,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:gravity="bottom"
-                    android:text="@string/label_first_air_date" />
+                    android:gravity="center"
+                    android:text="@string/label_release_date" />
 
                 <TextView
-                    android:id="@+id/text_first_air_date"
+                    android:id="@+id/text_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -159,10 +147,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="bottom"
-                    android:text="Run time" />
+                    android:text="@string/label_duration" />
 
                 <TextView
-                    android:id="@+id/text_run_time"
+                    android:id="@+id/text_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

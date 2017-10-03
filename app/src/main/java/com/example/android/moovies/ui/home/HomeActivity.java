@@ -12,9 +12,12 @@ import com.example.android.moovies.R;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.domain.models.mtv.Credits;
+import com.example.android.moovies.domain.models.mtv.Images;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
 import com.example.android.moovies.ui.celebs_list.CelebsListFragment;
+import com.example.android.moovies.ui.common.gallery_images.GalleryDetailFragment;
+import com.example.android.moovies.ui.common.gallery_images.GalleryGridFragment;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
@@ -222,6 +225,29 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     @Override
     public void closeSearch() {
         search.collapseActionView();
+    }
+
+    @Override
+    public void startImageGallery(Images images) {
+
+        Fragment galleryImagesFragment = new GalleryGridFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("images", images);
+        galleryImagesFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, galleryImagesFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startImageDetail(Images images, int position) {
+
+        Fragment galleryDetailFragment = new GalleryDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("images", images);
+        bundle.putInt("position", position);
+        galleryDetailFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, galleryDetailFragment).addToBackStack("tag").commit();
     }
 
 }

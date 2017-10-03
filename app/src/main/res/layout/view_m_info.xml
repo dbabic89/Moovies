@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
+
+    <TextView
+        android:id="@+id/text_info_label"
+        style="@style/MovieTextLabel"
+        android:text="@string/label_info"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp">
+
+        <TextView
+            android:id="@+id/text_full_title_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Title: " />
+
+        <TextView
+            android:id="@+id/text_full_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_full_title_label"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/text_full_title_label" />
+
+        <TextView
+            android:id="@+id/text_original_title_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_full_title"
+            android:layout_marginTop="8dp"
+            android:text="Original title: "
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_original_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_original_title_label"
+            android:layout_below="@id/text_full_title"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/text_original_title_label"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_votes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_original_title"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_vote_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rating: " />
+
+            <TextView
+                android:id="@+id/text_vote_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:id="@+id/text_vote_count_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vote count: " />
+
+            <TextView
+                android:id="@+id/text_vote_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_production_companies_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout_votes"
+            android:text="Production companies: " />
+
+        <TextView
+            android:id="@+id/text_production_companies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_production_companies_label"
+            android:layout_below="@id/linear_layout_votes"
+            android:layout_toEndOf="@id/text_production_companies_label" />
+
+        <TextView
+            android:id="@+id/text_production_countries_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_production_companies"
+            android:layout_marginTop="8dp"
+            android:text="Production countries: " />
+
+        <TextView
+            android:id="@+id/text_production_countries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_production_countries_label"
+            android:layout_below="@id/text_production_companies"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/text_production_countries_label" />
+
+        <TextView
+            android:id="@+id/text_spoken_language_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_production_countries"
+            android:layout_marginTop="8dp"
+            android:text="Spoken language: " />
+
+        <TextView
+            android:id="@+id/text_spoken_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_spoken_language_label"
+            android:layout_below="@id/text_production_countries"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/text_spoken_language_label" />
+
+        <TextView
+            android:id="@+id/text_budget_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_spoken_language_label"
+            android:layout_marginTop="8dp"
+            android:text="Budget: " />
+
+        <TextView
+            android:id="@+id/text_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_budget_label"
+            android:layout_toEndOf="@id/text_budget_label" />
+
+        <TextView
+            android:id="@+id/text_revenue_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_budget_label"
+            android:layout_marginTop="8dp"
+            android:text="Revenue: " />
+
+        <TextView
+            android:id="@+id/text_revenue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_revenue_label"
+            android:layout_toEndOf="@id/text_revenue_label" />
+
+    </RelativeLayout>
+
+</LinearLayout>

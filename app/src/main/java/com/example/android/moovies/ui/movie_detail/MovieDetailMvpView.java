@@ -1,12 +1,12 @@
 package com.example.android.moovies.ui.movie_detail;
 
-import com.example.android.moovies.domain.models.mtv.Backdrop;
-import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
-import com.example.android.moovies.domain.models.mtv.Crew;
-import com.example.android.moovies.domain.models.mtv.Genre;
 import com.example.android.moovies.domain.models.movie.Keyword;
 import com.example.android.moovies.domain.models.movie.Reviews;
+import com.example.android.moovies.domain.models.mtv.Cast;
+import com.example.android.moovies.domain.models.mtv.Crew;
+import com.example.android.moovies.domain.models.mtv.Genre;
+import com.example.android.moovies.domain.models.mtv.Images;
 import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.ui.base.BaseMvpView;
 
@@ -42,8 +42,6 @@ interface MovieDetailMvpView extends BaseMvpView {
 
     void showDirectedBy(List<Crew> crewList);
 
-    void showNoDirectedBy();
-
     void showOverview(String overview);
 
     void showWatchlist(boolean watchlist);
@@ -52,7 +50,7 @@ interface MovieDetailMvpView extends BaseMvpView {
 
     void showList(boolean list);
 
-    void showImages(List<Backdrop> backdropList);
+    void showImages(Images images);
 
     void showNoImages();
 

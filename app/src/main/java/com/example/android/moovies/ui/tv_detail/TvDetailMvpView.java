@@ -1,8 +1,8 @@
 package com.example.android.moovies.ui.tv_detail;
 
-import com.example.android.moovies.domain.models.mtv.Backdrop;
 import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.mtv.Genre;
+import com.example.android.moovies.domain.models.mtv.Images;
 import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.domain.models.tv.CreatedBy;
 import com.example.android.moovies.domain.models.tv.KeywordsResults;
@@ -40,7 +40,7 @@ interface TvDetailMvpView extends BaseMvpView {
 
     void showList(boolean list);
 
-    void showImages(List<Backdrop> backdropList);
+    void showImages(Images images);
 
     void showNoImages();
 

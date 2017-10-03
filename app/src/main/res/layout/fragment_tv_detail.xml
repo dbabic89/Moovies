@@ -13,8 +13,8 @@
         android:orientation="vertical">
 
         <include
-            android:id="@+id/view_mtv_header"
-            layout="@layout/view_mtv_header" />
+            android:id="@+id/view_m_header"
+            layout="@layout/view_tv_header" />
 
         <include
             android:id="@+id/view_mtv_buttons"
@@ -29,8 +29,8 @@
             layout="@layout/view_mtv_credits" />
 
         <include
-            android:id="@+id/view_mtv_info"
-            layout="@layout/view_mtv_info" />
+            android:id="@+id/view_m_info"
+            layout="@layout/view_tv_info" />
 
         <FrameLayout
             android:id="@+id/similar"

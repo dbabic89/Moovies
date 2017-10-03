@@ -1,26 +1,26 @@
 package com.example.android.moovies.domain.use_case;
 
-import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.PostResponse;
+import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.repository.Repository;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-public class AddToWatchlist extends UseCase<PostResponse, PostToWatchlist> {
+public class DeleteTvRating extends UseCase<PostResponse, Rating> {
 
     @Inject
     Repository movieRepository;
 
     @Inject
-    AddToWatchlist(Repository movieRepository) {
+    DeleteTvRating(Repository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
     @Override
-    Observable<PostResponse> createObservable(PostToWatchlist toWatchlist) {
-        return movieRepository.addToWatchlist(toWatchlist);
+    Observable<PostResponse> createObservable(Rating rating) {
+        return movieRepository.deleteTvRating(rating);
     }
 
 }

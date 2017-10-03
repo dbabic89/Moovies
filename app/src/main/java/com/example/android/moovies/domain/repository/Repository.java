@@ -129,8 +129,8 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<PostResponse> addToWatchlist(PostToWatchlist movieToWatchlist) {
-        return dataSourceNetwork.addToWatchlist(movieToWatchlist);
+    public Observable<PostResponse> addToWatchlist(PostToWatchlist toWatchlist) {
+        return dataSourceNetwork.addToWatchlist(toWatchlist);
     }
 
     @Override

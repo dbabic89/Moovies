@@ -5,6 +5,8 @@ import com.example.android.moovies.domain.models.movie.ProductionCountry;
 import com.example.android.moovies.domain.models.movie.SpokenLanguage;
 import com.example.android.moovies.domain.models.mtv.Crew;
 import com.example.android.moovies.domain.models.mtv.Genre;
+import com.example.android.moovies.domain.models.mtv.Image;
+import com.example.android.moovies.domain.models.mtv.Images;
 import com.example.android.moovies.domain.models.mtv.ProductionCompany;
 import com.example.android.moovies.domain.models.tv.KeywordsResults;
 import com.example.android.moovies.domain.models.tv.Network;
@@ -177,4 +179,36 @@ public class StringFormating {
         return languages;
     }
 
+    public static List<Image> getImageList(Images images){
+        final List<Image> imageList = new ArrayList<>();
+
+        for (int i = 0; i < images.getBackdrops().size(); i++) {
+
+            imageList.add(images.getBackdrops().get(i));
+        }
+
+        for (int i = 0; i < images.getPosters().size(); i++) {
+
+            imageList.add(images.getPosters().get(i));
+        }
+
+        return imageList;
+    }
+
+
+    public static List<String> getImageListtoString(Images images){
+        final List<String> imageList = new ArrayList<>();
+
+        for (int i = 0; i < images.getBackdrops().size(); i++) {
+
+            imageList.add(images.getBackdrops().get(i).getFilePath());
+        }
+
+        for (int i = 0; i < images.getPosters().size(); i++) {
+
+            imageList.add(images.getPosters().get(i).getFilePath());
+        }
+
+        return imageList;
+    }
 }

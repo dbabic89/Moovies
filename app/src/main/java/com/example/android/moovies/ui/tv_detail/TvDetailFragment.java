@@ -23,10 +23,10 @@ import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
-import com.example.android.moovies.domain.models.mtv.Backdrop;
 import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.domain.models.mtv.Genre;
+import com.example.android.moovies.domain.models.mtv.Images;
 import com.example.android.moovies.domain.models.mtv.Video;
 import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.domain.models.tv.CreatedBy;
@@ -36,6 +36,7 @@ import com.example.android.moovies.ui.common.gallery_videos.GalleryVideosActivit
 import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
 import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
+import com.example.android.moovies.utils.RatingDialog;
 import com.example.android.moovies.utils.StringFormating;
 import com.squareup.picasso.Picasso;
 
@@ -78,11 +79,6 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     @BindView(R.id.text_mtv_overview)
     TextView textOverview;
 
-    @BindView(R.id.image_button)
-    ImageView imageButtonImages;
-
-    @BindView(R.id.text_button)
-    TextView textButtonImages;
 
     @BindView(R.id.text_keywords_label)
     TextView textKeywordsLabel;
@@ -163,7 +159,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
             LinearLayout linearLayoutImagesVideos;
 
     View mView;
-    int tvId, currentRating;
+    int tvId;
     private LayoutInflater layoutInflater;
     private FragmentCommunication fragmentCommunication;
 
@@ -267,7 +263,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     public void showRating(int rating) {
 
         if (rating == 0) {
-            textUserRating.setText("Rate this movie");
+            textUserRating.setText("Rate this TV show");
             imageButtonRating.setBackground(getResources().getDrawable(R.drawable.orange_circle));
         } else {
             textUserRating.setText(String.valueOf(rating));
@@ -281,14 +277,30 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     }
 
     @Override
-    public void showImages(List<Backdrop> backdropList) {
-        textButtonImages.setText("Images (" + backdropList.size() + ")");
-        picasso.load(Constants.URL_BACKDROP + backdropList.get(new Random().nextInt(backdropList.size())).getFilePath()).into(imageButtonImages);
+    public void showImages(final Images images) {
+        LinearLayout linearLayoutImages = (LinearLayout) linearLayoutImagesVideos.findViewById(R.id.linear_layout_images);
+        TextView textButtonImages = (TextView) linearLayoutImages.findViewById(R.id.text_button);
+        ImageView imageButtonImages = (ImageView) linearLayoutImages.findViewById(R.id.image_button);
 
+        linearLayoutImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragmentCommunication.startImageGallery(images);
+            }
+        });
+
+        int imageCount = images.getBackdrops().size() + images.getPosters().size();
+
+        textButtonImages.setText("Images (" + imageCount + ")");
+        picasso.load(Constants.URL_BACKDROP + images.getBackdrops().get(new Random().nextInt(images.getBackdrops().size())).getFilePath()).into(imageButtonImages);
     }
 
     @Override
     public void showNoImages() {
+
+        LinearLayout linearLayoutImages = (LinearLayout) linearLayoutImagesVideos.findViewById(R.id.linear_layout_videos);
+        ImageView imageButtonImages = (ImageView) linearLayoutImages.findViewById(R.id.image_button);
         picasso.load(R.drawable.red_circle).into(imageButtonImages);
     }
 
@@ -454,7 +466,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
 
     @Override
     public void onClick(View view) {
-        int id = view.getId();
+        final int id = view.getId();
 
         if (id == R.id.image_button_watchlist) {
 
@@ -463,10 +475,10 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
                 if (textWatchlist.getText().equals("Add to watchlist")) {
                     textWatchlist.setText("On watchlist");
                     imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.green_circle));
-                    mPresenter.addMovieToWatchlist(tvId, true);
+                    mPresenter.addToWatchlist(tvId, true);
                 } else {
                     textWatchlist.setText("Add to watchlist");
-                    mPresenter.addMovieToWatchlist(tvId, false);
+                    mPresenter.addToWatchlist(tvId, false);
                     imageButtonWatchlist.setBackground(getResources().getDrawable(R.drawable.orange_circle));
                 }
             } else {
@@ -476,14 +488,39 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
         } else if (id == R.id.image_button_rating) {
 
             if (!sharedPreferencesManager.getSessionId().isEmpty()) {
-                createDialog(tvId);
+                createDialog();
             } else {
                 Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void createDialog(int tvId) {
+    private void createDialog() {
+        final RatingDialog ratingDialog = new RatingDialog(getActivity(), textUserRating, "Rate this TV show", "Rate this TV show");
 
+        Button b1 = ratingDialog.getPositiveButton();
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int rating = ratingDialog.getCurrentRating();
+                if (rating < 1) {
+                    Toast.makeText(getActivity(), "Please rate this TV show", Toast.LENGTH_SHORT).show();
+                } else {
+                    mPresenter.addRating(tvId, rating);
+                    ratingDialog.dismiss();
+                }
+            }
+        });
+
+        Button b2 = ratingDialog.getNegativeButton();
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mPresenter.deleteRating(tvId, 0);
+                ratingDialog.dismiss();
+            }
+        });
     }
 }

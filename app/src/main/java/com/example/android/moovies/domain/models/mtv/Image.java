@@ -3,11 +3,13 @@ package com.example.android.moovies.domain.models.mtv;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Backdrop {
+import java.io.Serializable;
+
+public class Image implements Serializable {
 
     @SerializedName("aspect_ratio")
     @Expose
-    private float aspectRatio;
+    private double aspectRatio;
     @SerializedName("file_path")
     @Expose
     private String filePath;
@@ -19,7 +21,7 @@ public class Backdrop {
     private String iso6391;
     @SerializedName("vote_average")
     @Expose
-    private float voteAverage;
+    private double voteAverage;
     @SerializedName("vote_count")
     @Expose
     private int voteCount;
@@ -27,11 +29,11 @@ public class Backdrop {
     @Expose
     private int width;
 
-    public float getAspectRatio() {
+    public double getAspectRatio() {
         return aspectRatio;
     }
 
-    public void setAspectRatio(float aspectRatio) {
+    public void setAspectRatio(double aspectRatio) {
         this.aspectRatio = aspectRatio;
     }
 
@@ -59,11 +61,11 @@ public class Backdrop {
         this.iso6391 = iso6391;
     }
 
-    public float getVoteAverage() {
+    public double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(float voteAverage) {
+    public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
 

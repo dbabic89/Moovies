@@ -5,9 +5,9 @@
     <string name="see_more">See more</string>
     <string name="action_profile">Profile</string>
     <string name="action_logout">Logout</string>
-    <string name="label_release_date">Release date:</string>
-    <string name="label_directed_by">Directed by:</string>
-    <string name="label_duration">Duration:</string>
+    <string name="label_release_date">Release date</string>
+    <string name="label_directed_by">Directed by</string>
+    <string name="label_duration">Duration</string>
     <string name="add_to_watchlist">Add to watchlist</string>
     <string name="on_watchlist">On watchlist</string>
     <string name="on_list">On list</string>

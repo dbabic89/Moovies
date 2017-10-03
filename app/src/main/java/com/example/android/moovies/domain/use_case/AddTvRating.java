@@ -9,19 +9,19 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 
-public class AddRating extends UseCase<PostResponse, Rating> {
+public class AddTvRating extends UseCase<PostResponse, Rating> {
 
     @Inject
     Repository movieRepository;
 
     @Inject
-    AddRating(Repository movieRepository) {
+    AddTvRating(Repository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
     @Override
     Observable<PostResponse> createObservable(Rating rating) {
-        return movieRepository.addMovieRating(rating);
+        return movieRepository.addTvRating(rating);
     }
 
 }

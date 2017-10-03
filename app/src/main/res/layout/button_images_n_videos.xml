@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:scaleType="centerCrop" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@id/image_button"
+        android:background="@color/transparentBlack" />
+
     <TextView
         android:id="@+id/text_button"
         android:layout_width="match_parent"
@@ -18,12 +24,6 @@
         android:layout_margin="8dp"
         android:gravity="center_horizontal"
         android:textColor="@android:color/white" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@id/image_button"
-        android:background="@color/transparentBlack" />
 
     <ImageView
         android:id="@+id/play_button"

@@ -42,7 +42,7 @@ public class MtvGridFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerView.setNestedScrollingEnabled(true);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(mtvGridAdapter);
     }
 }

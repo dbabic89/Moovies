@@ -10,9 +10,9 @@ import com.example.android.moovies.domain.models.account.Rated;
 import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.observers.AddToWatchlistObserver;
-import com.example.android.moovies.domain.use_case.AddRating;
+import com.example.android.moovies.domain.use_case.AddTvRating;
 import com.example.android.moovies.domain.use_case.AddToWatchlist;
-import com.example.android.moovies.domain.use_case.DeleteRating;
+import com.example.android.moovies.domain.use_case.DeleteTvRating;
 import com.example.android.moovies.domain.use_case.GetAccountStatesTv;
 import com.example.android.moovies.domain.use_case.GetTvDetails;
 import com.example.android.moovies.ui.base.BasePresenter;
@@ -35,9 +35,9 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
     GetAccountStatesTv getAccountStatesTv;
 
     @Inject
-    AddRating addRating;
+    AddTvRating addTvRating;
     @Inject
-    DeleteRating deleteRating;
+    DeleteTvRating deleteTvRating;
 
     @Inject
     SharedPreferencesManager mSharedPreferencesManager;
@@ -60,27 +60,27 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
         getTvDetail.dispose();
         getAccountStatesTv.dispose();
         addToWatchlist.dispose();
-        addRating.dispose();
-        deleteRating.dispose();
+        addTvRating.dispose();
+        deleteTvRating.dispose();
     }
 
     void getTvDetails(int tvId) {
         getTvDetail.execute(new TvDetailObserver(), tvId);
-        getAccountStatesTv.execute(new GetAccountStatesTvObserver(), tvId);
+        if (mSharedPreferencesManager.getSessionId() != null) getAccountStatesTv.execute(new GetAccountStatesTvObserver(), tvId);
         this.tvId = tvId;
     }
 
-    void addMovieToWatchlist(int tvId, boolean watchlist) {
-        addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("tv", tvId, watchlist));
+    void addToWatchlist(int tvId, boolean watchlist) {
+        if (mSharedPreferencesManager.getSessionId() != null) addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("tv", tvId, watchlist));
     }
 
-    void addTvRating(int movieId, int rating) {
-        addRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+    void addRating(int movieId, int rating) {
+        if (mSharedPreferencesManager.getSessionId() != null) addTvRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
-    void deleteTvRating(int movieId, int rating) {
-        deleteRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+    void deleteRating(int movieId, int rating) {
+        if (mSharedPreferencesManager.getSessionId() != null) deleteTvRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
@@ -99,7 +99,7 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
             getMvpView().showDuration(value.getEpisodeRunTime().get(0) + " min");
             getMvpView().showOverview(value.getOverview());
             getMvpView().showReleaseDate(StringFormating.dateFormating(value.getFirstAirDate()));
-            if (value.getImages().getBackdrops().size() != 0)getMvpView().showImages(value.getImages().getBackdrops());
+            if (value.getImages().getBackdrops().size() != 0)getMvpView().showImages(value.getImages());
             else getMvpView().showNoImages();
             if (value.getVideos().getResults().size() != 0) getMvpView().showVideos(value.getVideos(), value.getName(), value.getOverview());
             else getMvpView().showNoVideos();
@@ -159,6 +159,7 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
 
         @Override
         public void onError(Throwable e) {
+            Log.i("TAG", e.getMessage());
 
         }
 

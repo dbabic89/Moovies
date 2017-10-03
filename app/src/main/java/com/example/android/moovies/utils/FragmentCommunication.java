@@ -1,7 +1,8 @@
 package com.example.android.moovies.utils;
 
-import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.domain.models.movie.Reviews;
+import com.example.android.moovies.domain.models.mtv.Credits;
+import com.example.android.moovies.domain.models.mtv.Images;
 
 public interface FragmentCommunication {
 
@@ -24,4 +25,8 @@ public interface FragmentCommunication {
     void startCelebrityList(Credits credits);
 
     void closeSearch();
+
+    void startImageGallery(Images images);
+
+    void startImageDetail(Images imageList, int position);
 }
