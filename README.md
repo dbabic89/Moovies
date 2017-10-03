@@ -1,7 +1,7 @@
 # Moovies
 
 This application allows user to browse movies and tv shows, it displays most recent, upcoming, most popular and top rated movies
-and tv shows. User can check movie and tv show details, rate them and add custom lists or watchlist. There is also a search functionality 
+and tv shows. User can check movie and tv show details, rate it and add custom lists or watchlist. There is also a search functionality 
 that currently only works for movies. 
 
 ## Under construction
@@ -22,12 +22,12 @@ This application is still under construction, and there is a lot more features t
 
    <img src="images/home_movies.png" width="250">   <img src="images/home_tvs.png" width="250">   <img src="images/list_movies.png" width="250">
 
-* Check movie details, check if it belongs to collection, add it to watchlist or rate it
+* Check movie details, check if it belongs to any collection, add it to the watchlist or rate it
 
    <img src="images/movie_detail%20(1).png" width="250">   <img src="images/movie_detail%20(2).png" width="250">   <img src="images/movie_detail%20(3).png" width="250">   
    <img src="images/movie_detail%20(4).png" width="250">   <img src="images/movie_collection.png" width="250">   <img src="images/movie_rating.png" width="250">
 
-* Check trailers
+* Watch trailers and other videos
 
    <img src="images/movie_trailer.png" width="250">
 
@@ -39,11 +39,11 @@ This application is still under construction, and there is a lot more features t
    
    <img src="images/celebriti_profile.png" width="250">
 
-* Search for specific movie
+* Search for a specific movie
 
    <img src="images/search.png" width="250">
 
-* Check your profile with informations about movies and tv shows you have seen
+* Check your profile with information about movies and tv shows you have seen
 
    <img src="images/user_profile.png" width="250">
 
@@ -62,7 +62,7 @@ This application is still under construction, and there is a lot more features t
 
 [Expandable Text](https://github.com/Manabu-GT/ExpandableTextView)
 
-[Hedge hog rating bar](https://github.com/hedge-hog/RatingBar)
+[Hedge Hog Rating Bar](https://github.com/hedge-hog/RatingBar)
 
 [Chips Layout Manager](https://github.com/BelooS/ChipsLayoutManager)
 
