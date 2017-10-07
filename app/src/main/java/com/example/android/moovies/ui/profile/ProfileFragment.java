@@ -68,8 +68,10 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 11) {
-            mPresenter.getSessionID(data.getExtras().getString("token"));
+        if (data != null) {
+            if (requestCode == 11) {
+                mPresenter.getSessionID(data.getExtras().getString("token"));
+            }
         }
     }
 

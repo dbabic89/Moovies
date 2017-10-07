@@ -31,6 +31,8 @@ import com.example.android.moovies.domain.models.mtv.Video;
 import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.domain.models.tv.CreatedBy;
 import com.example.android.moovies.domain.models.tv.KeywordsResults;
+import com.example.android.moovies.domain.models.tv.Season;
+import com.example.android.moovies.domain.models.tv.Seasons;
 import com.example.android.moovies.ui.common.adapters.ChipsAdapter;
 import com.example.android.moovies.ui.common.gallery_videos.GalleryVideosActivity;
 import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
@@ -79,7 +81,6 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     @BindView(R.id.text_mtv_overview)
     TextView textOverview;
 
-
     @BindView(R.id.text_keywords_label)
     TextView textKeywordsLabel;
 
@@ -123,10 +124,10 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     TextView textRunTime;
 
     @BindView(R.id.text_created_by_label)
-            TextView textcreatedByLabel;
+    TextView textcreatedByLabel;
 
     @BindView(R.id.text_cast_label)
-            TextView textCastLabel;
+    TextView textCastLabel;
 
     @BindView(R.id.linear_layout_crew)
     LinearLayout linearLayoutCrew;
@@ -156,12 +157,16 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     TextView textUserRating;
 
     @BindView(R.id.view_mtv_images_n_videos)
-            LinearLayout linearLayoutImagesVideos;
+    LinearLayout linearLayoutImagesVideos;
+
+    @BindView(R.id.linear_layout_season)
+    LinearLayout linearLayoutSeason;
 
     View mView;
     int tvId;
     private LayoutInflater layoutInflater;
     private FragmentCommunication fragmentCommunication;
+    private List<Season> seasons;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -177,6 +182,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
 
         imageButtonWatchlist.setOnClickListener(this);
         imageButtonRating.setOnClickListener(this);
+        linearLayoutSeason.setOnClickListener(this);
 
         return mView;
     }
@@ -196,7 +202,8 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
     }
 
     @Override
-    public void showDetails(String rating, String title, String voteCount) {
+    public void showDetails(String rating, String title, String voteCount, List<Season> seasons) {
+        this.seasons = seasons;
         textMtvRating.setText(rating);
         textTitle.setText(title);
         textFullTitle.setText(" " + title);
@@ -492,6 +499,8 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
             } else {
                 Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
             }
+        } else if (id == R.id.linear_layout_season){
+            fragmentCommunication.startSeasonFragment(new Seasons(seasons), tvId);
         }
     }
 

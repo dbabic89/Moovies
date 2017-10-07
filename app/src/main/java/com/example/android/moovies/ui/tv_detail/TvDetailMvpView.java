@@ -6,13 +6,14 @@ import com.example.android.moovies.domain.models.mtv.Images;
 import com.example.android.moovies.domain.models.mtv.Videos;
 import com.example.android.moovies.domain.models.tv.CreatedBy;
 import com.example.android.moovies.domain.models.tv.KeywordsResults;
+import com.example.android.moovies.domain.models.tv.Season;
 import com.example.android.moovies.ui.base.BaseMvpView;
 
 import java.util.List;
 
 interface TvDetailMvpView extends BaseMvpView {
 
-    void showDetails(String rating, String title, String voteCount);
+    void showDetails(String rating, String title, String voteCount, List<Season> seasons);
 
     void showBackdrop(String imageUrl);
 

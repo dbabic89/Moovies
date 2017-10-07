@@ -12,6 +12,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
 
@@ -106,6 +107,11 @@ public class DataSourceNetwork implements DataSource {
     @Override
     public Observable<TvDetail> getTvDetail(int tvId) {
         return tmdbInterface.getTvDetail(tvId, apiKey, appendTvs);
+    }
+
+    @Override
+    public Observable<SeasonDetail> getSeason(int tvId, int num) {
+        return tmdbInterface.getSeason(tvId, num, apiKey);
     }
 
     @Override

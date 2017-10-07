@@ -125,7 +125,7 @@ public class StringFormating {
         Date currentDate = null;
 
         try {
-            currentDate = inputFormat.parse(date);
+             currentDate = inputFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

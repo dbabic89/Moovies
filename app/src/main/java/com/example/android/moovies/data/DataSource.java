@@ -9,6 +9,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
 
@@ -45,6 +46,8 @@ public interface DataSource {
     Observable<TvListResponse> getSimilarTvs(int tvId, int page);
 
     Observable<TvDetail> getTvDetail(int tvId);
+
+    Observable<SeasonDetail> getSeason(int tvId, int num);
 
 
     Observable<AccountStates> getAccountStatesTv(int movieId);

@@ -8,6 +8,7 @@ import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.search.SearchFragment;
+import com.example.android.moovies.ui.season.SeasonFragment;
 import com.example.android.moovies.ui.tv_detail.TvDetailFragment;
 
 import dagger.Component;
@@ -29,4 +30,6 @@ public interface MovieComponent {
     void inject(CelebsDetailFragment celebsDetailFragment);
 
     void inject(ProfileFragment profileFragment);
+
+    void inject(SeasonFragment seasonFragment);
 }

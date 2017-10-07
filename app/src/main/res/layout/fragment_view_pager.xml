@@ -12,7 +12,7 @@
         android:elevation="4dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabGravity="fill"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="@android:color/white"/>

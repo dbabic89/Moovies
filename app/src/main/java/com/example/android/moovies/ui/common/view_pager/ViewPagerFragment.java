@@ -12,13 +12,17 @@ import android.view.ViewGroup;
 import com.example.android.moovies.R;
 import com.example.android.moovies.domain.models.celebrity.CelebsCredits;
 import com.example.android.moovies.domain.models.celebrity.Posters;
+import com.example.android.moovies.domain.models.tv.Season;
+import com.example.android.moovies.domain.models.tv.Seasons;
 import com.example.android.moovies.ui.common.mtv_grid.MtvGridFragment;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.home.HomeCelebsFragment;
 import com.example.android.moovies.ui.home.HomeMtvFragment;
 import com.example.android.moovies.ui.home.HomeProgressFragment;
+import com.example.android.moovies.ui.season.SeasonFragment;
 import com.example.android.moovies.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +41,8 @@ public class ViewPagerFragment extends Fragment {
     List<String> stringList;
 
     String viewPagerFragment;
-    int currentTab, movieId = 0;
+    Seasons seasons;
+    int currentTab, movieId, tvId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,13 +51,19 @@ public class ViewPagerFragment extends Fragment {
 
         ButterKnife.bind(this, mView);
 
+        fragmentList = new ArrayList<>();
+        stringList = new ArrayList<>();
+
         currentTab = getArguments().getInt(Constants.LIST_ID);
         movieId = getArguments().getInt("movie_id");
+        tvId = getArguments().getInt("tv_id");
         viewPagerFragment = getArguments().getString("vpf");
+        seasons = (Seasons) getArguments().getSerializable("seasons");
 
         switch (viewPagerFragment) {
 
             case "homeFragment":
+                mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
                 Fragment homeMovieFragment = new HomeMtvFragment();
                 Bundle homeMovieFragmentBundle = new Bundle();
@@ -71,6 +82,7 @@ public class ViewPagerFragment extends Fragment {
                 break;
 
             case "movieFragment":
+                mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
                 List<Integer> movieTabs = Arrays.asList(0, 1, 2, 3);
                 List<String> movieTitles = Arrays.asList("Now", "Upcoming", "Popular", "Top rated");
@@ -79,6 +91,7 @@ public class ViewPagerFragment extends Fragment {
                 break;
 
             case "tvFragment":
+                mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
                 List<Integer> tvTabs = Arrays.asList(4, 5, 6, 7);
                 List<String> tvTitles = Arrays.asList("Today", "On air", "Popular", "Top rated");
@@ -86,7 +99,50 @@ public class ViewPagerFragment extends Fragment {
 
                 break;
 
+            case "seasonFragment":
+
+                if (seasons.getSeasons().size() > 6) {
+                    mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                } else {
+                    mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+                }
+
+                if (seasons.getSeasons().size() == 1) {
+
+                    Season season = seasons.getSeasons().get(0);
+
+                    Fragment seasonFragment = new SeasonFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("tv_id", tvId);
+                    bundle.putSerializable("season", season);
+                    seasonFragment.setArguments(bundle);
+
+                    fragmentList.add(0, seasonFragment);
+                    stringList.add(0, "S" + season.getSeasonNumber());
+
+                    mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+                } else {
+
+                    for (int i = 0; i < seasons.getSeasons().size(); i++) {
+
+                        Season season = seasons.getSeasons().get(i);
+
+                        Fragment seasonFragment = new SeasonFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("tv_id", tvId);
+                        bundle.putSerializable("season", season);
+                        seasonFragment.setArguments(bundle);
+
+                        fragmentList.add(i, seasonFragment);
+                        stringList.add(i, "S" + season.getSeasonNumber());
+                    }
+                }
+
+                break;
+
             case "celebsDetailFragment":
+                mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
                 CelebsCredits celebsCredits = (CelebsCredits) getArguments().getSerializable("credits");
 

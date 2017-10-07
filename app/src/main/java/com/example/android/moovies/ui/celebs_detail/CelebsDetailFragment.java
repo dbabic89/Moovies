@@ -36,14 +36,19 @@ public class CelebsDetailFragment extends Fragment implements CelebsDetailMvpVie
 
     @BindView(R.id.text_name)
     TextView textName;
+
     @BindView(R.id.text_birthday)
     TextView textBirthday;
+
     @BindView(R.id.text_birthplace)
     TextView textBirthplace;
+
     @BindView(R.id.text_deathday)
     TextView textDeathDay;
+
     @BindView(R.id.expand_text_view)
     ExpandableTextView expTvBiography;
+
     @BindView(R.id.image_poster)
     ImageView imagePoster;
 

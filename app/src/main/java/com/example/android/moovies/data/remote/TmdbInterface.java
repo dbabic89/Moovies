@@ -11,6 +11,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
 
@@ -72,11 +73,17 @@ public interface TmdbInterface {
     @GET("tv/{tv_id}/similar")
     Observable<TvListResponse> getSimilarTv(@Path("tv_id") int id, @Query("api_key") String apiKey, @Query("page") int pageIndex);
 
+
     // Tv show details
 
     @GET("tv/{tv_id}")
     Observable<TvDetail> getTvDetail(@Path("tv_id") int id, @Query("api_key") String apiKey, @Query("append_to_response") String append);
 
+
+    // Tv show season
+
+    @GET("tv/{tv_id}/season/{season_number}")
+    Observable<SeasonDetail> getSeason(@Path("tv_id") int id, @Path("season_number") int num, @Query("api_key") String apiKey);
 
     // Celebrity Detail
 

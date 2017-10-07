@@ -27,23 +27,24 @@ import io.reactivex.observers.DisposableObserver;
 class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
     @Inject
-    SharedPreferencesManager mSharedPreferencesManager;
-    @Inject
     GetMovieDetails getMovieDetails;
+
     @Inject
     GetAccountStatesMovie getAccountStatesMovie;
+
     @Inject
     AddToWatchlist addToWatchlist;
+
     @Inject
     AddMovieRating addMovieRating;
+
     @Inject
     DeleteMovieRating deleteMovieRating;
 
-    int movieId, rating = 0;
+    private int movieId, rating = 0;
 
     @Inject
-    MovieDetailPresenter(SharedPreferencesManager mSharedPreferencesManager) {
-        this.mSharedPreferencesManager = mSharedPreferencesManager;
+    MovieDetailPresenter() {
     }
 
     @Override
@@ -67,20 +68,20 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     }
 
     void getAccountStatesRating(int movieId) {
-        if (mSharedPreferencesManager.getSessionId() != null) getAccountStatesMovie.execute(new AccountStatesRatingObserver(), movieId);
+        getAccountStatesMovie.execute(new AccountStatesRatingObserver(), movieId);
     }
 
     void addToWatchlist(final int movieId, boolean watchlist) {
-        if (mSharedPreferencesManager.getSessionId() != null) addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("movie", movieId, watchlist));
+        addToWatchlist.execute(new AddToWatchlistObserver(), new PostToWatchlist("movie", movieId, watchlist));
     }
 
     void addRating(int movieId, int rating) {
-        if (mSharedPreferencesManager.getSessionId() != null) addMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        addMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
     void deleteRating(int movieId, int rating) {
-        if (mSharedPreferencesManager.getSessionId() != null) deleteMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        deleteMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 

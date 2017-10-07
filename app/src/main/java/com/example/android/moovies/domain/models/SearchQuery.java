@@ -2,8 +2,8 @@ package com.example.android.moovies.domain.models;
 
 public class SearchQuery {
 
-    String query;
-    int page;
+    private String query;
+    private int page;
 
     public SearchQuery(String query, int page) {
         this.query = query;

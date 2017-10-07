@@ -13,6 +13,7 @@ import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.domain.models.mtv.Images;
+import com.example.android.moovies.domain.models.tv.Seasons;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
 import com.example.android.moovies.ui.celebs_list.CelebsListFragment;
@@ -248,6 +249,19 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         galleryDetailFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, galleryDetailFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startSeasonFragment(Seasons seasons, int id) {
+
+        Fragment viewPagerFragment = new ViewPagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("vpf", "seasonFragment");
+        bundle.putInt("tv_id", id);
+        bundle.putSerializable("seasons", seasons);
+        viewPagerFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().add(R.id.content_main, viewPagerFragment).addToBackStack("tag").commit();
     }
 
 }
