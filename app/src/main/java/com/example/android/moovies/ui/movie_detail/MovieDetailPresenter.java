@@ -2,12 +2,11 @@ package com.example.android.moovies.ui.movie_detail;
 
 import android.util.Log;
 
-import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.account.MtvRating;
 import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.Rated;
-import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.movie.Country;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.observers.AddToWatchlistObserver;
@@ -76,12 +75,12 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     }
 
     void addRating(int movieId, int rating) {
-        addMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        addMovieRating.execute(new RatingObserver(), new MtvRating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
     void deleteRating(int movieId, int rating) {
-        deleteMovieRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        deleteMovieRating.execute(new RatingObserver(), new MtvRating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 

@@ -3,10 +3,10 @@ package com.example.android.moovies.ui.tv_detail;
 import android.util.Log;
 
 import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.account.MtvRating;
 import com.example.android.moovies.domain.models.account.PostResponse;
 import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.account.Rated;
-import com.example.android.moovies.domain.models.account.Rating;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.observers.AddToWatchlistObserver;
 import com.example.android.moovies.domain.use_case.AddToWatchlist;
@@ -71,12 +71,12 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
     }
 
     void addRating(int movieId, int rating) {
-        addTvRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+        addTvRating.execute(new RatingObserver(), new MtvRating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 
     void deleteRating(int movieId, int rating) {
-       deleteTvRating.execute(new RatingObserver(), new Rating(movieId, new Rated(rating)));
+       deleteTvRating.execute(new RatingObserver(), new MtvRating(movieId, new Rated(rating)));
         this.rating = rating;
     }
 

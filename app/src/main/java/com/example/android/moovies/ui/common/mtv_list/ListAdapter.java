@@ -26,6 +26,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.MovieViewHolder> {
     private ListAdapter.RecyclerViewInterface recyclerViewInterface;
 
     @Inject Picasso picasso;
+
     @Inject
     ListAdapter() {
         listItems = new ArrayList<>();

@@ -2,14 +2,18 @@ package com.example.android.moovies.domain.models.tv;
 
 import com.example.android.moovies.domain.models.mtv.Cast;
 import com.example.android.moovies.domain.models.mtv.Crew;
+import com.example.android.moovies.domain.models.mtv.Images;
+import com.example.android.moovies.domain.models.mtv.Videos;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Created by Laptop on 07.10.2017..
+ */
 
-public class Episode implements Serializable{
+public class EpisodeDetail {
 
     @SerializedName("air_date")
     @Expose
@@ -47,6 +51,12 @@ public class Episode implements Serializable{
     @SerializedName("vote_count")
     @Expose
     private int voteCount;
+    @SerializedName("images")
+    @Expose
+    private Images images;
+    @SerializedName("videos")
+    @Expose
+    private Videos videos;
 
     public String getAirDate() {
         return airDate;
@@ -142,6 +152,22 @@ public class Episode implements Serializable{
 
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
+    }
+
+    public Images getImages() {
+        return images;
+    }
+
+    public void setImages(Images images) {
+        this.images = images;
+    }
+
+    public Videos getVideos() {
+        return videos;
+    }
+
+    public void setVideos(Videos videos) {
+        this.videos = videos;
     }
 
 }

@@ -10,16 +10,16 @@ import io.reactivex.Observable;
 public class CelebsDetail extends UseCase<Celebrity, Integer> {
 
     @Inject
-    Repository movieRepository;
+    Repository repository;
 
     @Inject
-    CelebsDetail(Repository movieRepository) {
-        this.movieRepository = movieRepository;
+    CelebsDetail(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
     Observable<Celebrity> createObservable(Integer integer) {
-        return movieRepository.getCelebrity(integer);
+        return repository.getCelebrity(integer);
     }
 
 }

@@ -11,16 +11,16 @@ import io.reactivex.Observable;
 public class AddToWatchlist extends UseCase<PostResponse, PostToWatchlist> {
 
     @Inject
-    Repository movieRepository;
+    Repository repository;
 
     @Inject
-    AddToWatchlist(Repository movieRepository) {
-        this.movieRepository = movieRepository;
+    AddToWatchlist(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
     Observable<PostResponse> createObservable(PostToWatchlist toWatchlist) {
-        return movieRepository.addToWatchlist(toWatchlist);
+        return repository.addToWatchlist(toWatchlist);
     }
 
 }

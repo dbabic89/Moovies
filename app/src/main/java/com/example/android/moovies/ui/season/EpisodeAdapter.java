@@ -35,7 +35,7 @@ class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHold
     }
 
     interface RecyclerViewInterface {
-        void onCardClick(int position);
+        void onClick(int position);
     }
 
     void setRecyclerViewInterface(EpisodeAdapter.RecyclerViewInterface recyclerViewInterface) {
@@ -117,7 +117,7 @@ class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHold
 
         @Override
         public void onClick(View view) {
-            recyclerViewInterface.onCardClick(getAdapterPosition());
+            recyclerViewInterface.onClick(getAdapterPosition());
         }
     }
 }

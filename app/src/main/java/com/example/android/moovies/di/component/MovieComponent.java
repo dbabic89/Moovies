@@ -3,6 +3,7 @@ package com.example.android.moovies.di.component;
 import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.di.scope.ActivityScope;
 import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
+import com.example.android.moovies.ui.episode.EpisodeFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
 import com.example.android.moovies.ui.common.mtv_list.HorizontalRecyclerView;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
@@ -32,4 +33,6 @@ public interface MovieComponent {
     void inject(ProfileFragment profileFragment);
 
     void inject(SeasonFragment seasonFragment);
+
+    void inject(EpisodeFragment episodeFragment);
 }

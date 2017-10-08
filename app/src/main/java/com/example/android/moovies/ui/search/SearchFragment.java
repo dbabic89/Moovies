@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.moovies.Moovies;
@@ -26,16 +27,22 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchFragment extends Fragment implements SearchMvpView {
+public class SearchFragment extends Fragment implements SearchMvpView, View.OnClickListener {
 
-    View mView;
-    @BindView(R.id.recycler_view_search) RecyclerView mRecyclerView;
-    FragmentCommunication fragmentCommunication;
+    @BindView(R.id.recycler_view_search)
+    RecyclerView mRecyclerView;
+
+    @BindView(R.id.discover)
+    LinearLayout linearLayoutDiscover;
 
     @Inject
     SearchPresenter mPresenter;
+
     @Inject
     SearchAdapter searchAdapter;
+
+    View mView;
+    FragmentCommunication fragmentCommunication;
 
     private int currentPage;
     private int TOTAL_PAGES = 10;
@@ -57,6 +64,8 @@ public class SearchFragment extends Fragment implements SearchMvpView {
 
         movieComponent.inject(this);
         setPresenter();
+
+        linearLayoutDiscover.setOnClickListener(this);
 
         return mView;
     }
@@ -141,5 +150,10 @@ public class SearchFragment extends Fragment implements SearchMvpView {
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        fragmentCommunication.startDiscoverFragment();
     }
 }

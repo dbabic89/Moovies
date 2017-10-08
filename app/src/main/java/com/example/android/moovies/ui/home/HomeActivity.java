@@ -13,6 +13,7 @@ import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.domain.models.mtv.Images;
+import com.example.android.moovies.domain.models.tv.Episodes;
 import com.example.android.moovies.domain.models.tv.Seasons;
 import com.example.android.moovies.ui.base.BaseActivity;
 import com.example.android.moovies.ui.celebs_detail.CelebsDetailFragment;
@@ -21,6 +22,7 @@ import com.example.android.moovies.ui.common.gallery_images.GalleryDetailFragmen
 import com.example.android.moovies.ui.common.gallery_images.GalleryGridFragment;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
 import com.example.android.moovies.ui.common.view_pager.ViewPagerFragment;
+import com.example.android.moovies.ui.discover.DiscoverFragment;
 import com.example.android.moovies.ui.movie_detail.MovieDetailFragment;
 import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.review_list.ReviewListFragment;
@@ -262,6 +264,27 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         viewPagerFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.content_main, viewPagerFragment).addToBackStack("tag").commit();
+    }
+
+    @Override
+    public void startEpisodes(int tvId, Episodes episodes, int position) {
+
+        Fragment viewPagerFragment = new ViewPagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("tv_id", tvId);
+        bundle.putString("vpf", "episodeFragment");
+        bundle.putSerializable("episodes", episodes);
+        bundle.putInt("position", position);
+        viewPagerFragment.setArguments(bundle);
+        fragmentManager.beginTransaction().add(R.id.content_main, viewPagerFragment).addToBackStack("tag").commit();
+
+    }
+
+    @Override
+    public void startDiscoverFragment() {
+
+        Fragment discoverFragment = new DiscoverFragment();
+        fragmentManager.beginTransaction().add(R.id.content_main, discoverFragment).addToBackStack("tag").commit();
     }
 
 }

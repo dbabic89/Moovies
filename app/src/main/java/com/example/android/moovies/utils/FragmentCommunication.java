@@ -3,6 +3,7 @@ package com.example.android.moovies.utils;
 import com.example.android.moovies.domain.models.movie.Reviews;
 import com.example.android.moovies.domain.models.mtv.Credits;
 import com.example.android.moovies.domain.models.mtv.Images;
+import com.example.android.moovies.domain.models.tv.Episodes;
 import com.example.android.moovies.domain.models.tv.Seasons;
 
 public interface FragmentCommunication {
@@ -32,4 +33,8 @@ public interface FragmentCommunication {
     void startImageDetail(Images imageList, int position);
 
     void startSeasonFragment(Seasons seasons, int id);
+
+    void startEpisodes(int tvId, Episodes episodes, int position);
+
+    void startDiscoverFragment();
 }

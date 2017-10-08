@@ -1,16 +1,20 @@
 package com.example.android.moovies.domain.repository;
 
+import android.util.Log;
+
 import com.example.android.moovies.data.DataSource;
 import com.example.android.moovies.data.remote.DataSourceNetwork;
 import com.example.android.moovies.domain.models.SearchQuery;
 import com.example.android.moovies.domain.models.account.AccountStates;
-import com.example.android.moovies.domain.models.account.PostToWatchlist;
+import com.example.android.moovies.domain.models.account.EpisodeRating;
+import com.example.android.moovies.domain.models.account.MtvRating;
 import com.example.android.moovies.domain.models.account.PostResponse;
-import com.example.android.moovies.domain.models.account.Rating;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
@@ -100,18 +104,39 @@ public class Repository implements DataSource {
     }
 
     @Override
+    public Observable<EpisodeDetail> getEpisodeDetails(int tvId, int s_num, int e_num) {
+        Log.i("TAG", "getEpisodeDetails " + tvId + " " + s_num + " " + e_num);
+        return dataSourceNetwork.getEpisodeDetails(tvId, s_num, e_num);
+    }
+
+    @Override
+    public Observable<AccountStates> getEpisodeStates(int tvId, int s_num, int e_num) {
+        return dataSourceNetwork.getEpisodeStates(tvId, s_num, e_num);
+    }
+
+    @Override
+    public Observable<PostResponse> addEpisodeRating(EpisodeRating episodeRating) {
+        return dataSourceNetwork.addEpisodeRating(episodeRating);
+    }
+
+    @Override
+    public Observable<PostResponse> deleteEpisodeRating(EpisodeRating episodeRating) {
+        return dataSourceNetwork.deleteEpisodeRating(episodeRating);
+    }
+
+    @Override
     public Observable<AccountStates> getAccountStatesTv(int tvId) {
         return dataSourceNetwork.getAccountStatesTv(tvId);
     }
 
     @Override
-    public Observable<PostResponse> addTvRating(Rating rating) {
-        return dataSourceNetwork.addTvRating(rating);
+    public Observable<PostResponse> addTvRating(MtvRating mtvRating) {
+        return dataSourceNetwork.addTvRating(mtvRating);
     }
 
     @Override
-    public Observable<PostResponse> deleteTvRating(Rating rating) {
-        return dataSourceNetwork.deleteTvRating(rating);
+    public Observable<PostResponse> deleteTvRating(MtvRating mtvRating) {
+        return dataSourceNetwork.deleteTvRating(mtvRating);
     }
 
     @Override
@@ -140,13 +165,13 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<PostResponse> addMovieRating(Rating rating) {
-        return dataSourceNetwork.addMovieRating(rating);
+    public Observable<PostResponse> addMovieRating(MtvRating mtvRating) {
+        return dataSourceNetwork.addMovieRating(mtvRating);
     }
 
     @Override
-    public Observable<PostResponse> deleteMovieRating(Rating rating) {
-        return dataSourceNetwork.deleteMovieRating(rating);
+    public Observable<PostResponse> deleteMovieRating(MtvRating mtvRating) {
+        return dataSourceNetwork.deleteMovieRating(mtvRating);
     }
 
     @Override

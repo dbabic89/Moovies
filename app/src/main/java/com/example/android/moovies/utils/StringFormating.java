@@ -130,7 +130,7 @@ public class StringFormating {
             e.printStackTrace();
         }
 
-        return " " + outputFormat.format(currentDate);
+        return outputFormat.format(currentDate);
 
     }
 

@@ -11,16 +11,16 @@ public class GetMovieCollectionList extends UseCase<CollectionDetail, Integer> {
 
 
     @Inject
-    Repository movieRepository;
+    Repository repository;
 
     @Inject
-    GetMovieCollectionList(Repository movieRepository) {
-        this.movieRepository = movieRepository;
+    GetMovieCollectionList(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
     Observable<CollectionDetail> createObservable(Integer movieId) {
-        return movieRepository.getCollection(movieId);
+        return repository.getCollection(movieId);
     }
 
 }

@@ -18,8 +18,10 @@ import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.domain.models.tv.Episode;
+import com.example.android.moovies.domain.models.tv.Episodes;
 import com.example.android.moovies.domain.models.tv.Season;
 import com.example.android.moovies.utils.Constants;
+import com.example.android.moovies.utils.FragmentCommunication;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 
@@ -61,6 +63,8 @@ public class SeasonFragment extends Fragment implements SeasonMvpView {
     SeasonPresenter seasonPresenter;
 
     View mView;
+    FragmentCommunication fragmentCommunication;
+    private int tvId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,10 +73,12 @@ public class SeasonFragment extends Fragment implements SeasonMvpView {
 
         ButterKnife.bind(this, mView);
         Season season = (Season) getArguments().getSerializable("season");
-        int tvId = getArguments().getInt("tv_id");
+        tvId = getArguments().getInt("tv_id");
 
         createComponent();
         setPresenter(Arrays.asList(tvId, season.getSeasonNumber()));
+
+        fragmentCommunication = (FragmentCommunication) getActivity();
 
         picasso.load(Constants.URL_POSTER + season.getPosterPath()).into(imageSeasonPoster);
 
@@ -114,7 +120,7 @@ public class SeasonFragment extends Fragment implements SeasonMvpView {
     }
 
     @Override
-    public void showEpisodes(List<Episode> episodes) {
+    public void showEpisodes(final List<Episode> episodes) {
 
 
         episodeAdapter.addAll(episodes);
@@ -122,5 +128,12 @@ public class SeasonFragment extends Fragment implements SeasonMvpView {
         recyclerViewEpisodes.setAdapter(episodeAdapter);
         recyclerViewEpisodes.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
         recyclerViewEpisodes.setNestedScrollingEnabled(false);
+
+        episodeAdapter.setRecyclerViewInterface(new EpisodeAdapter.RecyclerViewInterface() {
+            @Override
+            public void onClick(int position) {
+                fragmentCommunication.startEpisodes(tvId, new Episodes(episodes), position);
+            }
+        });
     }
 }

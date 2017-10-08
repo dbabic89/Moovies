@@ -2,13 +2,15 @@ package com.example.android.moovies.data;
 
 import com.example.android.moovies.domain.models.SearchQuery;
 import com.example.android.moovies.domain.models.account.AccountStates;
-import com.example.android.moovies.domain.models.account.PostToWatchlist;
+import com.example.android.moovies.domain.models.account.EpisodeRating;
+import com.example.android.moovies.domain.models.account.MtvRating;
 import com.example.android.moovies.domain.models.account.PostResponse;
-import com.example.android.moovies.domain.models.account.Rating;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
@@ -49,12 +51,20 @@ public interface DataSource {
 
     Observable<SeasonDetail> getSeason(int tvId, int num);
 
+    Observable<EpisodeDetail> getEpisodeDetails(int tvId, int s_num, int e_num);
+
+    Observable<AccountStates> getEpisodeStates(int tvId, int s_num, int e_num);
+
+    Observable<PostResponse> addEpisodeRating(EpisodeRating episodeRating);
+
+    Observable<PostResponse> deleteEpisodeRating(EpisodeRating episodeRating);
+
 
     Observable<AccountStates> getAccountStatesTv(int movieId);
 
-    Observable<PostResponse> addTvRating(Rating rating);
+    Observable<PostResponse> addTvRating(MtvRating mtvRating);
 
-    Observable<PostResponse> deleteTvRating(Rating rating);
+    Observable<PostResponse> deleteTvRating(MtvRating mtvRating);
 
     Observable<TvListResponse> getRatedTvs(int page);
 
@@ -65,9 +75,9 @@ public interface DataSource {
 
     Observable<PostResponse> addToWatchlist(PostToWatchlist postToWatchlist);
 
-    Observable<PostResponse> addMovieRating(Rating rating);
+    Observable<PostResponse> addMovieRating(MtvRating mtvRating);
 
-    Observable<PostResponse> deleteMovieRating(Rating rating);
+    Observable<PostResponse> deleteMovieRating(MtvRating mtvRating);
 
     Observable<MovieListResponse> getRatedMovies(int page);
 

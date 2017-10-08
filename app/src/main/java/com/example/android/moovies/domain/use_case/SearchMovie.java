@@ -13,16 +13,16 @@ import io.reactivex.Observable;
 public class SearchMovie extends UseCase<MovieListResponse, SearchQuery> {
 
     @Inject
-    Repository movieRepository;
+    Repository repository;
 
     @Inject
-    public SearchMovie(Repository movieRepository) {
-        this.movieRepository = movieRepository;
+    public SearchMovie(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
     Observable<MovieListResponse> createObservable(SearchQuery searchQuery) {
-        return movieRepository.searchMovie(searchQuery)
+        return repository.searchMovie(searchQuery)
                 .debounce(300, TimeUnit.MILLISECONDS);
     }
 

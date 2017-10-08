@@ -46,7 +46,9 @@ class SeasonPresenter extends BasePresenter<SeasonMvpView> {
         public void onNext(SeasonDetail value) {
 
             getMvpView().showSeasonName(value.getName());
-            getMvpView().showAirDate("Release date\n" + StringFormating.dateFormating(value.getAirDate()));
+
+            if (value.getAirDate() == null) getMvpView().showAirDate("Release date\nN/A");
+            else getMvpView().showAirDate("Release date\n" + StringFormating.dateFormating(value.getAirDate()));
             getMvpView().showEpisodeNum(value.getEpisodes().size() + " episodes");
             getMvpView().showOverview(value.getOverview());
             getMvpView().showEpisodes(value.getEpisodes());

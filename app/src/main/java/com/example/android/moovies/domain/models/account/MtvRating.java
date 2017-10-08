@@ -1,11 +1,11 @@
 package com.example.android.moovies.domain.models.account;
 
-public class Rating {
+public class MtvRating {
 
     private int id;
     private Rated rated;
 
-    public Rating(int id, Rated rated) {
+    public MtvRating(int id, Rated rated) {
         this.id = id;
         this.rated = rated;
     }

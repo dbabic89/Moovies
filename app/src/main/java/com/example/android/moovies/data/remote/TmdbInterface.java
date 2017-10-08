@@ -11,6 +11,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
@@ -84,6 +85,21 @@ public interface TmdbInterface {
 
     @GET("tv/{tv_id}/season/{season_number}")
     Observable<SeasonDetail> getSeason(@Path("tv_id") int id, @Path("season_number") int num, @Query("api_key") String apiKey);
+
+
+    // Tv show episode details
+
+    @GET("tv/{tv_id}/season/{season_number}/episode/{episode_number}")
+    Observable<EpisodeDetail> getEpisodeDetails(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Query("append_to_response") String append);
+
+    @GET("tv/{tv_id}/season/{season_number}/episode/{episode_number}/account_states")
+    Observable<AccountStates> getEpisodeStates(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey);
+
+    @POST("tv/{tv_id}/season/{season_number}/episode/{episode_number}/rating")
+    Observable<PostResponse> addRatingEpisode(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Body Rated rated);
+
+    @DELETE("tv/{tv_id}/season/{season_number}/episode/{episode_number}/rating")
+    Observable<PostResponse> deleteEpisodeRating(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey);
 
     // Celebrity Detail
 

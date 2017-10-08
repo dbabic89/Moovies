@@ -10,16 +10,16 @@ import io.reactivex.Observable;
 public class GetTvDetails extends UseCase<TvDetail, Integer>{
 
     @Inject
-    Repository Repository;
+    Repository repository;
 
     @Inject
-    GetTvDetails(Repository Repository) {
-        this.Repository = Repository;
+    GetTvDetails(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
     Observable<TvDetail> createObservable(Integer integer) {
-        return Repository.getTvDetail(integer);
+        return repository.getTvDetail(integer);
     }
 
 }

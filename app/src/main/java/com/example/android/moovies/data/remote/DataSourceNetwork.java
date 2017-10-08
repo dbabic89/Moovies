@@ -1,17 +1,21 @@
 package com.example.android.moovies.data.remote;
 
+import android.util.Log;
+
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.DataSource;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
 import com.example.android.moovies.domain.models.SearchQuery;
 import com.example.android.moovies.domain.models.account.AccountStates;
-import com.example.android.moovies.domain.models.account.PostToWatchlist;
+import com.example.android.moovies.domain.models.account.EpisodeRating;
+import com.example.android.moovies.domain.models.account.MtvRating;
 import com.example.android.moovies.domain.models.account.PostResponse;
-import com.example.android.moovies.domain.models.account.Rating;
+import com.example.android.moovies.domain.models.account.PostToWatchlist;
 import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
 import com.example.android.moovies.domain.models.tv.TvListResponse;
@@ -34,6 +38,7 @@ public class DataSourceNetwork implements DataSource {
     private String appendMovies = "images,videos,credits,similar,reviews,keywords,releases";
     private String appendTvs = "images,videos,credits,similar,reviews,content_ratings,keywords,alternative_titles";
     private String appendCelebs = "movie_credits,tagged_images,tv_credits,external_ids,images";
+    private String appendEpisodes = "images,videos";
     private int accoutId;
 
     @Inject
@@ -115,18 +120,39 @@ public class DataSourceNetwork implements DataSource {
     }
 
     @Override
+    public Observable<EpisodeDetail> getEpisodeDetails(int tvId, int s_num, int e_num) {
+        Log.i("TAG", "getEpisodeDetails dsn " + tvId + " " + s_num + " " + e_num);
+        return tmdbInterface.getEpisodeDetails(tvId, s_num, e_num, apiKey, appendEpisodes);
+    }
+
+    @Override
+    public Observable<AccountStates> getEpisodeStates(int tvId, int s_num, int e_num) {
+        return tmdbInterface.getEpisodeStates(tvId, s_num, e_num, apiKey);
+    }
+
+    @Override
+    public Observable<PostResponse> addEpisodeRating(EpisodeRating rating) {
+        return tmdbInterface.addRatingEpisode(rating.getId(), rating.getS_num(), rating.getE_num(), apiKey, rating.getRated());
+    }
+
+    @Override
+    public Observable<PostResponse> deleteEpisodeRating(EpisodeRating rating) {
+        return tmdbInterface.deleteEpisodeRating(rating.getId(), rating.getS_num(), rating.getE_num(), apiKey);
+    }
+
+    @Override
     public Observable<AccountStates> getAccountStatesTv(int tvId) {
         return tmdbInterface.getAccountStatesTv(tvId, apiKey, sessionId);
     }
 
     @Override
-    public Observable<PostResponse> addTvRating(Rating rating) {
-        return tmdbInterface.addTvRating(rating.getId(), apiKey, sessionId, rating.getRated());
+    public Observable<PostResponse> addTvRating(MtvRating mtvRating) {
+        return tmdbInterface.addTvRating(mtvRating.getId(), apiKey, sessionId, mtvRating.getRated());
     }
 
     @Override
-    public Observable<PostResponse> deleteTvRating(Rating rating) {
-        return tmdbInterface.deleteTvRating(rating.getId(), apiKey, sessionId);
+    public Observable<PostResponse> deleteTvRating(MtvRating mtvRating) {
+        return tmdbInterface.deleteTvRating(mtvRating.getId(), apiKey, sessionId);
     }
 
     @Override
@@ -155,13 +181,13 @@ public class DataSourceNetwork implements DataSource {
     }
 
     @Override
-    public Observable<PostResponse> addMovieRating(Rating rating) {
-        return tmdbInterface.addMovieRating(rating.getId(), apiKey, sessionId, rating.getRated());
+    public Observable<PostResponse> addMovieRating(MtvRating mtvRating) {
+        return tmdbInterface.addMovieRating(mtvRating.getId(), apiKey, sessionId, mtvRating.getRated());
     }
 
     @Override
-    public Observable<PostResponse> deleteMovieRating(Rating rating) {
-        return tmdbInterface.deleteMovieRating(rating.getId(), apiKey, sessionId);
+    public Observable<PostResponse> deleteMovieRating(MtvRating mtvRating) {
+        return tmdbInterface.deleteMovieRating(mtvRating.getId(), apiKey, sessionId);
     }
 
     @Override
