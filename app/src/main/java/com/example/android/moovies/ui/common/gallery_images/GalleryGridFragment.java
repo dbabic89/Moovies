@@ -26,15 +26,32 @@ public class GalleryGridFragment extends Fragment {
     View mView;
     Images images;
 
+    public static GalleryGridFragment newInstance(Images images) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("images", images);
+
+        GalleryGridFragment fragment = new GalleryGridFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            images = (Images) bundle.getSerializable("images");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_gallery_images, container, false);
 
+        readBundle(getArguments());
+
         fragmentCommunication = (FragmentCommunication) getActivity();
         ButterKnife.bind(this, mView);
-
-        images = (Images) getArguments().getSerializable("images");
 
         GalleryGridAdapter galleryImageAdapter = new GalleryGridAdapter(getActivity(), StringFormating.getImageList(images));
         galleryImageAdapter.setRecyclerViewInterface(new GalleryGridAdapter.RecyclerViewInterface() {

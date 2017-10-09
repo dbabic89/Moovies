@@ -13,14 +13,34 @@ import com.example.android.moovies.utils.StringFormating;
 
 public class GalleryDetailFragment extends Fragment {
 
+    int position;
+    Images images;
+
+    public static GalleryDetailFragment newInstance(Images images, int position) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("images", images);
+        bundle.putInt("position", position);
+
+        GalleryDetailFragment fragment = new GalleryDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            images = (Images) bundle.getSerializable("images");
+            position = bundle.getInt("position");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View mView = inflater.inflate(R.layout.fragment_gallery_detail, container, false);
 
-        Images images = (Images) getArguments().getSerializable("images");
-        int position = getArguments().getInt("position");
+        readBundle(getArguments());
 
         GalleryDetailAdapter galleryImagesAdapter = new GalleryDetailAdapter(getActivity(), StringFormating.getImageListtoString(images));
 

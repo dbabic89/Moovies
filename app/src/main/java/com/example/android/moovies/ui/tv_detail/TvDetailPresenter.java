@@ -15,12 +15,14 @@ import com.example.android.moovies.domain.use_case.DeleteTvRating;
 import com.example.android.moovies.domain.use_case.GetAccountStatesTv;
 import com.example.android.moovies.domain.use_case.GetTvDetails;
 import com.example.android.moovies.ui.base.BasePresenter;
-import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.StringFormating;
 
 import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableObserver;
+
+import static com.example.android.moovies.utils.Constants.URL_BACKDROP;
+import static com.example.android.moovies.utils.Constants.URL_POSTER;
 
 public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
 
@@ -39,11 +41,10 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
     @Inject
     DeleteTvRating deleteTvRating;
 
-    int tvId, rating = 0;
+    private int rating = 0;
 
     @Inject
-    TvDetailPresenter() {
-    }
+    TvDetailPresenter() {}
 
     @Override
     public void attachView(TvDetailMvpView mvpView) {
@@ -63,7 +64,6 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
     void getTvDetails(int tvId) {
         getTvDetail.execute(new TvDetailObserver(), tvId);
         getAccountStatesTv.execute(new GetAccountStatesTvObserver(), tvId);
-        this.tvId = tvId;
     }
 
     void addToWatchlist(int tvId, boolean watchlist) {
@@ -85,9 +85,9 @@ public class TvDetailPresenter extends BasePresenter<TvDetailMvpView> {
         public void onNext(TvDetail value) {
 
             getMvpView().showDetails(String.valueOf(value.getVoteAverage()), value.getName(), String.valueOf(value.getVoteCount()), value.getSeasons());
-            if (!value.getPosterPath().isEmpty())getMvpView().showPoster(Constants.URL_POSTER + value.getPosterPath());
+            if (!value.getPosterPath().isEmpty())getMvpView().showPoster(URL_POSTER + value.getPosterPath());
             else getMvpView().showNoPoster();
-            if (!value.getBackdropPath().isEmpty())getMvpView().showBackdrop(Constants.URL_BACKDROP + value.getBackdropPath());
+            if (!value.getBackdropPath().isEmpty())getMvpView().showBackdrop(URL_BACKDROP + value.getBackdropPath());
             else getMvpView().showNoBackdrop();
             getMvpView().showGenres(value.getGenres());
             getMvpView().showSeasonAndEpisode("S " + String.valueOf(value.getNumberOfSeasons()), "E " + String.valueOf(value.getNumberOfEpisodes()));

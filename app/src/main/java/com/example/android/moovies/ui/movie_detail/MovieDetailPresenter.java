@@ -16,12 +16,14 @@ import com.example.android.moovies.domain.use_case.DeleteMovieRating;
 import com.example.android.moovies.domain.use_case.GetAccountStatesMovie;
 import com.example.android.moovies.domain.use_case.GetMovieDetails;
 import com.example.android.moovies.ui.base.BasePresenter;
-import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.StringFormating;
 
 import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableObserver;
+
+import static com.example.android.moovies.utils.Constants.URL_BACKDROP;
+import static com.example.android.moovies.utils.Constants.URL_POSTER;
 
 class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
@@ -40,7 +42,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
     @Inject
     DeleteMovieRating deleteMovieRating;
 
-    private int movieId, rating = 0;
+    private int rating = 0;
 
     @Inject
     MovieDetailPresenter() {
@@ -63,7 +65,6 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
 
     void getMovieDetails(final int movieId) {
         getMovieDetails.execute(new MovieDetailObserver(), movieId);
-        this.movieId = movieId;
     }
 
     void getAccountStatesRating(int movieId) {
@@ -92,7 +93,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
             getMvpView().showOriginalTitle(movie.getOriginalTitle());
 
         if (movie.getBackdropPath() != null)
-            getMvpView().showBackdrop(Constants.URL_BACKDROP + movie.getBackdropPath());
+            getMvpView().showBackdrop(URL_BACKDROP + movie.getBackdropPath());
         else getMvpView().showNoBackdrop();
 
         if (movie.getTagline() != null) getMvpView().showTagline(movie.getTagline());
@@ -102,7 +103,7 @@ class MovieDetailPresenter extends BasePresenter<MovieDetailMvpView> {
             getMvpView().showDirectedBy(movie.getCredits().getCrew());
 
         if (movie.getPosterPath() != null)
-            getMvpView().showPoster(Constants.URL_POSTER + movie.getPosterPath());
+            getMvpView().showPoster(URL_POSTER + movie.getPosterPath());
         else getMvpView().showNoPoster();
 
         if (movie.getOverview() != null) getMvpView().showOverview(movie.getOverview());

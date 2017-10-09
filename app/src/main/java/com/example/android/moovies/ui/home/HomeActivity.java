@@ -33,17 +33,17 @@ import com.example.android.moovies.utils.FragmentCommunication;
 
 import javax.inject.Inject;
 
-import static android.R.attr.id;
-
 public class HomeActivity extends BaseActivity implements FragmentCommunication {
+
+    @Inject
+    TmdbInterface tmdbInteface;
 
     Fragment fragment;
     MenuItem search;
     SearchView searchView;
     SearchFragment searchFragment;
     FragmentManager fragmentManager;
-    @Inject
-    TmdbInterface tmdbInteface;
+
     int x;
 
     @Override
@@ -114,6 +114,11 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     }
 
     @Override
+    public void closeSearch() {
+        search.collapseActionView();
+    }
+
+    @Override
     public void startTabs(int tab, int type) {
 
         Fragment fragment = new ViewPagerFragment();
@@ -135,59 +140,27 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
     @Override
     public void startList(int id, int tab) {
-
-        Fragment listFragment = new ListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", id);
-        bundle.putInt(Constants.LIST_ID, tab);
-        listFragment.setArguments(bundle);
-        fragmentManager.beginTransaction().add(R.id.content_main, listFragment).addToBackStack("tag").commit();
+        startFragment(ListFragment.newInstance(id, 0, tab));
     }
 
     @Override
     public void startMovieDetail(int id) {
-
-        Fragment movieDetailFragment = new MovieDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("vpf", "movieDetailFragment");
-        bundle.putInt("movie_id", id);
-        movieDetailFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, movieDetailFragment).addToBackStack("tag").commit();
+        startFragment(MovieDetailFragment.newInstance(id));
     }
 
     @Override
     public void startTvDetail(int id) {
-
-        Fragment tvDetailFragment = new TvDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("tv_id", id);
-        tvDetailFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, tvDetailFragment).addToBackStack("tag").commit();
+        startFragment(TvDetailFragment.newInstance(id));
     }
 
     @Override
     public void startReviewList(Reviews reviews) {
-
-        Fragment reviewListFragment = new ReviewListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("reviews", reviews);
-        reviewListFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, reviewListFragment).addToBackStack("tag").commit();
+        startFragment(ReviewListFragment.newInstance(reviews));
     }
 
     @Override
     public void startCollectionList(int id) {
-
-        Fragment movieListFragment = new ListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("collection_id", id);
-        bundle.putInt(Constants.LIST_ID, 10);
-        movieListFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, movieListFragment).addToBackStack("tag").commit();
+        startFragment(ListFragment.newInstance(0, id, 10));
     }
 
     @Override
@@ -204,53 +177,22 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
     @Override
     public void startCelebrityDetail(int id) {
-
-        Fragment celebsDetailFragment = new CelebsDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("celebs_id", id);
-        celebsDetailFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, celebsDetailFragment).addToBackStack("tag").commit();
+        startFragment(CelebsDetailFragment.newInstance(id));
     }
 
     @Override
     public void startCelebrityList(Credits credits) {
-
-        Fragment celebsListFragment = new CelebsListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("credits", credits);
-        bundle.putInt("celebs_id", id);
-        celebsListFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, celebsListFragment).addToBackStack("tag").commit();
-    }
-
-    @Override
-    public void closeSearch() {
-        search.collapseActionView();
+        startFragment(CelebsListFragment.newInstance(credits));
     }
 
     @Override
     public void startImageGallery(Images images) {
-
-        Fragment galleryImagesFragment = new GalleryGridFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("images", images);
-        galleryImagesFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, galleryImagesFragment).addToBackStack("tag").commit();
+        startFragment(GalleryGridFragment.newInstance(images));
     }
 
     @Override
     public void startImageDetail(Images images, int position) {
-
-        Fragment galleryDetailFragment = new GalleryDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("images", images);
-        bundle.putInt("position", position);
-        galleryDetailFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, galleryDetailFragment).addToBackStack("tag").commit();
+        startFragment(GalleryDetailFragment.newInstance(images, position));
     }
 
     @Override
@@ -287,4 +229,7 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         fragmentManager.beginTransaction().add(R.id.content_main, discoverFragment).addToBackStack("tag").commit();
     }
 
+    private void startFragment(Fragment fragment) {
+        fragmentManager.beginTransaction().add(R.id.content_main, fragment).addToBackStack("tag").commit();
+    }
 }

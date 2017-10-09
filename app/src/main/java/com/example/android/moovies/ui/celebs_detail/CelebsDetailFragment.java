@@ -16,11 +16,10 @@ import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.domain.models.celebrity.AsCast;
 import com.example.android.moovies.domain.models.celebrity.MovieCredits;
-import com.example.android.moovies.domain.models.mtv.MtvPoster;
 import com.example.android.moovies.domain.models.celebrity.Posters;
 import com.example.android.moovies.domain.models.celebrity.TvCredits;
+import com.example.android.moovies.domain.models.mtv.MtvPoster;
 import com.example.android.moovies.ui.common.mtv_grid.MtvGridFragment;
-import com.example.android.moovies.utils.Constants;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +30,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.android.moovies.utils.Constants.URL_POSTER;
 
 public class CelebsDetailFragment extends Fragment implements CelebsDetailMvpView {
 
@@ -54,13 +55,35 @@ public class CelebsDetailFragment extends Fragment implements CelebsDetailMvpVie
 
     @Inject
     CelebsDetailPresenter celebsDetailPresenter;
+
     @Inject
     Picasso picasso;
+
+    int id;
+    View mView;
+
+    public static CelebsDetailFragment newInstance(int id) {
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("celebs_id", id);
+
+        CelebsDetailFragment fragment = new CelebsDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            id = bundle.getInt("celebs_id");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View mView = inflater.inflate(R.layout.fragment_celebs_detail, container, false);
+        mView = inflater.inflate(R.layout.fragment_celebs_detail, container, false);
+        readBundle(getArguments());
         ButterKnife.bind(this, mView);
 
         createComponent();
@@ -71,7 +94,7 @@ public class CelebsDetailFragment extends Fragment implements CelebsDetailMvpVie
 
     @Override
     public void showPoster(String poster) {
-        picasso.load(Constants.URL_POSTER + poster).into(imagePoster);
+        picasso.load(URL_POSTER + poster).into(imagePoster);
     }
 
     @Override
@@ -126,7 +149,7 @@ public class CelebsDetailFragment extends Fragment implements CelebsDetailMvpVie
 
     private void createPresenter() {
         celebsDetailPresenter.attachView(this);
-        celebsDetailPresenter.getDetails(getArguments().getInt("celebs_id"));
+        celebsDetailPresenter.getDetails(id);
     }
 
     private void createComponent() {

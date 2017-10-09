@@ -18,7 +18,6 @@ import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.domain.models.mtv.MtvListItem;
-import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
 import com.example.android.moovies.utils.PaginationScrollListener;
 
@@ -29,10 +28,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.android.moovies.utils.Constants.LIST_ID;
+
 
 public class ListFragment extends Fragment implements ListMvpView {
 
-    @BindView(R.id.recycler_view_movies) RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view_movies)
+    RecyclerView mRecyclerView;
     FragmentCommunication mFragmentCommunication;
     View mView;
 
@@ -44,15 +46,37 @@ public class ListFragment extends Fragment implements ListMvpView {
     @BindView(R.id.text_scroll_to_top)
     TextView textScrollToTop;
 
-    private int currentPage, type;
+    private int currentPage, type, id, collectionId, tab;
     private int TOTAL_PAGES = 10;
     private boolean isLoading = false;
     private boolean isLastPage = false;
+
+    public static ListFragment newInstance(int id, int collectionId, int tab) {
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        bundle.putInt("collection_id", collectionId);
+        bundle.putInt(LIST_ID, tab);
+
+        ListFragment fragment = new ListFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            id = bundle.getInt("id");
+            collectionId = bundle.getInt("collection_id");
+            tab = bundle.getInt(LIST_ID);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         currentPage = 1;
 
+        readBundle(getArguments());
         createComponent();
 
         mView = inflater.inflate(R.layout.fragment_movie_list, container, false);
@@ -60,11 +84,7 @@ public class ListFragment extends Fragment implements ListMvpView {
 
         mFragmentCommunication = (FragmentCommunication) getActivity();
 
-        int collectionId = getArguments().getInt("collection_id");
-        int id = getArguments().getInt("id");
-        int tab = getArguments().getInt(Constants.LIST_ID);
-
-        if (tab <= 3 || tab == 8 || tab == 10 || tab == 11 || tab == 12 ) type = 1;
+        if (tab <= 3 || tab == 8 || tab == 10 || tab == 11 || tab == 12) type = 1;
         else type = 0;
 
         setPresenter(id, collectionId, tab);

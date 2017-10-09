@@ -16,11 +16,14 @@ import java.util.List;
 
 public class HomeMtvFragment extends Fragment {
 
+    FragmentManager fragmentManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home_movie, container, false);
+
+        fragmentManager= getChildFragmentManager();
 
         if (getArguments().getString(Constants.HOME_MOVIE_FRAGMENT) != null) {
 
@@ -38,32 +41,17 @@ public class HomeMtvFragment extends Fragment {
 
     private void startHorizontalViews(List<Integer> listIds ) {
 
-        FragmentManager fragmentManager = getChildFragmentManager();
+        List<Integer> fragment_ids = Arrays.asList(R.id.now_playing, R.id.upcoming, R.id.popular, R.id.top_rated);
 
-        Fragment nowPlaying = new HorizontalRecyclerView();
-        Bundle bundle1 = new Bundle();
-        bundle1.putInt(Constants.LIST_ID, listIds.get(0));
-        nowPlaying.setArguments(bundle1);
+        for (int i = 0; i < listIds.size(); i++) {
 
-        Fragment upcoming = new HorizontalRecyclerView();
-        Bundle bundle2 = new Bundle();
-        bundle2.putInt(Constants.LIST_ID, listIds.get(1));
-        upcoming.setArguments(bundle2);
+            Fragment fragment = new HorizontalRecyclerView();
+            Bundle bundle1 = new Bundle();
+            bundle1.putInt(Constants.LIST_ID, listIds.get(i));
+            fragment.setArguments(bundle1);
 
-        Fragment popular = new HorizontalRecyclerView();
-        Bundle bundle3 = new Bundle();
-        bundle3.putInt(Constants.LIST_ID, listIds.get(2));
-        popular.setArguments(bundle3);
-
-        Fragment topRated = new HorizontalRecyclerView();
-        Bundle bundle4 = new Bundle();
-        bundle4.putInt(Constants.LIST_ID, listIds.get(3));
-        topRated.setArguments(bundle4);
-
-        fragmentManager.beginTransaction().replace(R.id.now_playing, nowPlaying).commit();
-        fragmentManager.beginTransaction().replace(R.id.upcoming, upcoming).commit();
-        fragmentManager.beginTransaction().replace(R.id.popular, popular).commit();
-        fragmentManager.beginTransaction().replace(R.id.top_rated, topRated).commit();
+            fragmentManager.beginTransaction().replace(fragment_ids.get(i), fragment).commit();
+        }
     }
 
 }

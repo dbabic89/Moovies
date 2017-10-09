@@ -25,8 +25,10 @@ class ProfilePresenter extends BasePresenter<ProfileMvpView> {
 
     @Inject
     TmdbInterface mTmdbInterface;
+
     @Inject
     SharedPreferencesManager sharedPreferencesManager;
+
     @Inject
     GetMovieList getMovieList;
 
@@ -93,7 +95,7 @@ class ProfilePresenter extends BasePresenter<ProfileMvpView> {
         });
     }
 
-    void getAccountId() {
+    private void getAccountId() {
         Observable<Account> observable = mTmdbInterface.getAccountDetail(BuildConfig.TMDB_APIKEY, sharedPreferencesManager.getSessionId());
         observable
                 .subscribeOn(Schedulers.io())

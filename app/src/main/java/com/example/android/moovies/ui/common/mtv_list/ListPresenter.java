@@ -27,10 +27,13 @@ class ListPresenter extends BasePresenter<ListMvpView> {
 
     @Inject
     GetMovieList getMovieList;
+
     @Inject
     GetTvList getTvList;
+
     @Inject
     GetMovieCollectionList getMovieCollectionList;
+
     @Inject
     SearchMovie searchMovie;
 

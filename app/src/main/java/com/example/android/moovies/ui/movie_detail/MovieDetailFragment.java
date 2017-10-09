@@ -188,10 +188,25 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
 
     int movieId = 0;
 
+    public static MovieDetailFragment newInstance(int id) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("movie_id", id);
+
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            movieId = bundle.getInt("movie_id");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        movieId = getArguments().getInt("movie_id");
+        readBundle(getArguments());
 
         fragmentCommunication = (FragmentCommunication) getActivity();
         layoutInflater = getActivity().getLayoutInflater();
@@ -438,7 +453,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailMvpView,
         buttonCast.setVisibility(View.VISIBLE);
 
         int x;
-        if (castList.size() < 3){
+        if (castList.size() < 3) {
             x = castList.size();
         } else x = 3;
 

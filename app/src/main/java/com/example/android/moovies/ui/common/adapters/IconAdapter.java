@@ -8,13 +8,14 @@ import android.widget.ImageView;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.domain.models.mtv.MtvListItem;
-import com.example.android.moovies.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import static com.example.android.moovies.utils.Constants.URL_ICON;
 
 public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolder> {
 
@@ -43,7 +44,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.MovieViewHolde
 
         if (item.getPoster() == null)
             picasso.load(R.drawable.red_circle).into(holder.imageView);
-        else picasso.load(Constants.URL_ICON + item.getPoster()).into(holder.imageView);
+        else picasso.load(URL_ICON + item.getPoster()).into(holder.imageView);
 
     }
 

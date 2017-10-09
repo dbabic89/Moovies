@@ -164,14 +164,31 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
 
     View mView;
     int tvId;
+
     private LayoutInflater layoutInflater;
     private FragmentCommunication fragmentCommunication;
     private List<Season> seasons;
 
+    public static TvDetailFragment newInstance(int id) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("tv_id", id);
+
+        TvDetailFragment fragment = new TvDetailFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            tvId = bundle.getInt("tv_id");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_tv_detail, container, false);
-        tvId = getArguments().getInt("tv_id");
+
+        readBundle(getArguments());
 
         fragmentCommunication = (FragmentCommunication) getActivity();
         layoutInflater = getActivity().getLayoutInflater();
@@ -371,7 +388,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
         buttonCast.setVisibility(View.VISIBLE);
 
         int x;
-        if (castList.size() < 3){
+        if (castList.size() < 3) {
             x = castList.size();
         } else x = 3;
 
@@ -499,7 +516,7 @@ public class TvDetailFragment extends Fragment implements TvDetailMvpView, View.
             } else {
                 Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.linear_layout_season){
+        } else if (id == R.id.linear_layout_season) {
             fragmentCommunication.startSeasonFragment(new Seasons(seasons), tvId);
         }
     }

@@ -25,7 +25,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.MovieViewHolder> {
     private List<MtvListItem> listItems;
     private ListAdapter.RecyclerViewInterface recyclerViewInterface;
 
-    @Inject Picasso picasso;
+    @Inject
+    Picasso picasso;
 
     @Inject
     ListAdapter() {
@@ -67,16 +68,16 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.MovieViewHolder> {
         }
 
         String titleAndDate = listItem.getTitle() + " (" + releaseDate + ")";
-        holder.movieTitle.setText(titleAndDate);
-        holder.movieDescription.setText(listItem.getOverview());
-        holder.moviePosition.setText(String.valueOf(x));
-        if (x > 999) holder.moviePosition.setTextSize(10);
-        holder.movieTmdbRating.setText(String.valueOf(listItem.getVoteAverage()));
+        holder.title.setText(titleAndDate);
+        holder.description.setText(listItem.getOverview());
+        holder.position.setText(String.valueOf(x));
+        if (x > 999) holder.position.setTextSize(10);
+        holder.tmdbRating.setText(String.valueOf(listItem.getVoteAverage()));
 
         if (listItem.getPoster() == null)
-            picasso.load(R.drawable.red_circle).into(holder.moviePoster);
+            picasso.load(R.drawable.red_circle).into(holder.poster);
         else
-            picasso.load(URL_POSTER + listItem.getPoster()).into(holder.moviePoster);
+            picasso.load(URL_POSTER + listItem.getPoster()).into(holder.poster);
     }
 
     @Override
@@ -88,34 +89,34 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.MovieViewHolder> {
         return listItems.get(position);
     }
 
-    public void add(MtvListItem movie) {
-        listItems.add(movie);
+    public void add(MtvListItem item) {
+        listItems.add(item);
         notifyItemInserted(listItems.size() - 1);
     }
 
-    void addAll(List<MtvListItem> movies) {
+    void addAll(List<MtvListItem> items) {
 
-        for (MtvListItem movie : movies) {
-            add(movie);
+        for (MtvListItem item : items) {
+            add(item);
         }
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView moviePoster;
-        TextView moviePosition;
-        TextView movieTitle;
-        TextView movieDescription;
-        TextView movieTmdbRating;
+        ImageView poster;
+        TextView position;
+        TextView title;
+        TextView description;
+        TextView tmdbRating;
 
         MovieViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
-            moviePoster = (ImageView) v.findViewById(R.id.image_poster);
-            moviePosition = (TextView) v.findViewById(R.id.text_movie_position);
-            movieTitle = (TextView) v.findViewById(R.id.text_movie_title);
-            movieDescription = (TextView) v.findViewById(R.id.text_movie_description);
-            movieTmdbRating = (TextView) v.findViewById(R.id.text_tmdb_rating);
+            poster = (ImageView) v.findViewById(R.id.image_poster);
+            position = (TextView) v.findViewById(R.id.text_movie_position);
+            title = (TextView) v.findViewById(R.id.text_movie_title);
+            description = (TextView) v.findViewById(R.id.text_movie_description);
+            tmdbRating = (TextView) v.findViewById(R.id.text_tmdb_rating);
         }
 
         @Override

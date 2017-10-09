@@ -25,16 +25,31 @@ import butterknife.ButterKnife;
 
 public class ProfileFragment extends Fragment implements ProfileMvpView, View.OnClickListener {
 
-    @BindView(R.id.button_login) Button buttonLogin;
-    @BindView(R.id.button_logout) Button buttonLogout;
-    @BindView(R.id.button_rated_movies) Button buttonRatedMovies;
-    @BindView(R.id.button_movie_watchlist) Button buttonMoviesWatclist;
-    @BindView(R.id.button_rated_tvs) Button buttonRatedTvs;
-    @BindView(R.id.button_tv_watchlist) Button buttonTvsWatclist;
-    @BindView(R.id.button_lists) Button buttonList;
-    View mView;
+    @BindView(R.id.button_login)
+    Button buttonLogin;
+
+    @BindView(R.id.button_logout)
+    Button buttonLogout;
+
+    @BindView(R.id.button_rated_movies)
+    Button buttonRatedMovies;
+
+    @BindView(R.id.button_movie_watchlist)
+    Button buttonMoviesWatclist;
+
+    @BindView(R.id.button_rated_tvs)
+    Button buttonRatedTvs;
+
+    @BindView(R.id.button_tv_watchlist)
+    Button buttonTvsWatclist;
+
+    @BindView(R.id.button_lists)
+    Button buttonList;
+
     @Inject
     ProfilePresenter mPresenter;
+
+    View mView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,6 +153,7 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
             Bundle bundle = new Bundle();
             bundle.putInt(Constants.LIST_ID, 11);
             fragment.setArguments(bundle);
+
         } else if (id == R.id.button_movie_watchlist) {
 
             Bundle bundle = new Bundle();

@@ -42,20 +42,21 @@ public class HorizontalRecyclerView extends Fragment implements ListMvpView, Vie
     @BindView(R.id.button_see_more)
     Button buttonSeeMore;
 
-    View mView;
-
-    private FragmentCommunication mFragmentCommunication;
-
-    MovieComponent movieComponent;
     @Inject
     ListPresenter mPresenter;
+
     @Inject
     GetMovieList getMovieList;
+
     @Inject
     GetTvList getTvList;
+
     @Inject
     IconAdapter mIconAdapter;
 
+    private FragmentCommunication mFragmentCommunication;
+
+    View mView;
     int currentRv, itemId, type = 0;
 
     @Override
@@ -122,7 +123,8 @@ public class HorizontalRecyclerView extends Fragment implements ListMvpView, Vie
     }
 
     private void createComponent() {
-        movieComponent = DaggerMovieComponent.builder()
+
+        MovieComponent movieComponent = DaggerMovieComponent.builder()
                 .applicationComponent(Moovies.get(getActivity()).getApplicationComponent())
                 .activityModule(new ActivityModule(getActivity()))
                 .build();

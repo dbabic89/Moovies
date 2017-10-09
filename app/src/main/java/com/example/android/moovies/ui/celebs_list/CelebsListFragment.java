@@ -18,14 +18,32 @@ public class CelebsListFragment extends Fragment {
 
     View mView;
     FragmentCommunication fragmentCommunication;
+    Credits credits;
+
+    public static CelebsListFragment newInstance(Credits credits) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("credits", credits);
+
+        CelebsListFragment fragment = new CelebsListFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            credits = (Credits) bundle.getSerializable("credits");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_celebs_list, container, false);
 
+        readBundle(getArguments());
         fragmentCommunication = (FragmentCommunication) getActivity();
-        final Credits credits = (Credits) getArguments().getSerializable("credits");
 
         createRecyclerView(credits);
 

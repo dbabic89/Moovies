@@ -14,12 +14,32 @@ import com.example.android.moovies.domain.models.movie.Reviews;
 
 public class ReviewListFragment extends Fragment {
 
+    private Reviews reviews;
+
+    public static ReviewListFragment newInstance(Reviews reviews) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("reviews", reviews);
+
+        ReviewListFragment fragment = new ReviewListFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            reviews = (Reviews) bundle.getSerializable("reviews");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View mView = inflater.inflate(R.layout.fragment_review_list, container, false);
 
-        Reviews reviews = (Reviews) getArguments().getSerializable("reviews");
+        readBundle(getArguments());
+
         ReviewAdapter reviewAdapter = new ReviewAdapter(reviews.getResults());
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.reviews_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -9,8 +9,9 @@ import android.widget.ImageView;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.domain.models.celebrity.Posters;
-import com.example.android.moovies.utils.Constants;
 import com.squareup.picasso.Picasso;
+
+import static com.example.android.moovies.utils.Constants.URL_POSTER;
 
 class MtvGridAdapter extends RecyclerView.Adapter<MtvGridAdapter.MovieViewHolder> {
 
@@ -31,7 +32,7 @@ class MtvGridAdapter extends RecyclerView.Adapter<MtvGridAdapter.MovieViewHolder
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        Picasso.with(context).load(Constants.URL_POSTER + posterList.getMtvPosterList().get(position).getPosterPath()).into(holder.imageView);
+        Picasso.with(context).load(URL_POSTER + posterList.getMtvPosterList().get(position).getPosterPath()).into(holder.imageView);
     }
 
     @Override

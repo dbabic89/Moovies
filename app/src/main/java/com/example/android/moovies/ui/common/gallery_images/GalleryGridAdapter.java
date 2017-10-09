@@ -9,10 +9,11 @@ import android.widget.ImageView;
 
 import com.example.android.moovies.R;
 import com.example.android.moovies.domain.models.mtv.Image;
-import com.example.android.moovies.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static com.example.android.moovies.utils.Constants.URL_ICON;
 
 class GalleryGridAdapter extends RecyclerView.Adapter<GalleryGridAdapter.ImageViewHolder> {
 
@@ -35,7 +36,7 @@ class GalleryGridAdapter extends RecyclerView.Adapter<GalleryGridAdapter.ImageVi
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
         Image image = images.get(position);
-        Picasso.with(mContext).load(Constants.URL_ICON + image.getFilePath()).into(holder.imagePicture);
+        Picasso.with(mContext).load(URL_ICON + image.getFilePath()).into(holder.imagePicture);
 
     }
 

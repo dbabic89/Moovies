@@ -29,6 +29,7 @@ public class CelebsDetailPresenter extends BasePresenter<CelebsDetailMvpView> {
     @Override
     public void detachView() {
         super.detachView();
+        celebsDetail.dispose();
     }
 
     void getDetails(int id) {
