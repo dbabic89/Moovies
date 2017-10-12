@@ -3,6 +3,7 @@ package com.example.android.moovies.di.module;
 import com.example.android.moovies.data.remote.TmdbInterface;
 import com.example.android.moovies.di.scope.MooviesAppScope;
 import com.example.android.moovies.domain.models.account.AccountStates;
+import com.example.android.moovies.domain.models.search.SearchResults;
 import com.example.android.moovies.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,6 +29,7 @@ public class RetrofitModule {
         public Gson gson() {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(AccountStates.class, new AccountStates.AccountStatesDeserializer());
+            gsonBuilder.registerTypeAdapter(SearchResults.class, new SearchResults.SearchResultsDeserializer());
             return gsonBuilder.create();
         }
 

@@ -1,5 +1,7 @@
 package com.example.android.moovies.domain.models.account;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -80,14 +82,22 @@ public class AccountStates {
                 JsonElement jsonRated = jsonObject.get("rated");
                 if (jsonRated.isJsonObject()) {
                     JsonElement jsonRatedValue = jsonRated.getAsJsonObject().get("value");
-                    accountStates.setWatchlist(jsonWatchlist.getAsBoolean());
+                    getBoolean(accountStates, jsonWatchlist);
                     accountStates.setRating(jsonRatedValue.getAsInt());
                 } else {
-                    accountStates.setWatchlist(jsonWatchlist.getAsBoolean());
+                    getBoolean(accountStates, jsonWatchlist);
                     accountStates.setRating(0);
                 }
             }
             return accountStates;
+        }
+
+        private void getBoolean(AccountStates accountStates, JsonElement jsonWatchlist) {
+            try {
+                accountStates.setWatchlist(jsonWatchlist.getAsBoolean());
+            } catch (NullPointerException e){
+                Log.i("TAG", "NullPointerException");
+            }
         }
     }
 }

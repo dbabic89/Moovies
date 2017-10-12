@@ -16,7 +16,6 @@ import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
-import com.example.android.moovies.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -146,32 +145,16 @@ public class ProfileFragment extends Fragment implements ProfileMvpView, View.On
     public void onClick(View view) {
         int id = view.getId();
 
-        Fragment fragment = new ListFragment();
+        Fragment fragment = null;
 
         if (id == R.id.button_rated_movies) {
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.LIST_ID, 11);
-            fragment.setArguments(bundle);
-
+            fragment = ListFragment.newInstance(0, 0, 11);
         } else if (id == R.id.button_movie_watchlist) {
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.LIST_ID, 12);
-            fragment.setArguments(bundle);
-
-        } else if (id == R.id.button_rated_tvs) {
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.LIST_ID, 14);
-            fragment.setArguments(bundle);
-
+            fragment = ListFragment.newInstance(0, 0, 12);
         } else if (id == R.id.button_tv_watchlist) {
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.LIST_ID, 13);
-            fragment.setArguments(bundle);
-
+            fragment = ListFragment.newInstance(0, 0, 13);
+        } else if (id == R.id.button_rated_tvs) {
+            fragment = ListFragment.newInstance(0, 0, 14);
         }
 
         FragmentManager fragmentManager = getFragmentManager();

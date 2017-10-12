@@ -28,7 +28,6 @@ import com.example.android.moovies.ui.profile.ProfileFragment;
 import com.example.android.moovies.ui.review_list.ReviewListFragment;
 import com.example.android.moovies.ui.search.SearchFragment;
 import com.example.android.moovies.ui.tv_detail.TvDetailFragment;
-import com.example.android.moovies.utils.Constants;
 import com.example.android.moovies.utils.FragmentCommunication;
 
 import javax.inject.Inject;
@@ -52,12 +51,8 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
         setContentView(R.layout.activity_home);
         getSupportActionBar().setElevation(0);
 
-        Fragment viewPager = new ViewPagerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("vpf", "homeFragment");
-        viewPager.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_main, viewPager).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_main, ViewPagerFragment.newInstance("homeFragment", 0, 0, 0, null, null)).commit();
     }
 
     @Override
@@ -121,21 +116,13 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
     @Override
     public void startTabs(int tab, int type) {
 
-        Fragment fragment = new ViewPagerFragment();
-
         if (type == 1) {
-            Bundle bundle = new Bundle();
-            bundle.putString("vpf", "movieFragment");
-            bundle.putInt(Constants.LIST_ID, tab);
-            fragment.setArguments(bundle);
+            startFragment(ViewPagerFragment.newInstance("movieFragment", 0, tab, 0, null, null));
+
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("vpf", "tvFragment");
-            bundle.putInt(Constants.LIST_ID, tab);
-            fragment.setArguments(bundle);
+            startFragment(ViewPagerFragment.newInstance("tvFragment", 0, tab, 0, null, null));
         }
 
-        fragmentManager.beginTransaction().add(R.id.content_main, fragment).addToBackStack("tag").commit();
     }
 
     @Override
@@ -165,14 +152,8 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
     @Override
     public void startSearchDetail(int id) {
-
-        Fragment movieDetailFragment = new MovieDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("movie_id", id);
-        movieDetailFragment.setArguments(bundle);
-
         fragmentManager.popBackStack();
-        fragmentManager.beginTransaction().add(R.id.content_main, movieDetailFragment).addToBackStack("tag").commit();
+        startFragment(MovieDetailFragment.newInstance(id));
     }
 
     @Override
@@ -197,36 +178,17 @@ public class HomeActivity extends BaseActivity implements FragmentCommunication 
 
     @Override
     public void startSeasonFragment(Seasons seasons, int id) {
-
-        Fragment viewPagerFragment = new ViewPagerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("vpf", "seasonFragment");
-        bundle.putInt("tv_id", id);
-        bundle.putSerializable("seasons", seasons);
-        viewPagerFragment.setArguments(bundle);
-
-        fragmentManager.beginTransaction().add(R.id.content_main, viewPagerFragment).addToBackStack("tag").commit();
+        startFragment(ViewPagerFragment.newInstance("seasonFragment", id, 0, 0, null, seasons));
     }
 
     @Override
-    public void startEpisodes(int tvId, Episodes episodes, int position) {
-
-        Fragment viewPagerFragment = new ViewPagerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("tv_id", tvId);
-        bundle.putString("vpf", "episodeFragment");
-        bundle.putSerializable("episodes", episodes);
-        bundle.putInt("position", position);
-        viewPagerFragment.setArguments(bundle);
-        fragmentManager.beginTransaction().add(R.id.content_main, viewPagerFragment).addToBackStack("tag").commit();
-
+    public void startEpisodes(int id, Episodes episodes, int position) {
+        startFragment(ViewPagerFragment.newInstance("episodeFragment", id, 0, position, episodes, null));
     }
 
     @Override
     public void startDiscoverFragment() {
-
-        Fragment discoverFragment = new DiscoverFragment();
-        fragmentManager.beginTransaction().add(R.id.content_main, discoverFragment).addToBackStack("tag").commit();
+        fragmentManager.beginTransaction().add(R.id.content_main, new DiscoverFragment()).addToBackStack("tag").commit();
     }
 
     private void startFragment(Fragment fragment) {

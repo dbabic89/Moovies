@@ -9,10 +9,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by Laptop on 07.10.2017..
- */
-
 public class EpisodeDetail {
 
     @SerializedName("air_date")

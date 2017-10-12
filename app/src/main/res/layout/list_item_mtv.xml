@@ -27,7 +27,7 @@
                 android:scaleType="centerCrop"/>
 
             <TextView
-                android:id="@+id/text_movie_position"
+                android:id="@+id/text_position"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 style="@style/PositionIndicator"
@@ -46,12 +46,12 @@
             android:paddingEnd="8dp">
 
             <TextView
-                android:id="@+id/text_movie_title"
+                android:id="@+id/text_title"
                 android:paddingStart="6dp"
                 style="@style/MovieListTitle"/>
 
             <TextView
-                android:id="@+id/text_movie_description"
+                android:id="@+id/text_description"
                 style="@style/MovieListDescription"/>
 
             <RelativeLayout

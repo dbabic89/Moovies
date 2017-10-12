@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class Images implements Serializable{
+public class Images implements Serializable {
 
     @SerializedName("backdrops")
     @Expose
@@ -14,6 +14,10 @@ public class Images implements Serializable{
     @SerializedName("posters")
     @Expose
     private List<Image> posters = null;
+    @SerializedName("stills")
+    @Expose
+    private List<Image> stills = null;
+
 
     public List<Image> getBackdrops() {
         return backdrops;
@@ -29,6 +33,14 @@ public class Images implements Serializable{
 
     public void setPosters(List<Image> posters) {
         this.posters = posters;
+    }
+
+    public List<Image> getStills() {
+        return stills;
+    }
+
+    public void setStills(List<Image> stills) {
+        this.stills = stills;
     }
 
 }

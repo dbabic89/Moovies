@@ -1,11 +1,9 @@
 package com.example.android.moovies.data.remote;
 
-import android.util.Log;
-
 import com.example.android.moovies.BuildConfig;
 import com.example.android.moovies.data.DataSource;
 import com.example.android.moovies.data.local.SharedPreferencesManager;
-import com.example.android.moovies.domain.models.SearchQuery;
+import com.example.android.moovies.domain.models.search.SearchQuery;
 import com.example.android.moovies.domain.models.account.AccountStates;
 import com.example.android.moovies.domain.models.account.EpisodeRating;
 import com.example.android.moovies.domain.models.account.MtvRating;
@@ -15,6 +13,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.search.SearchResults;
 import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
@@ -35,10 +34,6 @@ public class DataSourceNetwork implements DataSource {
     private String sessionId;
     private String language = "en-US";
     private String region = "US";
-    private String appendMovies = "images,videos,credits,similar,reviews,keywords,releases";
-    private String appendTvs = "images,videos,credits,similar,reviews,content_ratings,keywords,alternative_titles";
-    private String appendCelebs = "movie_credits,tagged_images,tv_credits,external_ids,images";
-    private String appendEpisodes = "images,videos";
     private int accoutId;
 
     @Inject
@@ -75,7 +70,7 @@ public class DataSourceNetwork implements DataSource {
     }
 
     @Override
-    public Observable<MovieListResponse> searchMovie(SearchQuery searchQuery) {
+    public Observable<SearchResults> searchMovie(SearchQuery searchQuery) {
         return tmdbInterface.searchMovies(apiKey, searchQuery.getQuery(), searchQuery.getPage());
     }
 
@@ -111,7 +106,7 @@ public class DataSourceNetwork implements DataSource {
 
     @Override
     public Observable<TvDetail> getTvDetail(int tvId) {
-        return tmdbInterface.getTvDetail(tvId, apiKey, appendTvs);
+        return tmdbInterface.getTvDetail(tvId, apiKey, "images,videos,credits,similar,reviews,content_ratings,keywords,alternative_titles");
     }
 
     @Override
@@ -121,23 +116,22 @@ public class DataSourceNetwork implements DataSource {
 
     @Override
     public Observable<EpisodeDetail> getEpisodeDetails(int tvId, int s_num, int e_num) {
-        Log.i("TAG", "getEpisodeDetails dsn " + tvId + " " + s_num + " " + e_num);
-        return tmdbInterface.getEpisodeDetails(tvId, s_num, e_num, apiKey, appendEpisodes);
+        return tmdbInterface.getEpisodeDetails(tvId, s_num, e_num, apiKey, "images,videos");
     }
 
     @Override
     public Observable<AccountStates> getEpisodeStates(int tvId, int s_num, int e_num) {
-        return tmdbInterface.getEpisodeStates(tvId, s_num, e_num, apiKey);
+        return tmdbInterface.getEpisodeStates(tvId, s_num, e_num, apiKey, sessionId);
     }
 
     @Override
     public Observable<PostResponse> addEpisodeRating(EpisodeRating rating) {
-        return tmdbInterface.addRatingEpisode(rating.getId(), rating.getS_num(), rating.getE_num(), apiKey, rating.getRated());
+        return tmdbInterface.addRatingEpisode(rating.getId(), rating.getS_num(), rating.getE_num(), apiKey, sessionId, rating.getRated());
     }
 
     @Override
     public Observable<PostResponse> deleteEpisodeRating(EpisodeRating rating) {
-        return tmdbInterface.deleteEpisodeRating(rating.getId(), rating.getS_num(), rating.getE_num(), apiKey);
+        return tmdbInterface.deleteEpisodeRating(rating.getId(), rating.getS_num(), rating.getE_num(), apiKey, sessionId);
     }
 
     @Override
@@ -167,7 +161,7 @@ public class DataSourceNetwork implements DataSource {
 
     @Override
     public Observable<MovieDetail> getMovieDetails(int movieId) {
-        return tmdbInterface.getMovieDetails(movieId, apiKey, appendMovies);
+        return tmdbInterface.getMovieDetails(movieId, apiKey, "images,videos,credits,similar,reviews,keywords,releases");
     }
 
     @Override
@@ -202,6 +196,6 @@ public class DataSourceNetwork implements DataSource {
 
     @Override
     public Observable<Celebrity> getCelebrity(int id) {
-        return tmdbInterface.getCelebrity(id, apiKey, appendCelebs);
+        return tmdbInterface.getCelebrity(id, apiKey, "movie_credits,tagged_images,tv_credits,external_ids,images");
     }
 }

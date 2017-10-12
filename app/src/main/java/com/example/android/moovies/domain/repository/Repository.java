@@ -1,10 +1,8 @@
 package com.example.android.moovies.domain.repository;
 
-import android.util.Log;
-
 import com.example.android.moovies.data.DataSource;
 import com.example.android.moovies.data.remote.DataSourceNetwork;
-import com.example.android.moovies.domain.models.SearchQuery;
+import com.example.android.moovies.domain.models.search.SearchQuery;
 import com.example.android.moovies.domain.models.account.AccountStates;
 import com.example.android.moovies.domain.models.account.EpisodeRating;
 import com.example.android.moovies.domain.models.account.MtvRating;
@@ -14,6 +12,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.search.SearchResults;
 import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
@@ -59,7 +58,7 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<MovieListResponse> searchMovie(SearchQuery searchQuery) {
+    public Observable<SearchResults> searchMovie(SearchQuery searchQuery) {
         return dataSourceNetwork.searchMovie(searchQuery);
     }
 
@@ -105,7 +104,6 @@ public class Repository implements DataSource {
 
     @Override
     public Observable<EpisodeDetail> getEpisodeDetails(int tvId, int s_num, int e_num) {
-        Log.i("TAG", "getEpisodeDetails " + tvId + " " + s_num + " " + e_num);
         return dataSourceNetwork.getEpisodeDetails(tvId, s_num, e_num);
     }
 

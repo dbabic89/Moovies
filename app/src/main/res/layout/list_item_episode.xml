@@ -62,6 +62,7 @@
                 android:id="@+id/text_tmdb_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="3"
                 android:layout_toRightOf="@id/ic_tmdb"
                 android:layout_alignBaseline="@id/ic_tmdb"
                 android:layout_marginEnd="8dp"/>

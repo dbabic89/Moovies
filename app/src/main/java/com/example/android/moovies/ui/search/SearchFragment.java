@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.moovies.Moovies;
@@ -16,7 +15,7 @@ import com.example.android.moovies.R;
 import com.example.android.moovies.di.component.DaggerMovieComponent;
 import com.example.android.moovies.di.component.MovieComponent;
 import com.example.android.moovies.di.module.ActivityModule;
-import com.example.android.moovies.domain.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.search.SearchListItem;
 import com.example.android.moovies.utils.FragmentCommunication;
 import com.example.android.moovies.utils.PaginationScrollListener;
 
@@ -27,13 +26,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchFragment extends Fragment implements SearchMvpView, View.OnClickListener {
+public class SearchFragment extends Fragment implements SearchMvpView {
 
     @BindView(R.id.recycler_view_search)
     RecyclerView mRecyclerView;
-
-    @BindView(R.id.discover)
-    LinearLayout linearLayoutDiscover;
 
     @Inject
     SearchPresenter mPresenter;
@@ -65,20 +61,18 @@ public class SearchFragment extends Fragment implements SearchMvpView, View.OnCl
         movieComponent.inject(this);
         setPresenter();
 
-        linearLayoutDiscover.setOnClickListener(this);
-
         return mView;
     }
 
     @Override
-    public void showSearchResults(List<MovieListResult> movies) {
+    public void showSearchResults(List<SearchListItem> objects) {
         searchAdapter.clear();
-        searchAdapter.addAll(movies);
+        searchAdapter.addAll(objects);
         searchAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void showMoreMovies(List<MovieListResult> movies) {
+    public void showMoreMovies(List<SearchListItem> movies) {
         searchAdapter.addAll(movies);
     }
 
@@ -92,20 +86,13 @@ public class SearchFragment extends Fragment implements SearchMvpView, View.OnCl
         Toast.makeText(getActivity(), "Nema interneta", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void openMovieDetails(int id) {
-        fragmentCommunication.startSearchDetail(id);
-        fragmentCommunication.closeSearch();
-
-    }
-
     public void searchMovies(String query) {
         setRecyclerViewAndAdapter(query);
         mPresenter.getMovies(query, currentPage);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void setPresenter()  {
+    private void setPresenter() {
         mPresenter.attachView(this);
     }
 
@@ -115,8 +102,16 @@ public class SearchFragment extends Fragment implements SearchMvpView, View.OnCl
         searchAdapter.setRecyclerViewInterface(new SearchAdapter.RecyclerViewInterface() {
             @Override
             public void onCardClick(int position) {
-                MovieListResult movieListResult = searchAdapter.getItem(position);
-                openMovieDetails(movieListResult.getId());
+                SearchListItem item = searchAdapter.getItem(position);
+
+                if (item.getType().equals("movie")) {
+                    fragmentCommunication.startMovieDetail(item.getId());
+                } else if (item.getType().equals("tv")) {
+                    fragmentCommunication.startTvDetail(item.getId());
+                } else {
+                    fragmentCommunication.startCelebrityDetail(item.getId());
+                }
+                fragmentCommunication.closeSearch();
             }
         });
 
@@ -150,10 +145,5 @@ public class SearchFragment extends Fragment implements SearchMvpView, View.OnCl
             }
         });
 
-    }
-
-    @Override
-    public void onClick(View view) {
-        fragmentCommunication.startDiscoverFragment();
     }
 }

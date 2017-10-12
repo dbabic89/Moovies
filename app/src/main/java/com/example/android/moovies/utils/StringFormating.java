@@ -53,6 +53,7 @@ public class StringFormating {
         return network;
 
     }
+
     public static List<String> getKeywords(List<Keyword> keywordsList) {
 
         ArrayList<String> allKeywords = new ArrayList<>();
@@ -125,7 +126,7 @@ public class StringFormating {
         Date currentDate = null;
 
         try {
-             currentDate = inputFormat.parse(date);
+            currentDate = inputFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -179,36 +180,49 @@ public class StringFormating {
         return languages;
     }
 
-    public static List<Image> getImageList(Images images){
+    public static List<Image> getImageList(Images images) {
         final List<Image> imageList = new ArrayList<>();
 
-        for (int i = 0; i < images.getBackdrops().size(); i++) {
+        if (images.getBackdrops() != null)
+            for (int i = 0; i < images.getBackdrops().size(); i++) {
 
-            imageList.add(images.getBackdrops().get(i));
-        }
+                imageList.add(images.getBackdrops().get(i));
+            }
+        if (images.getPosters() != null)
+            for (int i = 0; i < images.getPosters().size(); i++) {
 
-        for (int i = 0; i < images.getPosters().size(); i++) {
+                imageList.add(images.getPosters().get(i));
+            }
+        if (images.getStills() != null)
+            for (int i = 0; i < images.getStills().size(); i++) {
 
-            imageList.add(images.getPosters().get(i));
-        }
+                imageList.add(images.getStills().get(i));
+            }
 
         return imageList;
     }
 
 
-    public static List<String> getImageListtoString(Images images){
+    public static List<String> getImageListtoString(Images images) {
         final List<String> imageList = new ArrayList<>();
 
-        for (int i = 0; i < images.getBackdrops().size(); i++) {
+        if (images.getBackdrops() != null)
+            for (int i = 0; i < images.getBackdrops().size(); i++) {
 
-            imageList.add(images.getBackdrops().get(i).getFilePath());
-        }
+                imageList.add(images.getBackdrops().get(i).getFilePath());
+            }
 
-        for (int i = 0; i < images.getPosters().size(); i++) {
+        if (images.getPosters() != null)
+            for (int i = 0; i < images.getPosters().size(); i++) {
 
-            imageList.add(images.getPosters().get(i).getFilePath());
-        }
+                imageList.add(images.getPosters().get(i).getFilePath());
+            }
 
+        if (images.getStills() != null)
+            for (int i = 0; i < images.getStills().size(); i++) {
+
+                imageList.add(images.getStills().get(i).getFilePath());
+            }
         return imageList;
     }
 }

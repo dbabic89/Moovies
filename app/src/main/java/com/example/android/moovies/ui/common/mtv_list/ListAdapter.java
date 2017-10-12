@@ -113,9 +113,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.MovieViewHolder> {
             super(v);
             v.setOnClickListener(this);
             poster = (ImageView) v.findViewById(R.id.image_poster);
-            position = (TextView) v.findViewById(R.id.text_movie_position);
-            title = (TextView) v.findViewById(R.id.text_movie_title);
-            description = (TextView) v.findViewById(R.id.text_movie_description);
+            position = (TextView) v.findViewById(R.id.text_position);
+            title = (TextView) v.findViewById(R.id.text_title);
+            description = (TextView) v.findViewById(R.id.text_description);
             tmdbRating = (TextView) v.findViewById(R.id.text_tmdb_rating);
         }
 

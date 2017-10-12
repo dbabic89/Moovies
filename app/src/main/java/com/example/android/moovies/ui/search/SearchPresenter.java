@@ -1,10 +1,8 @@
 package com.example.android.moovies.ui.search;
 
-import android.util.Log;
-
-import com.example.android.moovies.domain.models.SearchQuery;
-import com.example.android.moovies.domain.models.movie.MovieListResponse;
-import com.example.android.moovies.domain.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.search.SearchListItem;
+import com.example.android.moovies.domain.models.search.SearchQuery;
+import com.example.android.moovies.domain.models.search.SearchResults;
 import com.example.android.moovies.domain.use_case.SearchMovie;
 import com.example.android.moovies.ui.base.BasePresenter;
 
@@ -36,7 +34,6 @@ class SearchPresenter extends BasePresenter<SearchMvpView> {
         searchMovie.dispose();
     }
 
-
     void getMovies(String query, int page) {
         searchMovie.execute(new SearchMovieObserver(), new SearchQuery(query, page));
     }
@@ -45,22 +42,21 @@ class SearchPresenter extends BasePresenter<SearchMvpView> {
         searchMovie.execute(new MoreMovieObserver(), new SearchQuery(query, page));
     }
 
-    private class SearchMovieObserver extends DisposableObserver<MovieListResponse> {
+    private class SearchMovieObserver extends DisposableObserver<SearchResults> {
         @Override
-        public void onNext(MovieListResponse value) {
-            List<MovieListResult> mMovieListResultList = new ArrayList<>();
+        public void onNext(SearchResults value) {
+            List<SearchListItem> listResults = new ArrayList<>();
 
             if (value.getResults() != null) {
-                mMovieListResultList.addAll(value.getResults());
-                getMvpView().showSearchResults(mMovieListResultList);
+                listResults.addAll(value.getResults());
+                getMvpView().showSearchResults(listResults);
             } else
                 getMvpView().showMoviesEmpty();
         }
 
         @Override
         public void onError(Throwable e) {
-            getMvpView().showError();
-            Log.i("TAG", e.getMessage());
+            e.printStackTrace();
         }
 
         @Override
@@ -69,15 +65,15 @@ class SearchPresenter extends BasePresenter<SearchMvpView> {
         }
     }
 
-    private class MoreMovieObserver extends DisposableObserver<MovieListResponse> {
+    private class MoreMovieObserver extends DisposableObserver<SearchResults> {
         @Override
-        public void onNext(MovieListResponse value) {
+        public void onNext(SearchResults value) {
 
-            List<MovieListResult> mMovieListResultList = new ArrayList<>();
+            List<SearchListItem> listResults = new ArrayList<>();
 
             if (value.getResults() != null) {
-                mMovieListResultList.addAll(value.getResults());
-                getMvpView().showMoreMovies(mMovieListResultList);
+                listResults.addAll(value.getResults());
+                getMvpView().showMoreMovies(listResults);
             } else
                 getMvpView().showMoviesEmpty();
         }

@@ -1,4 +1,4 @@
-package com.example.android.moovies.domain.models;
+package com.example.android.moovies.domain.models.search;
 
 public class SearchQuery {
 

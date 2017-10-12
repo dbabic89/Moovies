@@ -64,16 +64,35 @@ public class SeasonFragment extends Fragment implements SeasonMvpView {
 
     View mView;
     FragmentCommunication fragmentCommunication;
+    private Season season;
     private int tvId;
+
+
+    public static SeasonFragment newInstance(Season season, int id) {
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("tv_id", id);
+        bundle.putSerializable("season", season);
+
+        SeasonFragment fragment = new SeasonFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            season = (Season) getArguments().getSerializable("season");
+            tvId = getArguments().getInt("tv_id");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_season, container, false);
-
         ButterKnife.bind(this, mView);
-        Season season = (Season) getArguments().getSerializable("season");
-        tvId = getArguments().getInt("tv_id");
+        readBundle(getArguments());
 
         createComponent();
         setPresenter(Arrays.asList(tvId, season.getSeasonNumber()));
@@ -121,7 +140,6 @@ public class SeasonFragment extends Fragment implements SeasonMvpView {
 
     @Override
     public void showEpisodes(final List<Episode> episodes) {
-
 
         episodeAdapter.addAll(episodes);
         recyclerViewEpisodes.setLayoutManager(new LinearLayoutManager(getActivity()));

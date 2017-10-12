@@ -2,7 +2,6 @@ package com.example.android.moovies.ui.common.view_pager;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,17 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.domain.models.celebrity.CelebsCredits;
-import com.example.android.moovies.domain.models.celebrity.Posters;
-import com.example.android.moovies.domain.models.mtv.MtvPoster;
+import com.example.android.moovies.domain.models.tv.Episode;
+import com.example.android.moovies.domain.models.tv.Episodes;
 import com.example.android.moovies.domain.models.tv.Season;
 import com.example.android.moovies.domain.models.tv.Seasons;
-import com.example.android.moovies.ui.common.mtv_grid.MtvGridFragment;
 import com.example.android.moovies.ui.common.mtv_list.ListFragment;
+import com.example.android.moovies.ui.discover.DiscoverFragment;
 import com.example.android.moovies.ui.episode.EpisodeFragment;
-import com.example.android.moovies.ui.home.HomeCelebsFragment;
 import com.example.android.moovies.ui.home.HomeMtvFragment;
-import com.example.android.moovies.ui.home.HomeProgressFragment;
 import com.example.android.moovies.ui.season.SeasonFragment;
 import com.example.android.moovies.utils.Constants;
 
@@ -31,6 +27,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.android.moovies.utils.Constants.LIST_ID;
 
 public class ViewPagerFragment extends Fragment {
 
@@ -45,24 +43,47 @@ public class ViewPagerFragment extends Fragment {
     List<String> stringList;
 
     String viewPagerFragment;
+    int currentTab, position, tvId = 0;
+    Episodes episodes;
     Seasons seasons;
-    int currentTab, movieId, tvId = 0;
+
+    public static ViewPagerFragment newInstance(String vpf, int tvId, int tab, int position, Episodes episodes, Seasons seasons) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString("vpf", vpf);
+        bundle.putInt("tv_id", tvId);
+        bundle.putInt(LIST_ID, tab);
+        bundle.putInt("position", position);
+        bundle.putSerializable("episodes", episodes);
+        bundle.putSerializable("seasons", seasons);
+
+        ViewPagerFragment fragment = new ViewPagerFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            viewPagerFragment = bundle.getString("vpf");
+            tvId = getArguments().getInt("tv_id");
+            currentTab = getArguments().getInt(LIST_ID);
+            position = getArguments().getInt("position");
+            episodes = (Episodes) getArguments().getSerializable("episodes");
+            seasons = (Seasons) getArguments().getSerializable("seasons");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_view_pager, container, false);
-
         ButterKnife.bind(this, mView);
+
+        readBundle(getArguments());
 
         fragmentList = new ArrayList<>();
         stringList = new ArrayList<>();
-
-        currentTab = getArguments().getInt(Constants.LIST_ID);
-        movieId = getArguments().getInt("movie_id");
-        tvId = getArguments().getInt("tv_id");
-        viewPagerFragment = getArguments().getString("vpf");
-        seasons = (Seasons) getArguments().getSerializable("seasons");
 
         switch (viewPagerFragment) {
 
@@ -85,19 +106,6 @@ public class ViewPagerFragment extends Fragment {
             case "episodeFragment":
                 setEpisodeTabs();
                 break;
-
-            case "celebsDetailFragment":
-                mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-
-                CelebsCredits celebsCredits = (CelebsCredits) getArguments().getSerializable("credits");
-
-                Fragment moviesGridFragment = getMtvGridFragment(celebsCredits.getMoviePosters().getMtvPosterList(), "movies");
-                Fragment tvsGridFragment = getMtvGridFragment(celebsCredits.getTvPosters().getMtvPosterList(), "tvs");
-
-                fragmentList = Arrays.asList(moviesGridFragment, tvsGridFragment);
-                stringList = Arrays.asList("Movies", "TV shows");
-                break;
-
         }
 
         new CustomViewPager(fragmentList, stringList, getChildFragmentManager(), mViewPager, mTabLayout, currentTab);
@@ -106,12 +114,21 @@ public class ViewPagerFragment extends Fragment {
     }
 
     private void setEpisodeTabs() {
-        mTabLayout.setVisibility(View.GONE);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        Fragment episodeFragment = new EpisodeFragment();
+        currentTab = position * (-1);
+
+        for (int i = 0; i < episodes.getEpisodes().size(); i++) {
+            Episode episode = episodes.getEpisodes().get(i);
+
+            fragmentList.add(i, EpisodeFragment.newInstance(tvId, episode));
+            stringList.add(i, "E" + episode.getEpisodeNumber());
+        }
+
     }
 
     private void setSeasonTabs() {
+
         if (seasons.getSeasons().size() > 6) {
             mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         } else {
@@ -119,12 +136,9 @@ public class ViewPagerFragment extends Fragment {
         }
 
         if (seasons.getSeasons().size() == 1) {
-
             Season season = seasons.getSeasons().get(0);
 
-            Fragment seasonFragment = createSeasonFragment(season);
-
-            fragmentList.add(0, seasonFragment);
+            fragmentList.add(0, SeasonFragment.newInstance(season, tvId));
             stringList.add(0, "S" + season.getSeasonNumber());
 
             mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -132,12 +146,9 @@ public class ViewPagerFragment extends Fragment {
         } else {
 
             for (int i = 0; i < seasons.getSeasons().size(); i++) {
-
                 Season season = seasons.getSeasons().get(i);
 
-                Fragment seasonFragment = createSeasonFragment(season);
-
-                fragmentList.add(i, seasonFragment);
+                fragmentList.add(i, SeasonFragment.newInstance(season, tvId));
                 stringList.add(i, "S" + season.getSeasonNumber());
             }
         }
@@ -172,8 +183,8 @@ public class ViewPagerFragment extends Fragment {
         homeTvFragmentBundle.putString(Constants.HOME_TV_FRAGMENT, Constants.HOME_TV_FRAGMENT);
         homeTvFragment.setArguments(homeTvFragmentBundle);
 
-        fragmentList = Arrays.asList(homeMovieFragment, homeTvFragment, new HomeCelebsFragment(), new HomeProgressFragment());
-        stringList = Arrays.asList("Movies", "TV shows", "Celebs", "Progress");
+        fragmentList = Arrays.asList(homeMovieFragment, homeTvFragment, new DiscoverFragment());
+        stringList = Arrays.asList("Movies", "TV shows", "Discover");
     }
 
     private void startListFragments(List<Integer> list, List<String> titles) {
@@ -182,26 +193,6 @@ public class ViewPagerFragment extends Fragment {
             fragmentList.add(ListFragment.newInstance(0, 0, list.get(i)));
             stringList.add(titles.get(i));
         }
-    }
-
-    @NonNull
-    private Fragment createSeasonFragment(Season season) {
-        Fragment seasonFragment = new SeasonFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("tv_id", tvId);
-        bundle.putSerializable("season", season);
-        seasonFragment.setArguments(bundle);
-        return seasonFragment;
-    }
-
-    @NonNull
-    private Fragment getMtvGridFragment(List<MtvPoster> mtvPosterList, String movies) {
-        Fragment posterGridFragment1 = new MtvGridFragment();
-        Bundle bundle5 = new Bundle();
-        Posters posters1 = new Posters(mtvPosterList);
-        bundle5.putSerializable(movies, posters1);
-        posterGridFragment1.setArguments(bundle5);
-        return posterGridFragment1;
     }
 
 }

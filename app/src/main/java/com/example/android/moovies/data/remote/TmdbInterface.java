@@ -11,6 +11,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.search.SearchResults;
 import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
@@ -93,13 +94,13 @@ public interface TmdbInterface {
     Observable<EpisodeDetail> getEpisodeDetails(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Query("append_to_response") String append);
 
     @GET("tv/{tv_id}/season/{season_number}/episode/{episode_number}/account_states")
-    Observable<AccountStates> getEpisodeStates(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey);
+    Observable<AccountStates> getEpisodeStates(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     @POST("tv/{tv_id}/season/{season_number}/episode/{episode_number}/rating")
-    Observable<PostResponse> addRatingEpisode(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Body Rated rated);
+    Observable<PostResponse> addRatingEpisode(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Query("session_id") String session_id, @Body Rated rated);
 
     @DELETE("tv/{tv_id}/season/{season_number}/episode/{episode_number}/rating")
-    Observable<PostResponse> deleteEpisodeRating(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey);
+    Observable<PostResponse> deleteEpisodeRating(@Path("tv_id") int id, @Path("season_number") int se_num, @Path("episode_number") int ep_num, @Query("api_key") String apiKey, @Query("session_id") String session_id);
 
     // Celebrity Detail
 
@@ -168,6 +169,6 @@ public interface TmdbInterface {
 
     // Search
 
-    @GET("search/movie")
-    Observable<MovieListResponse> searchMovies(@Query("api_key") String apiKey, @Query("query") String query, @Query("page") int pageIndex);
+    @GET("search/multi")
+    Observable<SearchResults> searchMovies(@Query("api_key") String apiKey, @Query("query") String query, @Query("page") int pageIndex);
 }

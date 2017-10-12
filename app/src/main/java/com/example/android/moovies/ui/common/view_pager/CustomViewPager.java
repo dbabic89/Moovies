@@ -1,12 +1,9 @@
 package com.example.android.moovies.ui.common.view_pager;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -39,24 +36,16 @@ class CustomViewPager {
             adapter.addFrag(mFragmentList.get(i), mStringList.get(i));
         }
         viewPager.setAdapter(adapter);
-        if (currentTab <= 3) viewPager.setCurrentItem(currentTab);
+        if (currentTab > 0 && currentTab <= 3) viewPager.setCurrentItem(currentTab);
         else if (currentTab == 6)viewPager.setCurrentItem(2);
         else if (currentTab == 7)viewPager.setCurrentItem(3);
+        else if (currentTab < 0) viewPager.setCurrentItem((currentTab * (-1)));
         else viewPager.setCurrentItem(currentTab%2);
     }
 
     private void setupTabLayout() {
 
         mTabLayout.setupWithViewPager(mViewPager);
-
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setColor(Color.YELLOW);
-        drawable.setSize(2, 2);
-
-        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
-        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        linearLayout.setDividerPadding(30);
-        linearLayout.setDividerDrawable(drawable);
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

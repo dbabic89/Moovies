@@ -1,6 +1,6 @@
 package com.example.android.moovies.data;
 
-import com.example.android.moovies.domain.models.SearchQuery;
+import com.example.android.moovies.domain.models.search.SearchQuery;
 import com.example.android.moovies.domain.models.account.AccountStates;
 import com.example.android.moovies.domain.models.account.EpisodeRating;
 import com.example.android.moovies.domain.models.account.MtvRating;
@@ -10,6 +10,7 @@ import com.example.android.moovies.domain.models.celebrity.Celebrity;
 import com.example.android.moovies.domain.models.movie.CollectionDetail;
 import com.example.android.moovies.domain.models.movie.MovieDetail;
 import com.example.android.moovies.domain.models.movie.MovieListResponse;
+import com.example.android.moovies.domain.models.search.SearchResults;
 import com.example.android.moovies.domain.models.tv.EpisodeDetail;
 import com.example.android.moovies.domain.models.tv.SeasonDetail;
 import com.example.android.moovies.domain.models.tv.TvDetail;
@@ -29,7 +30,7 @@ public interface DataSource {
 
     Observable<MovieListResponse> getSimilarMovies(int movieId, int page);
 
-    Observable<MovieListResponse> searchMovie(SearchQuery searchQuery);
+    Observable<SearchResults> searchMovie(SearchQuery searchQuery);
 
     Observable<MovieDetail> getMovieDetails(int movieId);
 

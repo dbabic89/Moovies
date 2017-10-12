@@ -1,9 +1,7 @@
 package com.example.android.moovies.ui.search;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.moovies.R;
-import com.example.android.moovies.domain.models.movie.MovieListResult;
+import com.example.android.moovies.domain.models.search.SearchListItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -21,78 +19,55 @@ import javax.inject.Inject;
 
 import static com.example.android.moovies.utils.Constants.URL_POSTER;
 
-class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MovieViewHolder> {
+class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MtvViewHolder> {
 
-    private List<MovieListResult> movies;
     private SearchAdapter.RecyclerViewInterface recyclerViewInterface;
     private Context context;
+    private List<SearchListItem> items;
 
     @Inject
     SearchAdapter(Context context) {
         this.context = context;
-        movies = new ArrayList<>();
+        items = new ArrayList<>();
     }
 
     @Override
-    public SearchAdapter.MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MtvViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        return getViewHolder(parent, layoutInflater);
-    }
-
-    @NonNull
-    private SearchAdapter.MovieViewHolder getViewHolder(ViewGroup parent, LayoutInflater inflater) {
-        View v1 = inflater.inflate(R.layout.list_item_mtv, parent, false);
-        return new SearchAdapter.MovieViewHolder(v1);
+        View view = layoutInflater.inflate(R.layout.list_item_search, parent, false);
+        return new MtvViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, final int position) {
-        MovieListResult movie = movies.get(position);
-
-        int x = position + 1;
-        String releaseDate = " - ";
-
-        try {
-            if (!movie.getReleaseDate().isEmpty())
-                releaseDate = movie.getReleaseDate().substring(0, 4);
-        } catch (NullPointerException e) {
-            Log.i("TAG", e.getMessage());
-        }
-
-        String titleAndDate = movie.getTitle() + " (" + releaseDate + ")";
-        holder.movieTitle.setText(titleAndDate);
-        holder.movieDescription.setText(movie.getOverview());
-        holder.moviePosition.setText(String.valueOf(x));
-        holder.movieTmdbRating.setText(String.valueOf(movie.getVoteAverage()));
-
-        if (movie.getPosterPath() == null)
-            Picasso.with(context).load(R.drawable.red_circle).into(holder.moviePoster);
-        else
-            Picasso.with(context).load(URL_POSTER + movie.getPosterPath()).into(holder.moviePoster);
+    public void onBindViewHolder(MtvViewHolder holder, final int position) {
+        SearchListItem item = items.get(position);
+        holder.title.setText(item.getTitle());
+        Picasso.with(context).load(URL_POSTER + item.getPoster()).into(holder.poster);
+        holder.type.setText(item.getType());
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return items.size();
     }
 
-    MovieListResult getItem(int position) {
-        return movies.get(position);
+    public void add(SearchListItem item) {
+        items.add(item);
+        notifyItemInserted(items.size() - 1);
     }
 
-    public void add(MovieListResult movie) {
-        movies.add(movie);
-        notifyItemInserted(movies.size() - 1);
-    }
-
-    void addAll(List<MovieListResult> movies) {
-        for (MovieListResult movie : movies) {
-            add(movie);
+    void addAll(List<SearchListItem> items) {
+        for (SearchListItem item : items) {
+            add(item);
         }
     }
 
     void clear() {
-        movies = new ArrayList<>();
+        items = new ArrayList<>();
+    }
+
+    SearchListItem getItem(int position) {
+        return items.get(position);
     }
 
     interface RecyclerViewInterface {
@@ -103,22 +78,18 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MovieViewHolder> 
         this.recyclerViewInterface = recyclerViewInterface;
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MtvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView moviePoster;
-        TextView moviePosition;
-        TextView movieTitle;
-        TextView movieDescription;
-        TextView movieTmdbRating;
+        ImageView poster;
+        TextView title;
+        TextView type;
 
-        MovieViewHolder(View v) {
+        MtvViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
-            moviePoster = (ImageView) v.findViewById(R.id.image_poster);
-            moviePosition = (TextView) v.findViewById(R.id.text_movie_position);
-            movieTitle = (TextView) v.findViewById(R.id.text_movie_title);
-            movieDescription = (TextView) v.findViewById(R.id.text_movie_description);
-            movieTmdbRating = (TextView) v.findViewById(R.id.text_tmdb_rating);
+            poster = (ImageView) v.findViewById(R.id.image_poster);
+            title = (TextView) v.findViewById(R.id.text_title);
+            type = (TextView) v.findViewById(R.id.text_type);
         }
 
         @Override

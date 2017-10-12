@@ -14,6 +14,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:tabMode="scrollable"
         app:tabGravity="fill"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="@android:color/white"/>
 

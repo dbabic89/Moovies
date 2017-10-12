@@ -72,7 +72,7 @@ class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHold
         holder.episodeTitle.setText(titleAndDate);
         holder.episodeDescription.setText(episode.getOverview());
         holder.episodePosition.setText(String.valueOf(x));
-        holder.episodeTmdbRating.setText(String.format("%.1f", episode.getVoteAverage()).replace(",", "."));
+        holder.episodeTmdbRating.setText(String.valueOf(episode.getVoteAverage()).replace(",", "."));
 
         if (episode.getStillPath() == null)
             picasso.load(R.drawable.red_circle).into(holder.episodePoster);
